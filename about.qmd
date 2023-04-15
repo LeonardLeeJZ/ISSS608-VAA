@@ -1,9 +1,37 @@
 ---
-title: "About"
+title: "Leonard Lee"
+
+about:
+
+  template: jolla
+
+  image: profile.jpg
+
+  links:
+
+    - icon: twitter
+
+      text: twitter
+
+      href: https://twitter.com
+
+    - icon: github
+
+      text: Github
+
+      href: https://github.com/LeonardLeeJZ
 ---
 
-About this site
+Leonard Lee is an aspiring student of Data Analytics, who has been an infantry officer since 2013. When not honing his hand-eye coordination in the digital realm, he enjoys in-line skating and most sports.
 
-```{r}
-1 + 1
-```
+## Education
+
+University of Glasgow, Scotland \| United Kingdom
+
+**Bachelor of Science in Psychology** \| Sept 2014 - Sept 2018
+
+## Experience
+
+Singapore Armed Forces \| Training Development Officer \| April 2022 - present
+
+Singapore Armed Forces \| Infantry Officer \| July 2013 - present
