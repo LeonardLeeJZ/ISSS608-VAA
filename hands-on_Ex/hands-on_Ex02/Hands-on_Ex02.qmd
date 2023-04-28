@@ -11,7 +11,7 @@ pacman::p_load(ggrepel, patchwork,
                tidyverse)
 ```
 
-# Load the Data
+# Import the Data
 
 ```{r}
 
