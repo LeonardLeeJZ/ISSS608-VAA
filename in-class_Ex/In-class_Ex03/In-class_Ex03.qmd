@@ -1,7 +1,7 @@
 ---
-title: "In-class_Ex03"
+title: "In-class Exercise 3"
 author: "Leonard Lee"
-
+date: "29 April 2023"
 format:
   html:
     link-external-icon: true
