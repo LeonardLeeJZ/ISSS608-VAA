@@ -56,46 +56,25 @@
     "text": "3: hrbrthemes\nggplot(data=exam_data, aes(x = MATHS)) + geom_histogram(bins=20, boundary = 100, color=“grey25”, fill=“grey90”) + ggtitle(“Distribution of Maths scores”) + theme_ipsum()\n\nggplot(data=exam_data, \n             aes(x = MATHS)) +\n  geom_histogram(bins=20, \n                 boundary = 100,\n                 color=\"grey25\", \n                 fill=\"grey90\") +\n  ggtitle(\"Distribution of Maths scores\") +\n  theme_ipsum(axis_title_size = 18,\n              base_size = 15,\n              grid = \"Y\")"
   },
   {
-    "objectID": "hands-on_Ex/hands-on_Ex02/Hands-on_Ex02.html#merging-of-graphs",
-    "href": "hands-on_Ex/hands-on_Ex02/Hands-on_Ex02.html#merging-of-graphs",
+    "objectID": "hands-on_Ex/hands-on_Ex02/Hands-on_Ex02.html#creating-individual-graphs",
+    "href": "hands-on_Ex/hands-on_Ex02/Hands-on_Ex02.html#creating-individual-graphs",
     "title": "Hands-on_Ex02",
-    "section": "4: Merging of Graphs",
-    "text": "4: Merging of Graphs\n\np1 <- ggplot(data=exam_data, \n             aes(x = MATHS)) +\n  geom_histogram(bins=20, \n                 boundary = 100,\n                 color=\"grey25\", \n                 fill=\"grey90\") + \n  coord_cartesian(xlim=c(0,100)) +\n  ggtitle(\"Distribution of Maths scores\")\n\n\np2 <- ggplot(data=exam_data, \n             aes(x = ENGLISH)) +\n  geom_histogram(bins=20, \n                 boundary = 100,\n                 color=\"grey25\", \n                 fill=\"grey90\") +\n  coord_cartesian(xlim=c(0,100)) +\n  ggtitle(\"Distribution of English scores\")\n\n\np3 <- ggplot(data=exam_data, \n             aes(x= MATHS, \n                 y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(method=lm, \n              size=0.5) +  \n  coord_cartesian(xlim=c(0,100),\n                  ylim=c(0,100)) +\n  ggtitle(\"English scores versus Maths scores for Primary 3\")"
+    "section": "4: Creating Individual Graphs",
+    "text": "4: Creating Individual Graphs\n\np1p2p3\n\n\n\np1 <- ggplot(data=exam_data, \n             aes(x = MATHS)) +\n  geom_histogram(bins=20, \n                 boundary = 100,\n                 color=\"grey25\", \n                 fill=\"grey90\") + \n  coord_cartesian(xlim=c(0,100)) +\n  ggtitle(\"Distribution of Maths scores\")\n\n\n\n\np2 <- ggplot(data=exam_data, \n             aes(x = ENGLISH)) +\n  geom_histogram(bins=20, \n                 boundary = 100,\n                 color=\"grey25\", \n                 fill=\"grey90\") +\n  coord_cartesian(xlim=c(0,100)) +\n  ggtitle(\"Distribution of English scores\")\n\n\n\n\np3 <- ggplot(data=exam_data, \n             aes(x= MATHS, \n                 y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(method=lm, \n              size=0.5) +  \n  coord_cartesian(xlim=c(0,100),\n                  ylim=c(0,100)) +\n  ggtitle(\"English scores versus Maths scores for Primary 3\")"
   },
   {
-    "objectID": "hands-on_Ex/hands-on_Ex02/Hands-on_Ex02.html#example-of-merging-two-graphs-p1-and-p2",
-    "href": "hands-on_Ex/hands-on_Ex02/Hands-on_Ex02.html#example-of-merging-two-graphs-p1-and-p2",
+    "objectID": "hands-on_Ex/hands-on_Ex02/Hands-on_Ex02.html#merging-graphs",
+    "href": "hands-on_Ex/hands-on_Ex02/Hands-on_Ex02.html#merging-graphs",
     "title": "Hands-on_Ex02",
-    "section": "Example of Merging two graphs (p1 and p2)",
-    "text": "Example of Merging two graphs (p1 and p2)\n\np1 + p2"
+    "section": "5.1 Merging Graphs",
+    "text": "5.1 Merging Graphs\n\nMerging p1 & p2Merging p1 p2 p3\n\n\n\np1 + p2\n\n\n\n\n\n\n\n(p1 / p2) | p3"
   },
   {
-    "objectID": "hands-on_Ex/hands-on_Ex02/Hands-on_Ex02.html#merge-all-three-graphs",
-    "href": "hands-on_Ex/hands-on_Ex02/Hands-on_Ex02.html#merge-all-three-graphs",
+    "objectID": "hands-on_Ex/hands-on_Ex02/Hands-on_Ex02.html#modifying-composite-graph",
+    "href": "hands-on_Ex/hands-on_Ex02/Hands-on_Ex02.html#modifying-composite-graph",
     "title": "Hands-on_Ex02",
-    "section": "Merge all three graphs",
-    "text": "Merge all three graphs\n\n(p1 / p2) | p3"
-  },
-  {
-    "objectID": "hands-on_Ex/hands-on_Ex02/Hands-on_Ex02.html#add-tag",
-    "href": "hands-on_Ex/hands-on_Ex02/Hands-on_Ex02.html#add-tag",
-    "title": "Hands-on_Ex02",
-    "section": "Add Tag",
-    "text": "Add Tag\n\n((p1 / p2) | p3) + \n  plot_annotation(tag_levels = 'I')"
-  },
-  {
-    "objectID": "hands-on_Ex/hands-on_Ex02/Hands-on_Ex02.html#add-insert",
-    "href": "hands-on_Ex/hands-on_Ex02/Hands-on_Ex02.html#add-insert",
-    "title": "Hands-on_Ex02",
-    "section": "Add insert",
-    "text": "Add insert\n\np3 + inset_element(p2, \n                   left = 0.02, \n                   bottom = 0.7, \n                   right = 0.5, \n                   top = 1)"
-  },
-  {
-    "objectID": "hands-on_Ex/hands-on_Ex02/Hands-on_Ex02.html#composite-using-patchwork-and-ggtheme",
-    "href": "hands-on_Ex/hands-on_Ex02/Hands-on_Ex02.html#composite-using-patchwork-and-ggtheme",
-    "title": "Hands-on_Ex02",
-    "section": "Composite using patchwork and ggtheme",
-    "text": "Composite using patchwork and ggtheme\n\npatchwork <- (p1 / p2) | p3\npatchwork & theme_economist()"
+    "section": "5.2 Modifying Composite Graph",
+    "text": "5.2 Modifying Composite Graph\n\nAdd TagAdd insertComposite using patchwork and ggtheme\n\n\n\n((p1 / p2) | p3) + \n  plot_annotation(tag_levels = 'I')\n\n\n\n\n\n\n\np3 + inset_element(p2, \n                   left = 0.02, \n                   bottom = 0.7, \n                   right = 0.5, \n                   top = 1)\n\n\n\n\n\n\n\npatchwork <- (p1 / p2) | p3\npatchwork & theme_economist()"
   },
   {
     "objectID": "hands-on_Ex/hands-on_Ex03/Hands-on_Ex03.html",
@@ -189,31 +168,17 @@
     "text": "ADV: plotly\nIn Plotly R package, both ggplotly() and plot_ly() support key frame animations through the frame argument/aesthetic. They also support an ids argument/aesthetic to ensure smooth transitions between objects with the same id (which helps facilitate object constancy).\n\nAnimated Bubble Plot: ggplotly() method\n\ngg <- ggplot(globalPop, \n       aes(x = Old, \n           y = Young, \n           size = Population, \n           colour = Country)) +\n  geom_point(aes(size = Population,\n                 frame = Year),\n             alpha = 0.7, \n             show.legend = FALSE) +\n  scale_colour_manual(values = country_colors) +\n  scale_size(range = c(2, 12)) +\n  labs(x = '% Aged', \n       y = '% Young')\n\nggplotly(gg)\n\n\n\n\n\n\n\nAnimated Bubble Plot: plot_ly() method\n\nbp <- globalPop %>%\n  plot_ly(x = ~Old, \n          y = ~Young, \n          size = ~Population, \n          color = ~Continent, \n          frame = ~Year, \n          text = ~Country, \n          hoverinfo = \"text\",\n          type = 'scatter',\n          mode = 'markers'\n          )\nbp"
   },
   {
+    "objectID": "in-class_Ex/In-class_Ex01/In-class_Ex01.html",
+    "href": "in-class_Ex/In-class_Ex01/In-class_Ex01.html",
+    "title": "In-class_Ex01",
+    "section": "",
+    "text": "#Tableau Introduction\nRefer to Tableau Public Space for In-class_Ex01 here:\nIn-Class_Ex01"
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "ISSS608-VAA",
     "section": "",
     "text": "Welcome to ISSS608 Visual Analytics and Applications. In this website, you will find Leonard Lee’s coursework prepared for this course."
-  },
-  {
-    "objectID": "hands-on_Ex/hands-on_Ex02/Hands-on_Ex02.html#creating-individual-graphs",
-    "href": "hands-on_Ex/hands-on_Ex02/Hands-on_Ex02.html#creating-individual-graphs",
-    "title": "Hands-on_Ex02",
-    "section": "4: Creating Individual Graphs",
-    "text": "4: Creating Individual Graphs\n\np1p2p3\n\n\n\np1 <- ggplot(data=exam_data, \n             aes(x = MATHS)) +\n  geom_histogram(bins=20, \n                 boundary = 100,\n                 color=\"grey25\", \n                 fill=\"grey90\") + \n  coord_cartesian(xlim=c(0,100)) +\n  ggtitle(\"Distribution of Maths scores\")\n\n\n\n\np2 <- ggplot(data=exam_data, \n             aes(x = ENGLISH)) +\n  geom_histogram(bins=20, \n                 boundary = 100,\n                 color=\"grey25\", \n                 fill=\"grey90\") +\n  coord_cartesian(xlim=c(0,100)) +\n  ggtitle(\"Distribution of English scores\")\n\n\n\n\np3 <- ggplot(data=exam_data, \n             aes(x= MATHS, \n                 y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(method=lm, \n              size=0.5) +  \n  coord_cartesian(xlim=c(0,100),\n                  ylim=c(0,100)) +\n  ggtitle(\"English scores versus Maths scores for Primary 3\")"
-  },
-  {
-    "objectID": "hands-on_Ex/hands-on_Ex02/Hands-on_Ex02.html#merging-graphs",
-    "href": "hands-on_Ex/hands-on_Ex02/Hands-on_Ex02.html#merging-graphs",
-    "title": "Hands-on_Ex02",
-    "section": "5.1 Merging Graphs",
-    "text": "5.1 Merging Graphs\n\nMerging p1 & p2Merging p1 p2 p3\n\n\n\np1 + p2\n\n\n\n\n\n\n\n(p1 / p2) | p3"
-  },
-  {
-    "objectID": "hands-on_Ex/hands-on_Ex02/Hands-on_Ex02.html#modifying-composite-graph",
-    "href": "hands-on_Ex/hands-on_Ex02/Hands-on_Ex02.html#modifying-composite-graph",
-    "title": "Hands-on_Ex02",
-    "section": "5.2 Modifying Composite Graph",
-    "text": "5.2 Modifying Composite Graph\n\nAdd TagAdd insertComposite using patchwork and ggtheme\n\n\n\n((p1 / p2) | p3) + \n  plot_annotation(tag_levels = 'I')\n\n\n\n\n\n\n\np3 + inset_element(p2, \n                   left = 0.02, \n                   bottom = 0.7, \n                   right = 0.5, \n                   top = 1)\n\n\n\n\n\n\n\npatchwork <- (p1 / p2) | p3\npatchwork & theme_economist()"
   }
 ]
