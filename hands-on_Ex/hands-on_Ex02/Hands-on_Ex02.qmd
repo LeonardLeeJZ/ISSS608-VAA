@@ -1,6 +1,8 @@
 ---
 title: "Hands-on_Ex02"
 author: "Leonard Lee"
+execute:
+  warning: false
 ---
 
 # Load Packages
@@ -23,8 +25,15 @@ exam_data <- read_csv("data/Exam_data.csv")
 
 ## 1: ggrepel
 
-Original Code: ggplot(data=exam_data, aes(x= MATHS, y=ENGLISH)) + geom_point() + geom_smooth(method=lm, size=0.5) +\
+::: panel-tabset 
+
+### Original
+```{r}
+ggplot(data=exam_data, aes(x= MATHS, y=ENGLISH)) + geom_point() + geom_smooth(method=lm, size=0.5) +
 geom_label(aes(label = ID), hjust = .5, vjust = -.5) + coord_cartesian(xlim=c(0,100), ylim=c(0,100)) + ggtitle("English scores versus Maths scores for Primary 3")
+```
+
+### With ggrepel
 
 ```{r}
 ggplot(data=exam_data, 
@@ -40,10 +49,19 @@ ggplot(data=exam_data,
   ggtitle("English scores versus Maths scores for Primary 3")
 ```
 
+:::
+
 ## 2: ggplot 2 themes
 
-Original Code: ggplot(data=exam_data, aes(x = MATHS)) + geom_histogram(bins=20, boundary = 100, color="grey25", fill="grey90") + theme_gray() + ggtitle("Distribution of Maths scores")
+::: panel-tabset
 
+### Original
+
+```{r}
+ggplot(data=exam_data, aes(x = MATHS)) + geom_histogram(bins=20, boundary = 100, color="grey25", fill="grey90") + theme_gray() + ggtitle("Distribution of Maths scores")
+```
+
+### with ggplot theme
 ```{r}
 ggplot(data=exam_data, 
              aes(x = MATHS)) +
@@ -54,6 +72,8 @@ ggplot(data=exam_data,
   ggtitle("Distribution of Maths scores") +
   theme_economist()
 ```
+
+:::
 
 ## 3: hrbrthemes
 
@@ -72,8 +92,10 @@ ggplot(data=exam_data,
               grid = "Y")
 ```
 
-## 4: Merging of Graphs
+## 4: Creating Individual Graphs
 
+::: panel-tabset
+### p1
 ```{r}
 p1 <- ggplot(data=exam_data, 
              aes(x = MATHS)) +
@@ -85,6 +107,7 @@ p1 <- ggplot(data=exam_data,
   ggtitle("Distribution of Maths scores")
 ```
 
+### p2
 ```{r}
 p2 <- ggplot(data=exam_data, 
              aes(x = ENGLISH)) +
@@ -96,6 +119,7 @@ p2 <- ggplot(data=exam_data,
   ggtitle("Distribution of English scores")
 ```
 
+### p3
 ```{r}
 p3 <- ggplot(data=exam_data, 
              aes(x= MATHS, 
@@ -108,28 +132,47 @@ p3 <- ggplot(data=exam_data,
   ggtitle("English scores versus Maths scores for Primary 3")
 ```
 
-## Example of Merging two graphs (p1 and p2)
+:::
+
+## 5.1 Merging Graphs
+
+::: panel-tabset
+
+### Merging p1 & p2
 
 ```{r}
+#| fig.width: 12
+#| fig.height: 8
 p1 + p2
 ```
 
-## Merge all three graphs
+### Merging p1 p2 p3
 
 ```{r}
-(p1 / p2) | p3
+#| fig.width: 12
+#| fig.height: 8
+(p1 / p2) | p3 
 ```
+:::
 
-## Add Tag
+## 5.2 Modifying Composite Graph
+
+::: panel-tabset
+
+### Add Tag
 
 ```{r}
+#| fig.width: 12
+#| fig.height: 8
 ((p1 / p2) | p3) + 
   plot_annotation(tag_levels = 'I')
 ```
 
-## Add insert
+### Add insert
 
 ```{r}
+#| fig.width: 12
+#| fig.height: 8
 p3 + inset_element(p2, 
                    left = 0.02, 
                    bottom = 0.7, 
@@ -137,9 +180,12 @@ p3 + inset_element(p2,
                    top = 1)
 ```
 
-## Composite using patchwork and ggtheme
+### Composite using patchwork and ggtheme
 
 ```{r}
+#| fig.width: 15
+#| fig.height: 8
 patchwork <- (p1 / p2) | p3
 patchwork & theme_economist()
 ```
+:::
