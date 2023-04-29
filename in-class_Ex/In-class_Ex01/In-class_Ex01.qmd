@@ -9,7 +9,8 @@ format:
 ---
 
 ## Tableau Introduction
-
+::: {.callout-note collapse="true"}
 Refer to Tableau Public Space for In-class_Ex01 here:
 
 [In-Class_Ex01](https://public.tableau.com/views/In-class_Ex01_16815424879710/Dashboard1?:language=en-US&:display_count=n&:origin=viz_share_link)
+:::

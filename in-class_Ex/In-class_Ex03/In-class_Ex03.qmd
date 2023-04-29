@@ -12,12 +12,17 @@ format:
 ## Interactivity in Visual Analytics: Principles and Methods
 
 ### Programming Interactive Data Visualisation with R
+::: {.callout-note collapse="true"}
 Refer to Tableau Public Space for In-class_Ex03 here:
 
 [In-Class_Ex03](https://public.tableau.com/views/In-class_Ex03_16827493124620/SalesversusProfit?:language=en-US&:display_count=n&:origin=viz_share_link)
+:::
+
 
 ### Programming Animated Statistical Graphics with R
 
+::: {.callout-note collapse="true"}
 Refer to Tableau Public Space for In-class_Ex03b here:
 
 [In-Class_Ex03b](https://public.tableau.com/views/In-class_Ex03b/Dashboard1?:language=en-US&:display_count=n&:origin=viz_share_link)
+:::
