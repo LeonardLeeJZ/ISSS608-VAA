@@ -8,7 +8,7 @@ format:
     link-external-filter: '^(?:http:|https:)\/\/www\.quarto\.org\/custom'
 ---
 
-# Tableau Introduction
+## Tableau Introduction
 
 Refer to Tableau Public Space for In-class_Ex01 here:
 
