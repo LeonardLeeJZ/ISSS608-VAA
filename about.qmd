@@ -22,7 +22,7 @@ about:
       href: https://github.com/LeonardLeeJZ
 ---
 
-Leonard Lee is an aspiring student of Data Analytics, who has been an infantry officer since 2013. When not honing his hand-eye coordination in the digital realm, he enjoys in-line skating and most sports.
+Leonard Lee is an aspiring student of Data Analytics, and has been an infantry officer since 2013. When not honing his hand-eye coordination in the digital realm, he enjoys in-line skating and most sports.
 
 ## Education
 

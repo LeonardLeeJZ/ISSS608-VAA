@@ -4,7 +4,7 @@
     "href": "about.html",
     "title": "Leonard Lee",
     "section": "",
-    "text": "Leonard Lee is an aspiring student of Data Analytics, who has been an infantry officer since 2013. When not honing his hand-eye coordination in the digital realm, he enjoys in-line skating and most sports."
+    "text": "Leonard Lee is an aspiring student of Data Analytics, and has been an infantry officer since 2013. When not honing his hand-eye coordination in the digital realm, he enjoys in-line skating and most sports."
   },
   {
     "objectID": "about.html#education",
@@ -182,10 +182,31 @@
     "text": "Note\n\n\n\n\n\nRefer to Tableau Public Space for In-class_Ex03 here:\nIn-Class_Ex03\n\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\n\nRefer to Tableau Public Space for In-class_Ex03b here:\nIn-Class_Ex03b"
   },
   {
+    "objectID": "in-class_Ex/In-class_Ex04/In-class_Ex04.html",
+    "href": "in-class_Ex/In-class_Ex04/In-class_Ex04.html",
+    "title": "In-Class Exercise 4",
+    "section": "",
+    "text": "Load Packages\n\npacman::p_load(rstatix, gt, patchwork, webshot2, tidyverse)\n\n#Importing the data\n\nexam_data4 <- read_csv(\"data/Exam_data.csv\")\n\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\nggplot(exam_data4,\n       aes(sample=ENGLISH)) +\n  stat_qq() +\n  stat_qq_line()\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nWe can see that the points deviate significantly from the straight diagonal line. This is a clear indication that the set of data is not normally distributed.\n\n\n##Combining Statistical Results and\n\nThe plotThe code\n\n\n\n\n\n\n\n\n\n\nqq <- ggplot(exam_data4,\n       aes(sample=ENGLISH)) +\n  stat_qq() +\n  stat_qq_line()\n\nsw_t <- exam_data4 %>%\n  shapiro_test(ENGLISH) %>%\n  gt()\n\ntmp <- tempfile(fileext = '.png')\ngtsave(sw_t, tmp)\ntable_png <- png::readPNG(tmp, native = TRUE)\n\nqq + table_png"
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "ISSS608-VAA",
     "section": "",
     "text": "Welcome to ISSS608 Visual Analytics and Applications. In this website, you will find Leonard Lee’s coursework prepared for this course."
+  },
+  {
+    "objectID": "take-home_Ex/take-home_Ex01/take-home_Ex01.html",
+    "href": "take-home_Ex/take-home_Ex01/take-home_Ex01.html",
+    "title": "Take-Home Exercise 1",
+    "section": "",
+    "text": "pacman::p_load(readr, ggrepel, patchwork,\n               ggthemes, hrbrthemes, ggiraph, plotly, \n               patchwork, DT, tidyverse)"
+  },
+  {
+    "objectID": "take-home_Ex/take-home_Ex01/take-home_Ex01.html#data-are-in-incorrect-format",
+    "href": "take-home_Ex/take-home_Ex01/take-home_Ex01.html#data-are-in-incorrect-format",
+    "title": "Take-Home Exercise 1",
+    "section": "Data are in incorrect format",
+    "text": "Data are in incorrect format\n\nFdata$amount <- as.integer(Fdata$amount)\n\n\n\n\n\n\n\nNote\n\n\n\n\n\n\n\n\n\n\nHeader"
   }
 ]
