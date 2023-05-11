@@ -1,17 +1,34 @@
 ---
 title: "Take-Home Exercise 1"
 author: "Leonard Lee"
+format:
+  html:
+    code-fold: true
+    code-summary: "Show me the good stuff"
 ---
 
-# Load Packages
+# Setting
+
+City of Engagement, with a total population of 50,000, is a small city located at Country of Nowhere. The city serves as a service centre of an agriculture region surrounding the city. The main agriculture of the region is fruit farms and vineyards. The local council of the city is in the process of preparing the Local Plan 2023. A sample survey of 1000 representative residents had been conducted to collect data related to their household demographic and spending patterns, among other things. The city aims to use the data to assist with their major community revitalization efforts, including how to allocate a very large city renewal grant they have recently received.
+
+# The Task
+
+In this take-home exercise, you are required to apply the concepts and methods you had learned in Lesson 1-4 to reveal the demographic and financial characteristics of the city of Engagement byusing appropriate static and interactive statistical graphics methods. This exercise requires a user-friendly and interactive solution that helps city managers and planners to explore the complex data in an engaging way and reveal hidden patterns.
+
+# The Data
+
+For the purpose of this study, two data sets are provided. They are:
+
+Participants.csv 
+Financial.csv
+
+# 1 Load Packages
 
 ```{r}
-pacman::p_load(readr, ggrepel, patchwork,
-               ggthemes, hrbrthemes, ggiraph, plotly, 
-               patchwork, DT, tidyverse)
+pacman::p_load(readr, ggrepel, patchwork, Hmisc, ggthemes, hrbrthemes, ggstatsplot, ggiraph, plotly, dplyr, patchwork, DT, tidyverse, ggplot2, stats)
 ```
 
-# Import the Data
+# 2 Import the Data
 
 ```{r}
 
@@ -26,52 +43,258 @@ Jdata <- read_csv("data/Participants.csv")
 
 ```
 
-#Cleaning and Preparing the Data
+# 3 Cleaning and Preparing the Data
 
-##Check for Missing Values
-
-```{r}
-any(is.na(Fdata))
-
-any(is.na(Jdata))
-```
-
-
-# Merge Data to compare expenses to Joviality
-
-``` {r}
-
-
-# Group the data frame by participant ID and calculate the sum of expenses for each group
-
-summed_df <- aggregate(Fdata$amount, by=list(Fdata$participantId), FUN=sum)
-
-# Rename the columns in the resulting data frame
-
-colnames(summed_df) <- c("participantId", "total_expenses")
-
-# Save the resulting data frame to a new CSV file
-
-write.csv(summed_df, file="data/summed_expenses.csv", row.names=FALSE)
-
-```
+## 3.1 Financial Dataset Summary
 
 ```{r}
-# Merge the two data frames on the 'participant ID' column
-merged_data <- merge(Jdata, summed_df, by="participantId")
+Hmisc::describe(Fdata)
 
-# Save the merged data frame to a new CSV file
-
-write.csv(merged_data, file="merged_data.csv", row.names=FALSE)
 ```
 
-## Data are in incorrect format
+## 3.2 Joviality Dataset Summary
 
 ```{r}
 
-Fdata$amount <- as.integer(Fdata$amount)
+Hmisc::describe(Jdata)
+```
+
+## 3.3 Correcting Data Format [Jdata]
+
+::: {.callout-note collapse="true"}
+
+- participantId is currently classified as <dbl> instead of nominal, and is cast to <chr> class using as.character().
+
+- educationLevel is currently classified as <chr> categorical data, and is cast as factor type using the ordered() function, in accordance to its inherent hierarchy. 
+
+- householdSize and interestGroup are classified as <dbl> and <chr> respectively despite being categorical in nature. The two variables are cast as factors using as.factor()
+
+:::
+
+
+```{r}
+Jdata_new <- Jdata %>%
+  #change PariticipantId to <chr>
+  mutate(participantId = as.character(Jdata$participantId),
+         
+  #update educationaLevel with ordinal scale
+  educationLevel = ordered(Jdata$educationLevel, levels = c("Graduate", "Bachelors", "HighSchoolOrCollege", "Low")),
+  
+  # Cast householdSize and interestGroup as factors
+  householdSize = as.factor(Jdata$householdSize),
+  interestGroup = as.factor(Jdata$interestGroup)
+  )
 
 ```
+
+## 3.4.1 Correcting Data Format [Fdata]
+
+::: {.callout-note collapse="true"}
+
+- participantId is currently classified as <dbl> instead of nominal, and is cast to <chr> class using as.character().
+
+
+- category is classified as <dbl>, and is cast as factor using as.factor()
+
+:::
+
+```{r}
+Fdata_new <- Fdata %>%
+  #change PariticipantId to <chr>
+  mutate(participantId = as.character(Fdata$participantId),
+         
+  #Extract Year-Month from timestamp
+  YMDate = paste0(year(timestamp), "-", sprintf("%02d", month(timestamp))),
+         
+  # Cast householdSize and interestGroup as factors
+  category = as.factor(Fdata$category),
+  
+  # Round amount to 2dp
+  amount = as.integer(round(amount, digits = 2))
+  ) %>%
+  
+  # remove original timestamp column
+  select(-timestamp) %>%
+  
+  #sort by ParticipantId
+  arrange(participantId)
+  
+```
+
+## 3.4.2 Pivoting Financial Data [Fdata_new]
+
+```{r}
+
+Pivot_Fdata <- Fdata_new %>%
+               #Define row groups
+               group_by(participantId, YMDate) %>%
+  
+               # Sum total amount per category for each month
+               summarise(Education = sum(amount[category == "Education"]),
+                         Food = sum(amount[category == "Food"]),
+                         Shelter = sum(amount[category == "Shelter"]),
+                         Recreation = sum(amount[category == "Recreation"]),
+                         RentAdjmt = sum(amount[category == "RentAdjustment"]),
+                         Wage = sum(amount[category == "Wage"])) %>%
+                ungroup()
+  
+
+
+```
+
+# 4 Data Preparation
+
+```{r}
+Pivot_Fdata <- Pivot_Fdata %>%
+               #create new column with financial outflow (expenses)
+               mutate(Total_Expense = Education + Food + Shelter + Recreation) %>%
+               #calculate proportion of expense wrt wage
+               mutate (Expense_Prop = (abs(Total_Expense)/Wage)*100)
+
+
+Pivot_Avg_Fdata <- Pivot_Fdata %>%
+               # Group by Participant ID to get average values
+               group_by(participantId) %>%
+               summarise(NumT = n(),
+                         Education = (sum(Education)/NumT),
+                         Food = (sum(Food)/NumT),
+                         Shelter = (sum(Shelter)/NumT),
+                         Recreation = (sum(Recreation)/NumT),
+                         RentAdjmt = (sum(RentAdjmt)/NumT),
+                         Wage = (sum(Wage)/NumT),
+                         Total_Expense = (sum(Total_Expense)/NumT),
+                         Expense_Prop = (sum(Expense_Prop)/NumT))
+               
+
+Joined_data <- merge(Pivot_Avg_Fdata, Jdata_new, by = "participantId") %>%
+               select(unique(colnames(.))) %>%
+               arrange(as.numeric(participantId))
+```
+
+
+## 5 Exploratory Data Analysis
+
+### 5.1 Normality Testing of Joviality
+
+::: panel-tabset
+
+## QQ Plot
+```{r}
+set.seed(1234)
+qqnorm(Joined_data$joviality)
+qqline(Joined_data$joviality)
+
+```
+
+The qqplot compares the distribution of the data against the expected normal distribution. As the points deviate significantly from the line, the qqplot suggests that the data is not normally distributed.
+
+## Shapiro-Wilk Test
+
+```{r}
+shapiro.test(Joined_data$joviality)
+
+
+```
+
+The Shapiro-Wilk test is a widely used method to test for normality. As p < 0.05, there is sufficient statistical power to reject the null hypothesis that the data is normally distributed.
+
+### 5.2 Normality Testing of Wage
+
+::: panel-tabset
+
+## QQ Plot
+```{r}
+set.seed(1234)
+qqnorm(Joined_data$Wage)
+qqline(Joined_data$Wage)
+
+```
+
+The qqplot compares the distribution of the data against the expected normal distribution. As the points deviate significantly from the line, the qqplot suggests that the data is not normally distributed.
+
+## Shapiro-Wilk Test
+
+```{r}
+shapiro.test(Joined_data$Wage)
+
+
+```
+
+The Shapiro-Wilk test is a widely used method to test for normality. As p < 0.05, there is sufficient statistical power to reject the null hypothesis that the data is normally distributed.
+
+:::
+
+ 
+
+
+
+### Kids and Joviality (Kids related facilities)
+
+## Wage and Joviality
+
+
+### Cut Wage into Categories based on quantiles
+
+
+```{r}
+
+# Calculate the quantile values for the Wage variable
+quantiles <- quantile(Joined_data$Wage, probs = c(0.25, 0.5, 0.75))
+
+# Define the breaks for the three bins
+breaks <- c(-Inf, quantiles[1], quantiles[2], Inf)
+
+# Bin the Wage variable into three categories using cut()
+income_levels <- cut(Joined_data$Wage, breaks, labels = c("Low", "Middle", "High"))
+
+# Add the income levels as a new column in the dataset
+Joined_data$Income_Level <- income_levels
+```
+
+### Comparison of mean Joviality Scores between Income Group Levels 
+
+```{r}
+ggbetweenstats(Joined_data, x= Income_Level, y= joviality)
+
+```
+As p is less than 0.05, we reject the null hypothesis that there is no significant difference in means across income groups.
+
+An interesting insight can be gleaned from this comparison of means, as a significantly higher mean joviality score is observed in both Middle and Lower income groups, while the lowest mean score is observed in the High income group. 
+
+### Comparison of Means for Joviality across Education  Levels
+
+::: panel-tabset
+
+## Pairwise Test
+```{r}
+
+ggbetweenstats(Joined_data, x= educationLevel, y= joviality)
+
+```
+
+Through comparison of mean joviality scores across education levels, the null hypothesis is that there is no difference between means. As p > 0.05, we accept the null hypothesis.
+
+:::
+
+::: {.bubblebox .bubbleicon}
+
+
+Hi this is a placeholder text to see if this will stretch out the box
+
+
+
+
+:::
+
+### Education and Wage 
+
+### Expense and Joviality (Build more cost efficient stuff)
+
+### Age and Joviality (Need more ageing popn stuff?)
+
+### Interest Group X Joviality (IG related stuff)
+
+### Wage x Kids X Joviality 
 
 ::: {.callout-note collapse="true"}
 :::
