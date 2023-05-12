@@ -7,6 +7,8 @@ format:
     code-summary: "Show me the good stuff"
 execute:
   warning: false
+date: "5 May 2023"
+date-modified: "`r Sys.Date()`"
 ---
 
 # Setting
