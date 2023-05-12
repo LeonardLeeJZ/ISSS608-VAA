@@ -5,6 +5,8 @@ format:
   html:
     code-fold: true
     code-summary: "Show me the good stuff"
+execute:
+  warning: false
 ---
 
 # Setting
@@ -63,11 +65,11 @@ Hmisc::describe(Jdata)
 
 ::: {.callout-note collapse="true"}
 
-- participantId is currently classified as <dbl> instead of nominal, and is cast to <chr> class using as.character().
+- **_participantId_** is currently classified as <dbl> instead of nominal, and is cast to <chr> class using as.character().
 
-- educationLevel is currently classified as <chr> categorical data, and is cast as factor type using the ordered() function, in accordance to its inherent hierarchy. 
+- **_educationLevel_** is currently classified as <chr> categorical data, and is cast as factor type using the ordered() function, in accordance to its inherent hierarchy. 
 
-- householdSize and interestGroup are classified as <dbl> and <chr> respectively despite being categorical in nature. The two variables are cast as factors using as.factor()
+- **_householdSize_** and **_interestGroup_** are classified as <dbl> and <chr> respectively despite being categorical in nature. The two variables are cast as factors using as.factor()
 
 :::
 
@@ -91,10 +93,10 @@ Jdata_new <- Jdata %>%
 
 ::: {.callout-note collapse="true"}
 
-- participantId is currently classified as <dbl> instead of nominal, and is cast to <chr> class using as.character().
+- **_participantId_** is currently classified as <dbl> instead of nominal, and is cast to <chr> class using as.character().
 
 
-- category is classified as <dbl>, and is cast as factor using as.factor()
+- **_category_** is classified as <dbl>, and is cast as factor using as.factor()
 
 :::
 
@@ -170,8 +172,78 @@ Joined_data <- merge(Pivot_Avg_Fdata, Jdata_new, by = "participantId") %>%
                select(unique(colnames(.))) %>%
                arrange(as.numeric(participantId))
 ```
+## 4.1 Establishing Demographic Data Groups
 
 
+### 4.1.1 Age Groups
+
+```{r}
+# Computing min and max age to annotate plot
+min_age <- min(Joined_data$age)
+max_age <- max(Joined_data$age)
+
+
+dem_age <- ggplot(Joined_data, aes(x = age)) +
+  geom_dotplot(binwidth = 1,
+               stackratio = 1.2,
+               stackdir = "up",
+               fill = "#00BF7D", #< Fill colour same as bar charts
+               color = NA,
+               dotsize = 0.6) +
+  labs(title = "Age",
+       x = NULL,
+       y = NULL)
+
+```
+
+```{r}
+dem_age2 <-dem_age + 
+            annotate(geom = "text", x = min_age, y = 0.83,
+            label = paste0("Youngest:\n", min_age)) + #< add text annotation to show age range
+            annotate(geom = "text", x = max_age, y = 0.83,
+            label = paste0("Oldest:\n", max_age)) +
+            theme(axis.text.y = element_blank(), #< remove unnecessary elements from plot
+            panel.grid.major = element_blank())
+dem_age2
+
+```
+::: {.cushbox .cushicon}
+
+Participants are further grouped by age into **four categories**, each encompassing approximately 10 years of age range:
+
+**18-29, 30-39, 40-49, 50-60** 
+
+:::
+
+
+::: panel-tabset
+
+### Code
+```{r}
+Joined_data$ageGroup <- as.factor(cut(Joined_data$age,
+                                        breaks = c(0,29,39,49,60),
+                                        labels = c("18-29", "30-39", "40-49", "50-60")))
+
+```
+### Distribution Barchart
+
+```{r}
+
+# Barchart of ageGroup
+dem_agegrp<- ggplot(Joined_data, aes(x = ageGroup)) +
+            geom_bar() +
+            labs(title = "Even Distribution of Participants across Age Groups", #< Linebreak added to title so it does not get truncated
+                  x = "Age Group",
+                  y = NULL) +
+            geom_text(stat = "count",
+                      aes(label = after_stat(count)),
+                      vjust = -1) +
+            ylim(0,400) + #< Same y-axis limits for both age and wage plots to standardise
+            theme(text = element_text(size = 12))
+
+dem_agegrp
+```
+:::
 ## 5 Exploratory Data Analysis
 
 ### 5.1 Normality Testing of Joviality
@@ -197,6 +269,9 @@ shapiro.test(Joined_data$joviality)
 ```
 
 The Shapiro-Wilk test is a widely used method to test for normality. As p < 0.05, there is sufficient statistical power to reject the null hypothesis that the data is normally distributed.
+
+:::
+
 
 ### 5.2 Normality Testing of Wage
 
@@ -237,19 +312,54 @@ The Shapiro-Wilk test is a widely used method to test for normality. As p < 0.05
 
 
 ```{r}
+describe(Joined_data$Wage) #to assess best cut points for income levels
 
-# Calculate the quantile values for the Wage variable
-quantiles <- quantile(Joined_data$Wage, probs = c(0.25, 0.5, 0.75))
+```
+::: {.cushbox .cushicon}
+
+Based on the distribution described above, the cut points values matching **25th, 50th and 90th percentile** are used to group participants by income level:
+
+**Bottom 25th Percentile -> Low Income**
+**26th to 50th Percentile -> Low-Middle Income**
+**50th to 90th Percentile -> Middle-High Income**
+**Top 10th Percentile -> High Income**
+
+
+:::
+
+::: panel-tabset
+
+### Code
+```{r}
 
 # Define the breaks for the three bins
-breaks <- c(-Inf, quantiles[1], quantiles[2], Inf)
+breaks <- c(0, 2551, 3388, 6574, Inf)
 
 # Bin the Wage variable into three categories using cut()
-income_levels <- cut(Joined_data$Wage, breaks, labels = c("Low", "Middle", "High"))
+income_levels <- cut(Joined_data$Wage, breaks, labels = c("Low", "Low-Middle", "Middle-High", "High"))
 
 # Add the income levels as a new column in the dataset
 Joined_data$Income_Level <- income_levels
 ```
+
+### Distribution Barchart
+
+```{r}
+# Barchart of Income Level
+dem_incomelvl<- ggplot(Joined_data, aes(x = Income_Level)) +
+            geom_bar() +
+            labs(title = "High Distribution of \nParticipants in Middle-High Income Level", #< Linebreak added 
+                  x = "Income Level",
+                  y = NULL) +
+            geom_text(stat = "count",
+                      aes(label = after_stat(count)),
+                      vjust = -1) +
+            ylim(0,500) + 
+            theme(text = element_text(size = 12))
+
+dem_incomelvl
+```
+:::
 
 ### Comparison of mean Joviality Scores between Income Group Levels 
 
@@ -259,13 +369,21 @@ ggbetweenstats(Joined_data, x= Income_Level, y= joviality)
 ```
 As p is less than 0.05, we reject the null hypothesis that there is no significant difference in means across income groups.
 
-An interesting insight can be gleaned from this comparison of means, as a significantly higher mean joviality score is observed in both Middle and Lower income groups, while the lowest mean score is observed in the High income group. 
+::: {.bubblebox .bubbleicon}
+
+
+An interesting insight can be gleaned from this comparison of means- as a significantly higher mean joviality score is observed in both Middle and Lower income groups, while the lowest mean score is observed in the High income group. 
+
+
+:::
+
+
 
 ### Comparison of Means for Joviality across Education  Levels
 
 ::: panel-tabset
 
-## Pairwise Test
+## Visualisation: Pairwise Test
 ```{r}
 
 ggbetweenstats(Joined_data, x= educationLevel, y= joviality)
@@ -276,19 +394,28 @@ Through comparison of mean joviality scores across education levels, the null hy
 
 :::
 
-::: {.bubblebox .bubbleicon}
-
-
-Hi this is a placeholder text to see if this will stretch out the box
-
-
-
-
-:::
 
 ### Education and Wage 
+```{r}
+# prepare the data
+Joined_data$education_group <- factor(Joined_data$educationLevel, 
+                                 levels = c("Low", "HighSchoolOrCollege", "Bachelors", "Graduate"), 
+                                 labels = c("Low education", "High School or College", "Bachelor's Degree", "Graduate Degree"))
 
+# create the ggplot object
+p <- ggplot(Joined_data, aes(x = Wage, fill = education_group)) +
+  geom_density(alpha = 0.6) +
+  labs(x = "Wage ($)") +
+  labs(title = 'Wage Distribution across Education Levels', fill = 'Education Level') +
+  theme(axis.text.y = element_blank(), axis.title.y = element_blank())
+
+# convert to interactive plot
+ggplotly(p)
+
+```
 ### Expense and Joviality (Build more cost efficient stuff)
+
+
 
 ### Age and Joviality (Need more ageing popn stuff?)
 
