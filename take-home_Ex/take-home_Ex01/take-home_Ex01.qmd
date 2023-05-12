@@ -29,7 +29,7 @@ Financial.csv
 # 1 Load Packages
 
 ```{r}
-pacman::p_load(readr, ggrepel, patchwork, Hmisc, ggthemes, hrbrthemes, ggstatsplot, ggiraph, plotly, dplyr, patchwork, DT, tidyverse, ggplot2, stats, ggridges, viridis)
+pacman::p_load(readr, ggrepel, patchwork, Hmisc, ggthemes, hrbrthemes, ggstatsplot, ggiraph, plotly, dplyr, patchwork, DT, tidyverse, ggplot2, stats, ggridges, viridis, scales)
 ```
 
 # 2 Import the Data
@@ -139,7 +139,7 @@ Pivot_Fdata <- Fdata_new %>%
 head(Pivot_Fdata, n = 3)
 ```
 
-# 4 Data Preparation
+# 4 Data Wrangling and Evaluation
 
 ```{r}
 Pivot_Fdata <- Pivot_Fdata %>%
@@ -213,8 +213,32 @@ Participants are further grouped by age into **four categories**, each encompass
 
 :::
 
+### 4.1.2 Household Size
 
 
+```{r}
+
+
+# Calculate proportion of household sizes
+proportion <- Joined_data %>%
+  count(householdSize) %>%
+  mutate(prop = n / sum(n))
+
+# Create pie chart
+pie_chart <- ggplot(proportion, aes(x = "", y = prop, fill = householdSize)) +
+  geom_bar(stat = "identity", color = "black") +
+  coord_polar("y", start = 0) +
+  geom_text(aes(label = percent(prop)), position = position_stack(vjust = 0.5)) +
+  scale_y_continuous(labels = percent_format()) +
+  labs(fill = "Household Size") +
+  ggtitle("Proportion of Household Sizes") +
+  theme_void() +
+  theme(legend.position = "right")
+
+# Display pie chart
+pie_chart
+
+```
 
 ## Grouping Participants by Age
 ::: panel-tabset
