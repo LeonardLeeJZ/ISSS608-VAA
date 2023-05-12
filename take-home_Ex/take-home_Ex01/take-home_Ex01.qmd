@@ -27,7 +27,7 @@ Financial.csv
 # 1 Load Packages
 
 ```{r}
-pacman::p_load(readr, ggrepel, patchwork, Hmisc, ggthemes, hrbrthemes, ggstatsplot, ggiraph, plotly, dplyr, patchwork, DT, tidyverse, ggplot2, stats)
+pacman::p_load(readr, ggrepel, patchwork, Hmisc, ggthemes, hrbrthemes, ggstatsplot, ggiraph, plotly, dplyr, patchwork, DT, tidyverse, ggplot2, stats, ggridges, viridis)
 ```
 
 # 2 Import the Data
@@ -35,16 +35,10 @@ pacman::p_load(readr, ggrepel, patchwork, Hmisc, ggthemes, hrbrthemes, ggstatspl
 ```{r}
 
 Fdata <- read_csv("data/FinancialJournal.csv")
-
-
-```
-
-```{r}
-
 Jdata <- read_csv("data/Participants.csv")
 
-```
 
+```
 # 3 Cleaning and Preparing the Data
 
 ## 3.1 Financial Dataset Summary
@@ -61,7 +55,7 @@ Hmisc::describe(Fdata)
 Hmisc::describe(Jdata)
 ```
 
-## 3.3 Correcting Data Format [Jdata]
+## 3.3 Correcting Demographic Data Format [Jdata]
 
 ::: {.callout-note collapse="true"}
 
@@ -89,7 +83,7 @@ Jdata_new <- Jdata %>%
 
 ```
 
-## 3.4.1 Correcting Data Format [Fdata]
+## 3.4.1 Correcting Financial Data Format [Fdata]
 
 ::: {.callout-note collapse="true"}
 
@@ -140,8 +134,7 @@ Pivot_Fdata <- Fdata_new %>%
                          Wage = sum(amount[category == "Wage"])) %>%
                 ungroup()
   
-
-
+head(Pivot_Fdata, n = 3)
 ```
 
 # 4 Data Preparation
@@ -171,11 +164,15 @@ Pivot_Avg_Fdata <- Pivot_Fdata %>%
 Joined_data <- merge(Pivot_Avg_Fdata, Jdata_new, by = "participantId") %>%
                select(unique(colnames(.))) %>%
                arrange(as.numeric(participantId))
+
+head(Joined_data, n= 3)
 ```
 ## 4.1 Establishing Demographic Data Groups
 
 
 ### 4.1.1 Age Groups
+
+Through a dotplot, we see that age distribution across the participants is spread between 18 to 60, with minor fluctuations.
 
 ```{r}
 # Computing min and max age to annotate plot
@@ -194,9 +191,6 @@ dem_age <- ggplot(Joined_data, aes(x = age)) +
        x = NULL,
        y = NULL)
 
-```
-
-```{r}
 dem_age2 <-dem_age + 
             annotate(geom = "text", x = min_age, y = 0.83,
             label = paste0("Youngest:\n", min_age)) + #< add text annotation to show age range
@@ -207,6 +201,8 @@ dem_age2 <-dem_age +
 dem_age2
 
 ```
+
+
 ::: {.cushbox .cushicon}
 
 Participants are further grouped by age into **four categories**, each encompassing approximately 10 years of age range:
@@ -216,8 +212,10 @@ Participants are further grouped by age into **four categories**, each encompass
 :::
 
 
-::: panel-tabset
 
+
+## Grouping Participants by Age
+::: panel-tabset
 ### Code
 ```{r}
 Joined_data$ageGroup <- as.factor(cut(Joined_data$age,
@@ -246,9 +244,15 @@ dem_agegrp
 :::
 ## 5 Exploratory Data Analysis
 
-### 5.1 Normality Testing of Joviality
+### 5.1 Joviality
+
+The survey returned a range of Joviality scores between 0 and 1, and it is assumed that 1 is the maximum score to which one is most Jovial (or happy), and 0 is conversely the minimum score to which indicates the lowest possible state of happiness.
+
+### Normality Testing and Distribution
 
 ::: panel-tabset
+
+
 
 ## QQ Plot
 ```{r}
@@ -270,10 +274,48 @@ shapiro.test(Joined_data$joviality)
 
 The Shapiro-Wilk test is a widely used method to test for normality. As p < 0.05, there is sufficient statistical power to reject the null hypothesis that the data is normally distributed.
 
+
+## Distribution
+
+```{r}
+mean_j <- mean(Joined_data$joviality)
+med_j <- median(Joined_data$joviality)
+std_j <- sd(Joined_data$joviality)
+
+ggplot(Joined_data, aes(x = joviality)) + 
+      geom_histogram(aes(y = ..density..),
+                    binwidth = 0.05, 
+                    fill = "#CCFF99",
+                    color = "grey") +
+      stat_function(fun = dnorm,
+                args = list(mean = mean_j,
+                            sd = std_j),
+                col = "skyblue",
+                linewidth = 1) +
+      geom_vline(aes(xintercept = mean_j),
+                colour="#4d5887", linewidth = 0.8, linetype = "dashed") +
+      annotate(geom = "text", x = mean_j + 0.12, y = 1.4,
+                  label = paste0("Mean Joviality: ", round((mean_j),2)),
+                  color = "#4d5887") +
+      geom_vline(aes(xintercept = med_j),
+                colour="grey20", linewidth = 0.8, linetype = "dashed") +
+      annotate(geom = "text", x = med_j - 0.13, y = 1.5,
+                  label = paste0("Median Joviality: ", round((med_j),2)),
+                  color = "grey20") +
+      scale_x_continuous(breaks = scales::pretty_breaks(n = 10)) +
+      labs(title = "Distribution of Participants' Joviality Scores") +
+      theme(axis.text.y = element_blank(),
+            axis.title.y = element_blank(),
+            panel.grid.major = element_blank())
+
+```
 :::
 
 
-### 5.2 Normality Testing of Wage
+
+## 5.2 Wage (Income)
+
+### Normality Testing
 
 ::: panel-tabset
 
@@ -299,15 +341,6 @@ The Shapiro-Wilk test is a widely used method to test for normality. As p < 0.05
 
 :::
 
- 
-
-
-
-### Kids and Joviality (Kids related facilities)
-
-## Wage and Joviality
-
-
 ### Cut Wage into Categories based on quantiles
 
 
@@ -324,11 +357,11 @@ Based on the distribution described above, the cut points values matching **25th
 **50th to 90th Percentile -> Middle-High Income**
 **Top 10th Percentile -> High Income**
 
-
 :::
 
-::: panel-tabset
+## Grouping Participants by Income Levels
 
+::: panel-tabset
 ### Code
 ```{r}
 
@@ -361,58 +394,141 @@ dem_incomelvl
 ```
 :::
 
-### Comparison of mean Joviality Scores between Income Group Levels 
+ ## Association Testing (Chi-Squared Test)
+
+::: panel-tabset
+
+### Summary
+```{r}
+
+
+
+```
+
+### Income Levels
+
+
+
+### Education Levels
+
+
+### Age Group
+:::
+
+
+### Comparison of mean Joviality Scores
+
+::: panel-tabset
+
+## Income Levels
 
 ```{r}
-ggbetweenstats(Joined_data, x= Income_Level, y= joviality)
+ggbetweenstats(Joined_data, x= Income_Level, y= joviality) +
+  labs(x = "Income Level", y = "Joviality Score")
 
 ```
 As p is less than 0.05, we reject the null hypothesis that there is no significant difference in means across income groups.
 
-::: {.bubblebox .bubbleicon}
+
+
+## Age Groups
+
+```{r}
+
+ggbetweenstats(Joined_data, x= ageGroup, y= joviality) +
+  labs(x = "Age Group", y = "Joviality Score")
+
+```
 
 
 An interesting insight can be gleaned from this comparison of means- as a significantly higher mean joviality score is observed in both Middle and Lower income groups, while the lowest mean score is observed in the High income group. 
 
 
-:::
+## Education Levels
 
-
-
-### Comparison of Means for Joviality across Education  Levels
-
-::: panel-tabset
-
-## Visualisation: Pairwise Test
 ```{r}
-
-ggbetweenstats(Joined_data, x= educationLevel, y= joviality)
+ggbetweenstats(Joined_data, x= educationLevel, y= joviality) +
+  labs(x = "Education Level", y = "Joviality Score")
 
 ```
 
 Through comparison of mean joviality scores across education levels, the null hypothesis is that there is no difference between means. As p > 0.05, we accept the null hypothesis.
 
+## Household Size
+
+```{r}
+ggbetweenstats(Joined_data, x= householdSize, y= joviality) +
+  labs(x = "Household Size", y = "Joviality Score")
+
+```
+## Interest Groups
+
+```{r}
+
+
+ggbetweenstats(Joined_data, x = interestGroup, y = joviality) +
+  scale_color_manual(values = viridis(length(levels(Joined_data$interestGroup)))) +
+  labs(x = "Interest Group", y = "Joviality Score")
+
+
+
+```
+
+
+:::
+
+::: {.bubblebox .bubbleicon}
+**Insights**
+
+1) An interesting insight can be gleaned from this comparison of means- as a significantly higher mean joviality score is observed in both Middle and Lower income groups, while the lowest mean score is observed in the High income group. 
+
+2) 
+
+3)
+
 :::
 
 
-### Education and Wage 
+### 
 ```{r}
 # prepare the data
 Joined_data$education_group <- factor(Joined_data$educationLevel, 
                                  levels = c("Low", "HighSchoolOrCollege", "Bachelors", "Graduate"), 
                                  labels = c("Low education", "High School or College", "Bachelor's Degree", "Graduate Degree"))
 
+
 # create the ggplot object
+
 p <- ggplot(Joined_data, aes(x = Wage, fill = education_group)) +
   geom_density(alpha = 0.6) +
   labs(x = "Wage ($)") +
   labs(title = 'Wage Distribution across Education Levels', fill = 'Education Level') +
   theme(axis.text.y = element_blank(), axis.title.y = element_blank())
 
+
+
 # convert to interactive plot
 ggplotly(p)
 
 ```
+
+```{r}
+p2 <- ggplot(Joined_data, aes(y = education_group, x = Wage, fill = education_group)) +
+  geom_density_ridges(alpha = 0.6, scale = 0.9) +
+  scale_x_continuous(limits = c(0, 20000)) +
+  labs(x = "Wage ($)", y = "", fill = 'Education Level') +
+  labs(title = 'Wage Distribution across Education Levels') +
+  theme(axis.text.y = element_blank(), axis.title.y = element_blank())
+
+p2
+```
+
+```{r}
+
+
+
+```
+
 ### Expense and Joviality (Build more cost efficient stuff)
 
 
@@ -422,6 +538,10 @@ ggplotly(p)
 ### Interest Group X Joviality (IG related stuff)
 
 ### Wage x Kids X Joviality 
+
+### Kids and Joviality (Kids related facilities)
+
+## Wage and Joviality
 
 ::: {.callout-note collapse="true"}
 :::

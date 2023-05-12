@@ -5,7 +5,6 @@ execute:
   warning: false
 ---
 
-
 # Load Packages
 
 ```{r}
@@ -23,7 +22,7 @@ exam_data <- read_csv("data/Exam_data.csv")
 
 # Tooltip effect using Tooltip aesthetic
 
-## Creating interactive graph using ggiraph 
+## Creating interactive graph using ggiraph
 
 ```{r}
 p <- ggplot(data=exam_data, 
@@ -42,7 +41,7 @@ girafe(
 )
 ```
 
-## Displaying Multiple information 
+## Displaying Multiple information
 
 ```{r}
 exam_data$tooltip <- c(paste0(     
@@ -89,6 +88,7 @@ girafe(
       css = tooltip_css)) #<<
 ) 
 ```
+
 ### Displaying Statistics
 
 ```{r}
@@ -211,8 +211,8 @@ girafe(
 
 In order to build a coordinated multiple views as shown in the example above, the following programming strategy will be used:
 
-1) Appropriate interactive functions of ggiraph will be used to create the multiple views.
-2) patchwork function of patchwork package will be used inside girafe function to create the interactive coordinated multiple views.
+1)  Appropriate interactive functions of ggiraph will be used to create the multiple views.
+2)  patchwork function of patchwork package will be used inside girafe function to create the interactive coordinated multiple views.
 
 ```{r}
 p1 <- ggplot(data=exam_data, 
@@ -273,9 +273,9 @@ ggplotly(p)
 
 The creation of a coordinated linked plot by using plotly involves three steps:
 
-1) highlight_key() of plotly package is used as shared data.
-2) two scatterplots will be created by using ggplot2 functions.
-3) lastly, subplot() of plotly package is used to place them next to each other side-by-side.
+1)  highlight_key() of plotly package is used as shared data.
+2)  two scatterplots will be created by using ggplot2 functions.
+3)  lastly, subplot() of plotly package is used to place them next to each other side-by-side.
 
 ```{r}
 d <- highlight_key(exam_data)
@@ -299,6 +299,7 @@ subplot(ggplotly(p1),
 ## Interactive Data Table - Crosstalk methods
 
 ### DT Package
+
 ```{r}
 DT::datatable(exam_data, class= "compact")
 ```
@@ -325,6 +326,7 @@ crosstalk::bscols(gg,
 # Programming Animated Stats Graphics with R
 
 ## Loading Packages
+
 ```{r}
 pacman::p_load(readxl, gifski, gapminder,
                plotly, gganimate, tidyverse)
@@ -339,13 +341,14 @@ globalPop <- read_xls("data/GlobalPopulation.xls",
   mutate_each_(funs(factor(.)), col) %>%
   mutate(Year = as.integer(Year))
 ```
+
 ## Animated Data Visualisation: gganimate methods
 
-1) transition_*() defines how the data should be spread out and how it relates to itself across time.
-2) view_*() defines how the positional scales should change along the animation.
-3) shadow_*() defines how data from other points in time should be presented in the given point in time.
-4) enter_*()/exit_*() defines how new data should appear and how old data should disappear during the course of the animation.
-5) ease_aes() defines how different aesthetics should be eased during transitions.
+1)  transition\_\*() defines how the data should be spread out and how it relates to itself across time.
+2)  view\_\*() defines how the positional scales should change along the animation.
+3)  shadow\_\*() defines how data from other points in time should be presented in the given point in time.
+4)  enter\_*()/exit\_*() defines how new data should appear and how old data should disappear during the course of the animation.
+5)  ease_aes() defines how different aesthetics should be eased during transitions.
 
 ### Static Population Bubble Plot
 
@@ -378,6 +381,7 @@ ggplot(globalPop, aes(x = Old, y = Young,
   transition_time(Year) +       
   ease_aes('linear')
 ```
+
 ## ADV: plotly
 
 In Plotly R package, both ggplotly() and plot_ly() support key frame animations through the frame argument/aesthetic. They also support an ids argument/aesthetic to ensure smooth transitions between objects with the same id (which helps facilitate object constancy).
