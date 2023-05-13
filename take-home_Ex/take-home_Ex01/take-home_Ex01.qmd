@@ -29,7 +29,7 @@ Financial.csv
 # 1 Load Packages
 
 ```{r}
-pacman::p_load(readr, ggrepel, patchwork, Hmisc, ggthemes, hrbrthemes, ggstatsplot, ggiraph, plotly, dplyr, patchwork, DT, tidyverse, ggplot2, stats, ggridges, viridis, scales)
+pacman::p_load(readr, ggrepel, patchwork, Hmisc, ggthemes, hrbrthemes, ggstatsplot, ggiraph, plotly, dplyr, patchwork, DT, tidyverse, ggplot2, stats, ggridges, viridis, scales, cowplot, ggdist, tidyquant, ggthemes)
 ```
 
 # 2 Import the Data
@@ -230,7 +230,7 @@ Joined_data$ageGroup <- as.factor(cut(Joined_data$age,
 ```{r}
 
 # Barchart of ageGroup
-dem_agegrp<- ggplot(Joined_data, aes(x = ageGroup)) +
+dem_agegrp<- ggplot(Joined_data, aes(x = ageGroup, fill = ageGroup)) +
             geom_bar() +
             labs(title = "Even Distribution of Participants across Age Groups", #< Linebreak added to title so it does not get truncated
                   x = "Age Group",
@@ -408,7 +408,7 @@ Joined_data$Income_Level <- income_levels
 
 ```{r}
 # Barchart of Income Level
-dem_incomelvl<- ggplot(Joined_data, aes(x = Income_Level)) +
+dem_incomelvl<- ggplot(Joined_data, aes(x = Income_Level, fill = Income_Level)) +
             geom_bar() +
             labs(title = "High Distribution of \nParticipants in Middle-High Income Level", #< Linebreak added 
                   x = "Income Level",
@@ -517,8 +517,11 @@ ggbetweenstats(Joined_data, x = interestGroup, y = joviality) +
 
 :::
 
+## Wage across Education Levels
 
-### 
+::: panel-tabset
+
+## Interactive Density Plot
 ```{r}
 # prepare the data
 Joined_data$education_group <- factor(Joined_data$educationLevel, 
@@ -541,7 +544,11 @@ ggplotly(p)
 
 ```
 
+## Ridgeplot
+
 ```{r}
+
+
 p2 <- ggplot(Joined_data, aes(y = education_group, x = Wage, fill = education_group)) +
   geom_density_ridges(alpha = 0.6, scale = 0.9) +
   scale_x_continuous(limits = c(0, 20000)) +
@@ -550,13 +557,34 @@ p2 <- ggplot(Joined_data, aes(y = education_group, x = Wage, fill = education_gr
   theme(axis.text.y = element_blank(), axis.title.y = element_blank())
 
 p2
+
+
 ```
+
+## Ridgeplot ++
 
 ```{r}
 
+Joined_data %>%
+  ggplot(aes(x = education_group, y = Wage, fill = education_group)) +
+  stat_halfeye(adjust = 0.5, justification = -0.2, .width = 0, point_colour = NA) +
+  geom_boxplot(position = position_nudge(x = 0.3), width = 0.2, outlier.color = NA, alpha = 0.5) +
+  stat_dots(side = "left", justification = 1.1, binwidth = 0.25, size = 0.5) +
+  scale_fill_manual(values = c("#F8766D", "#00BFC4", "#FFC200", "#C77CFF")) +
+  theme_minimal() +
+  theme(axis.text.y = element_blank(), axis.title.y = element_blank(), legend.position = "right") +
+  labs(title = 'Wage Distribution across Education Levels', x = "Education Level", y = "", fill = "Education Level") +
+  coord_flip() +
+  lims(y = c(0, 15000))
+
 
 
 ```
+For Visualisation ease, values > 15000 for Wage have been obscured through limiting of the graph's axis. 
+
+:::
+
+
 
 ### Expense and Joviality (Build more cost efficient stuff)
 
