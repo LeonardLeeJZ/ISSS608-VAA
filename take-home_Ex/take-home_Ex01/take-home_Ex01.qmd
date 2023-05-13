@@ -397,31 +397,58 @@ dem_incomelvl
 ## Regression Model of Joviality
 
 ```{r}
-# Linear Regression Models (Joviality as Target var)
-model <- lm(joviality ~ Education + Food + Recreation + 
+# First plot
+model1 <- lm(joviality ~ Education + Food + Recreation + 
               Shelter + Wage + RentAdjmt + householdSize + haveKids + age + educationLevel + interestGroup, data = Joined_data)
+check_c1 <- check_collinearity(model1)
+par(mar=c(5,5,4,2)+0.1)
+plot(check_c1, las=2)
 
-check_c <- check_collinearity(model)
-plot(check_c)
 
 ```
 
 \## Association Testing (Chi-Squared Test)
 
 ::: panel-tabset
-### Summary
+## Summary
 
 ```{r}
 
 
 
 ```
+## Children
 
-### Income Levels
+```{r}
+set.seed(1234)
+test_kids <- ggbarstats(Joined_data,
+                          x = haveKids, y = Income_Level, 
+                        bf.message = FALSE)+
+            labs(title = "Households with Lower Income have Lower Proportion of Children",
+                 x = "Income Group") +
+            theme(plot.background = element_rect(fill="#F8F3E6",colour="#F8F3E6"))
+test_kids
+```
 
-### Education Levels
+## Education Levels
 
-### Age Group
+```{r}
+set.seed(1234)
+test_hhsize <- ggbarstats(Joined_data,
+                          x = education_group, y = Income_Level,
+                          bf.message = FALSE) +
+            labs(title = "Large Proportion of High Income Earners are Highly Educated",
+                 x = "Income Group") +
+            theme(plot.background = element_rect(fill="#F8F3E6",colour="#F8F3E6"))
+test_hhsize
+
+```
+
+## Education Levels
+
+## Age Group
+
+## 
 :::
 
 ### Comparison of mean Joviality Scores
@@ -559,15 +586,34 @@ For Visualisation ease, values \> 10,000 for Wage have been obscured through lim
 
 ### Expense and Joviality (Build more cost efficient stuff)
 
+```{r}
+
+
+
+```
+
 ### Age and Joviality (Need more ageing popn stuff?)
 
-### Interest Group X Joviality (IG related stuff)
+```{r}
 
-### Wage x Kids X Joviality
 
+```
+
+```{r}
+
+
+
+
+```
 ### Kids and Joviality (Kids related facilities)
 
-## Wage and Joviality
+
+### Income Level X Joviality x HaveKids
+
+### Income Level X Joviality x Expense_Prop
+
+
+
 
 ::: {.callout-note collapse="true"}
 :::
