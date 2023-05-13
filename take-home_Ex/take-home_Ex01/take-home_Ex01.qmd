@@ -274,9 +274,9 @@ pie_chart
 
 ```
 
-## 5 Exploratory Data Analysis
+# 5 Exploratory Data Analysis
 
-### 5.1 Joviality
+## 5.1 Joviality
 
 The survey returned a range of Joviality scores between 0 and 1, and it is assumed that 1 is the maximum score to which one is most Jovial (or happy), and 0 is conversely the minimum score to which indicates the lowest possible state of happiness.
 
