@@ -58,8 +58,8 @@ Jdata <- read_csv("data/Participants.csv")
 ## 3.1 Financial Dataset Summary
 
 ```{r}
-Hmisc::describe(Fdata)
 
+Hmisc::describe(Fdata)
 ```
 
 ## 3.2 Joviality Dataset Summary
@@ -176,7 +176,7 @@ Joined_data <- merge(Pivot_Avg_Fdata, Jdata_new, by = "participantId") %>%
 head(Joined_data, n= 3)
 ```
 
-## 4.1 Establishing Demographic Data Groups
+## 4.1 Examining Demographic Data Groups
 
 ### 4.1.1 Age Groups
 
@@ -274,11 +274,15 @@ pie_chart
 
 ```
 
+::: {.bubblebox .bubbleicon}
+Here, we see that there is a relatively even proportion of household sizes throughout the surveyed participants, with household size of 2 being slightly more prevalent.
+:::
+
 # 5 Exploratory Data Analysis
 
 ## 5.1 Joviality
 
-The survey returned a range of Joviality scores between 0 and 1, and it is assumed that 1 is the maximum score to which one is most Jovial (or happy), and 0 is conversely the minimum score to which indicates the lowest possible state of happiness.
+The survey returned a range of Joviality scores between 0 and 1, and it is assumed that 1 is the maximum score to which one is most Jovial (or happy), and 0 is conversely the minimum score to which indicates the lowest possible state of happiness at the time of survey.
 
 ### Normality Testing and Distribution
 
@@ -343,9 +347,83 @@ ggplot(Joined_data, aes(x = joviality)) +
 ```
 :::
 
+## Collinearity Check
+
+::: {.cushbox .cushicon}
+The variables **householdSize** and **haveKids** cause aliasing when run together, therefore two separate collinearity checks are run using each at a time.
+:::
+
+::: panel-tabset
+### householdSize
+
+```{r}
+
+# Load the car package
+library(car)
+
+# Fit the linear regression model
+model <- lm(joviality ~ Education + Food + Recreation + 
+              Shelter + Wage + RentAdjmt + householdSize + age + educationLevel + interestGroup, data = Joined_data)
+
+summary(model)
+
+# Calculate the VIFs using the vif() function
+vif_values <- vif(model)
+
+# Print the VIFs
+print(vif_values)
+
+
+
+```
+
+### haveKids
+
+```{r}
+
+
+# Load the car package
+library(car)
+
+# Fit the linear regression model
+model2 <- lm(joviality ~ Education + Food + Recreation + 
+              Shelter + Wage + RentAdjmt + haveKids + age + educationLevel + interestGroup, data = Joined_data)
+
+summary(model2)
+
+# Calculate the VIFs using the vif() function
+vif_values2 <- vif(model)
+
+# Print the VIFs
+print(vif_values2)
+```
+
+### Model 1 Visualisation
+
+```{r}
+# create plot
+model1V <- lm(joviality ~ Education + Food + Recreation + 
+              Shelter + Wage + RentAdjmt + householdSize + haveKids + age + educationLevel + interestGroup, data = Joined_data)
+
+check_c <- check_collinearity(model1V)
+plot(check_c)
+
+# rotate x-axis labels
+par(las=2) #doesn't work to rotate labels
+
+
+```
+:::
+
+::: {.bubblebox .bubbleicon}
+Based on the collinearity checks, we observe that the highest scoring variable (householdSize) scored at 5.69, suggesting moderate correlation between householdSize and joviality, which means they may share some common variance but are not highly correlated to cause multicollinearity. 
+:::
+
 ## 5.2 Financial Variables
 
-### Cut Wage and Expense Proportion into Categories based on quantiles
+### Cut Wage and Expense Proportion into Categories based on Quantiles
+
+For insights involving Financial Variables, the participants will be grouped by income level, as well as the proportion of their income (Wage) being spent (Expense_Prop).
 
 ```{r}
 describe(Joined_data$Wage) #to assess best cut points for income levels
@@ -365,7 +443,7 @@ Based on the distribution described above, the cut points values matching **25th
 **Bottom 25th Percentile -\> Low Proportion** **26th to 50th Percentile -\> Low-Middle Proportion** **50th to 90th Percentile -\> Middle-High Proportion** **Top 10th Percentile -\> High Proportion**
 :::
 
-## Grouping Participants by Income Levels
+### 5.2.1 Grouping Participants by Income Levels
 
 ::: panel-tabset
 ### Code
@@ -401,7 +479,7 @@ dem_incomelvl
 ```
 :::
 
-## Grouping Participants by Expense Proportion Category
+### 5.2.2 Grouping Participants by Expense Proportion Category
 
 ::: panel-tabset
 ### Code
@@ -437,30 +515,15 @@ dem_Exp_PropC
 ```
 :::
 
-## Regression Model of Joviality
+## 5.3 Association Testing (Chi-Squared Test)
 
-```{r}
-# First plot
-model1 <- lm(joviality ~ Education + Food + Recreation + 
-              Shelter + Wage + RentAdjmt + householdSize + haveKids + age + educationLevel + interestGroup, data = Joined_data)
-check_c1 <- check_collinearity(model1)
-par(mar=c(5,5,4,2)+0.1)
-plot(check_c1, las=2)
+::: {.bubblebox .bubbleicon}
+Of the variables tested, only Education Level is significantly associated with Expense Proportion Category (p <0.05).
 
-
-```
-
-## Association Testing (Chi-Squared Test)
+We therefore reject the null hypothesis that there is no association between the variables.
+:::
 
 ::: panel-tabset
-## Summary
-
-```{r}
-
-
-
-```
-
 ## Children
 
 ```{r}
@@ -488,7 +551,7 @@ test_edlvl
 
 ```
 
-## Age Group
+## Interest Group
 
 ```{r}
 set.seed(1234)
@@ -517,7 +580,9 @@ test_inclvl
 ```
 :::
 
-### Comparison of mean Joviality Scores
+### 5.4 Comparison of mean Joviality Scores (ANOVA)
+
+A non-parametric Kruskal-Wallis one-way ANOVA test is conducted to determine if there is a significant difference in mean joviality score between the following factors. We test for the null hypothesis that there is no difference in mean between the variable factors, at confidence level of 0.05.
 
 ::: panel-tabset
 ## Income Levels
@@ -576,14 +641,14 @@ ggbetweenstats(Joined_data, x = interestGroup, y = joviality) +
 ::: {.bubblebox .bubbleicon}
 **Insights**
 
-1)  An interesting insight can be gleaned from this comparison of means- as a significantly higher mean joviality score is observed in both Middle and Lower income groups, while the lowest mean score is observed in the High income group.
+1)  A significantly higher mean joviality score is observed in both Middle and Lower income groups, while the lowest mean score is observed in the High income group.
 
-2)  
+2)  P-value is >0.05 for all variables except for Income Group, with marginal difference between means within the variables.
 
-3)  
 :::
 
-## Wage across Education Levels
+
+## 5.5 Wage across Education Levels
 
 ::: panel-tabset
 ## Interactive Density Plot
@@ -650,9 +715,15 @@ Joined_data %>%
 For Visualisation ease, values \> 10,000 for Wage have been obscured through limiting of the graph's axis.
 :::
 
+::: {.bubblebox .bubbleicon}
+
+It is observed that the mean wage/income for participants is higher when they have been educated to a further extent, as observed in Visualisation, where the boxplot depicts increasing mean values as education level increases.
 
 
-## Have Kids/Joviality
+:::
+
+## 5.6 Have Kids/Joviality
+
 
 ::: panel-tabeset
 ### Animated Plot Depicting Uncertainty
@@ -696,8 +767,15 @@ ggplotly(p, tooltip = c("y", "group_mean", "group_median", "lower", "upper")) %>
 ```
 :::
 
+::: {.bubblebox .bubbleicon}
 
-### EPC/Have Kids/Education Level/Joviality
+The plot highlights the uncertainty associated with comparing joviality with the variable of having children, this is supported by the boxplot, which depicts relatively equal mean scores for joviality between participants with and without children. This indicates that there is no significant inclination observed between the two different states (having children or not).
+
+:::
+
+
+
+### 5.7 EPC/Have Kids/Education Level/Joviality
 
 ```{r}
 ExpP <- ggplot(Joined_data, aes(x = Expense_PropCat, y = joviality, fill = Expense_PropCat)) + 
@@ -721,7 +799,49 @@ ggplotly(ExpP)
 
 ::: {.bubblebox .bubbleicon}
 
+1) Participants who spent a high proportion of their income record the highest mean joviality score across all categories observed in the plot. 
+
+2) However, in less educated groups (High School or College, Low Education), joviality scores are higher when participants spend a low proportion of their income. 
 
 :::
 
+## Spending Streams and Joviality
+```{r}
 
+# Calculate the correlation coefficients between joviality and the types of expenses
+correlation_matrix <- cor(Joined_data[c("Shelter", "Education", "Food", "Recreation", "joviality")])
+
+# Check the correlation matrix
+correlation_matrix
+```
+::: {.bubblebox .bubbleicon}
+
+Correlation Analysis tells us that of all the types of expenditure, Recreation has the largest correlation coeffiecient (-0.25), but is still considered a weak negative association. 
+
+The results suggest that while slight shifts in joviality might be observed with reductions in Food and Recreation spending, it may not be significant enough to justify the town's spendings.
+
+:::
+
+## 6 Recommendations
+
+::: {.bubblebox .bubbleicon}
+
+1) Based on the analyses performed thus far, Income Level and Expense Proportion Category comparisons seem to draw the most difference in joviality scores.
+
+Specifically, proportion of spending between education levels seems to suggest that despite the relatively higher mean income associated with better education, those who spend less actually feel less happy than those who have a high expense proportion. 
+
+This suggests there is a population of Graduates and High School/College Graduants who may benefit from new sources of expenditure. Despite weak positive correlation between Shelter spending and joviality, it is suggested that the town explore developing a small number of high quality residences for this group of people.
+
+2) The town can also look into affordability schemes for middle to low income earners, so as to reduce the number of people within the Low-Middle and Middle-High Expense Proportion Categories.
+
+::: 
+
+## Data Limitations and Further Analysis
+
+::: {.bubblebox .bubbleicon}
+
+1) Sample selection method does not assure us of accurate representation, as there is no information on demographic distribution and survey methods.
+
+2) Correlation does not equate causation. While there are indicative signs of some association between joviality scores and select variables, the data collected may not be holistic enough to completely capture the nuance of all factors involved. This can be mitigated through conducting several rounds of survey and to ensure the population is well-accounted for.
+
+:::
