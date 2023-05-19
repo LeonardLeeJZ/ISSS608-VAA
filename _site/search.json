@@ -249,21 +249,7 @@
     "href": "hands-on_Ex/hands-on_Ex06/Hands-on_Ex06.html#reorder-a-corrgram",
     "title": "Hands-On Exercise 6",
     "section": "Reorder a corrgram",
-    "text": "Reorder a corrgram\n::: panel-tabset"
-  },
-  {
-    "objectID": "hands-on_Ex/hands-on_Ex06/Hands-on_Ex06.html#corrplot",
-    "href": "hands-on_Ex/hands-on_Ex06/Hands-on_Ex06.html#corrplot",
-    "title": "Hands-On Exercise 6",
-    "section": "Corrplot",
-    "text": "Corrplot\n\n\nShow me the good stuff\ncorrplot.mixed(wine.cor, \n               lower = \"ellipse\", \n               upper = \"number\",\n               tl.pos = \"lt\",\n               diag = \"l\",\n               order=\"AOE\",\n               tl.col = \"black\")"
-  },
-  {
-    "objectID": "hands-on_Ex/hands-on_Ex06/Hands-on_Ex06.html#hclust",
-    "href": "hands-on_Ex/hands-on_Ex06/Hands-on_Ex06.html#hclust",
-    "title": "Hands-On Exercise 6",
-    "section": "hclust",
-    "text": "hclust\n\n\nShow me the good stuff\ncorrplot(wine.cor, \n         method = \"ellipse\", \n         tl.pos = \"lt\",\n         tl.col = \"black\",\n         order=\"hclust\",\n         hclust.method = \"ward.D\",\n         addrect = 3)"
+    "text": "Reorder a corrgram\n\nCorrplothclust\n\n\n\n\nShow me the good stuff\ncorrplot.mixed(wine.cor, \n               lower = \"ellipse\", \n               upper = \"number\",\n               tl.pos = \"lt\",\n               diag = \"l\",\n               order=\"AOE\",\n               tl.col = \"black\")\n\n\n\n\n\n\n\n\n\nShow me the good stuff\ncorrplot(wine.cor, \n         method = \"ellipse\", \n         tl.pos = \"lt\",\n         tl.col = \"black\",\n         order=\"hclust\",\n         hclust.method = \"ward.D\",\n         addrect = 3)"
   },
   {
     "objectID": "in-class_Ex/In-class_Ex01/In-class_Ex01.html",
