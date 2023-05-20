@@ -25,5 +25,244 @@ sal_wgl <- fromJSON("data/salmon_wgl.json")
 shark <- fromJSON("data/shark.json")
 tuna <- fromJSON("data/tuna.json")
 
-
 ```
+
+```{r}
+carp_nodes <- as_tibble(carp$nodes) %>%
+  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns
+
+carp_edges <- as_tibble(carp$links) %>%
+  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)
+
+# rename columns
+carp_edges <- carp_edges %>%
+  rename('Source' = 'source', 
+         'Target' = 'target', 
+         'Value_OMU' = 'valueofgoods_omu', 
+         'Weight_KG' = 'weightkg', 
+         'HS_Code' = 'hscode', 
+         'Arrival_Date' = 'arrivaldate')
+  
+```
+
+```{r}
+c_mac_nodes <- as_tibble(c_mac$nodes) %>%
+  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns
+
+c_mac_edges <- as_tibble(c_mac$links) %>%
+  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)
+
+# rename columns
+c_mac_edges <- c_mac_edges %>%
+  rename('Source' = 'source', 
+         'Target' = 'target', 
+         'Value_OMU' = 'valueofgoods_omu', 
+         'Weight_KG' = 'weightkg', 
+         'HS_Code' = 'hscode', 
+         'Arrival_Date' = 'arrivaldate')
+  
+```
+
+```{r}
+cod_nodes <- as_tibble(cod$nodes) %>%
+  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns
+
+cod_edges <- as_tibble(cod$links) %>%
+  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)
+
+# rename columns
+cod_edges <- cod_edges %>%
+  rename('Source' = 'source', 
+         'Target' = 'target', 
+         'Value_OMU' = 'valueofgoods_omu', 
+         'Weight_KG' = 'weightkg', 
+         'HS_Code' = 'hscode', 
+         'Arrival_Date' = 'arrivaldate')
+  
+```
+
+Catfish sus, no weight data (underreporting/overreporting is a trait of illegal fishing?)
+```{r}
+catfish_nodes <- as_tibble(catfish$nodes) %>%
+  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns
+
+catfish_edges <- as_tibble(catfish$links) %>%
+  select(source, target, valueofgoods_omu, hscode, arrivaldate)
+
+# rename columns
+catfish_edges <- catfish_edges %>%
+  rename('Source' = 'source', 
+         'Target' = 'target', 
+         'Value_OMU' = 'valueofgoods_omu', 
+         'HS_Code' = 'hscode', 
+         'Arrival_Date' = 'arrivaldate')
+  
+```
+
+```{r}
+herring_nodes <- as_tibble(herring$nodes) %>%
+  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns
+
+herring_edges <- as_tibble(herring$links) %>%
+  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)
+
+# rename columns
+herring_edges <- herring_edges %>%
+  rename('Source' = 'source', 
+         'Target' = 'target', 
+         'Value_OMU' = 'valueofgoods_omu', 
+         'Weight_KG' = 'weightkg', 
+         'HS_Code' = 'hscode', 
+         'Arrival_Date' = 'arrivaldate')
+  
+```
+
+```{r}
+lichen_node <- as_tibble(lichen$nodes) %>%
+  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns
+
+lichen_edges <- as_tibble(lichen$links) %>%
+  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)
+
+# rename columns
+lichen_edges <- lichen_edges %>%
+  rename('Source' = 'source', 
+         'Target' = 'target', 
+         'Value_OMU' = 'valueofgoods_omu', 
+         'Weight_KG' = 'weightkg', 
+         'HS_Code' = 'hscode', 
+         'Arrival_Date' = 'arrivaldate')
+  
+```
+
+```{r}
+mac_nodes <- as_tibble(mac$nodes) %>%
+  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns
+
+mac_edges <- as_tibble(mac$links) %>%
+  select(source, target, valueofgoods_omu, hscode, arrivaldate)
+
+# rename columns
+mac_edges <- mac_edges %>%
+  rename('Source' = 'source', 
+         'Target' = 'target', 
+         'Value_OMU' = 'valueofgoods_omu', 
+         'HS_Code' = 'hscode', 
+         'Arrival_Date' = 'arrivaldate')
+  
+```
+
+```{r}
+pol_nodes <- as_tibble(pol$nodes) %>%
+  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns
+
+pol_edges <- as_tibble(pol$links) %>%
+  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)
+
+# rename columns
+pol_edges <- pol_edges %>%
+  rename('Source' = 'source', 
+         'Target' = 'target', 
+         'Value_OMU' = 'valueofgoods_omu', 
+         'Weight_KG' = 'weightkg', 
+         'HS_Code' = 'hscode', 
+         'Arrival_Date' = 'arrivaldate')
+  
+```
+
+```{r}
+sal_wgl_nodes <- as_tibble(sal_wgl$nodes) %>%
+  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns
+
+sal_wgl_edges <- as_tibble(sal_wgl$links) %>%
+  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)
+
+# rename columns
+sal_wgl_edges <- sal_wgl_edges %>%
+  rename('Source' = 'source', 
+         'Target' = 'target', 
+         'Value_OMU' = 'valueofgoods_omu', 
+         'Weight_KG' = 'weightkg', 
+         'HS_Code' = 'hscode', 
+         'Arrival_Date' = 'arrivaldate')
+  
+```
+
+```{r}
+salmon_nodes <- as_tibble(salmon$nodes) %>%
+  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns
+
+salmon_edges <- as_tibble(salmon$links) %>%
+  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)
+
+# rename columns
+salmon_edges <- salmon_edges %>%
+  rename('Source' = 'source', 
+         'Target' = 'target', 
+         'Value_OMU' = 'valueofgoods_omu', 
+         'Weight_KG' = 'weightkg', 
+         'HS_Code' = 'hscode', 
+         'Arrival_Date' = 'arrivaldate')
+  
+```
+
+```{r}
+shark_nodes <- as_tibble(shark$nodes) %>%
+  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns
+
+shark_edges <- as_tibble(shark$links) %>%
+  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)
+
+# rename columns
+shark_edges <- shark_edges %>%
+  rename('Source' = 'source', 
+         'Target' = 'target', 
+         'Value_OMU' = 'valueofgoods_omu', 
+         'Weight_KG' = 'weightkg', 
+         'HS_Code' = 'hscode', 
+         'Arrival_Date' = 'arrivaldate')
+  
+```
+
+```{r}
+tuna_nodes <- as_tibble(tuna$nodes) %>%
+  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns
+
+tuna_edges <- as_tibble(tuna$links) %>%
+  select(source, target, valueofgoods_omu, hscode, arrivaldate)
+
+# rename columns
+tuna_edges <- tuna_edges %>%
+  rename('Source' = 'source', 
+         'Target' = 'target', 
+         'Value_OMU' = 'valueofgoods_omu', 
+         'HS_Code' = 'hscode', 
+         'Arrival_Date' = 'arrivaldate')
+  
+```
+
+```{r}
+
+c_mac_edges <- c_mac_edges %>% distinct()
+
+carp_edges <- carp_edges %>% distinct()
+
+catfish_edges <- catfish_edges %>% distinct()
+
+cod_edges <- cod_edges %>% distinct()
+
+herring_edges <- herring_edges %>% distinct()
+
+lichen_edges <- lichen_edges %>% distinct()
+
+mac_edges <- mac_edges %>% distinct()
+
+pol_edges <- pol_edges %>% distinct()
+
+sal_wgl_edges <- sal_wgl_edges %>% distinct()
+
+salmon_edges <- salmon_edges %>% distinct()
+
+shark_edges <- shark_edges %>% distinct()
+
+tuna_edges <- tuna_edges %>% distinct()
