@@ -35,7 +35,28 @@ MC2 <- fromJSON("data/mc2_challenge_graph.json")
 ```
 
 ```{r}
-#MC2_nodes <- as_tibble(MC2$nodes) %>%
-  #select(id, type, country) #using select function to reorganise into desired order of columns
+MC2_nodes <- as_tibble(MC2$nodes) %>%
+  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns
 
+MC2_edges <- as_tibble(MC2$links) %>%
+  select(source, target, valueofgoods_omu, valueofgoodsusd, weightkg, hscode, arrivaldate)
+
+```
+
+
+```{r}
+MC2_edges <- MC2_edges %>%
+  mutate(Month = month(arrivaldate,
+                        label = TRUE,
+                        abbr = FALSE))
+
+# rename columns
+MC2_edges <- MC2_edges %>%
+  rename('Source' = 'source', 
+         'Target' = 'target', 
+         'Value_OMU' = 'valueofgoods_omu', 
+         'Value_USD' = 'valueofgoodsusd', 
+         'Weight_KG' = 'weightkg', 
+         'HS_Code' = 'hscode', 
+         'Arrival_Date' = 'arrivaldate')
 ```
