@@ -16,6 +16,7 @@ execute:
 # Lesson 5: Network Data Visualisation and Analysis
 
 ## Load the Packages
+
 ```{r}
 pacman::p_load(igraph, tidygraph, ggraph, 
                visNetwork, lubridate, clock,
@@ -41,10 +42,12 @@ MC1_edges <- as_tibble(MC1$links) %>%
 ```
 
 ## Review the Imported Data
+
 ```{r}
 glimpse(GAStech_edges)
 
 ```
+
 ## Wrangling Time
 
 ```{r}
@@ -82,6 +85,7 @@ GAStech_graph <- tbl_graph(nodes = GAStech_nodes,
                            directed = TRUE)
 GAStech_graph #Review Graph
 ```
+
 ## Change the Active Object
 
 ```{r}
@@ -90,6 +94,7 @@ GAStech_graph %>%
   arrange(desc(Weight))
 
 ```
+
 # Plotting Static Network Graphs with ggraph package
 
 ## Plotting a basic network graph
@@ -100,10 +105,8 @@ ggraph(GAStech_graph) +
   geom_node_point()
 ```
 
-
 ::: {.callout-note collapse="true"}
 The basic plotting function is ggraph(), which takes the data to be used for the graph and the type of layout desired. Both of the arguments for ggraph() are built around igraph. Therefore, ggraph() can use either an igraph object or a tbl_graph object.
-
 :::
 
 ## Changing the default network graph theme
@@ -116,6 +119,7 @@ g <- ggraph(GAStech_graph) +
 g + theme_graph()
 
 ```
+
 ## Changing the coloring of the plot
 
 ```{r}
@@ -130,8 +134,6 @@ g + theme_graph(background = 'grey10',
 
 ## Many models
 
-
-
 ## Fruchterman and Reingold layout
 
 ```{r}
@@ -143,6 +145,7 @@ g <- ggraph(GAStech_graph,
 g + theme_graph()
 
 ```
+
 ## Modifying Network Nodes
 
 ```{r}
@@ -158,9 +161,7 @@ g + theme_graph()
 ```
 
 ::: {.bubblebox .bubbleicon}
-
 geom_node_point is equivalent in functionality to geo_point of ggplot2. It allows for simple plotting of nodes in different shapes, colours and sizes. In the codes chnuks above colour and size are used.
-
 :::
 
 ## Modifying Edges
@@ -181,15 +182,13 @@ g + theme_graph()
 
 There are three functions in ggraph to implement faceting, they are:
 
-**facet_nodes()** whereby edges are only draw in a panel if both terminal nodes are present here,
-**facet_edges()** whereby nodes are always drawn in al panels even if the node data contains an attribute named the same as the one used for the edge facetting, and
-**facet_graph()** faceting on two variables simultaneously.
+**facet_nodes()** whereby edges are only draw in a panel if both terminal nodes are present here, **facet_edges()** whereby nodes are always drawn in al panels even if the node data contains an attribute named the same as the one used for the edge facetting, and **facet_graph()** faceting on two variables simultaneously.
 
 ## Working with facet_edges()
 
 ::: panel-tabset
-
 ## Default
+
 ```{r}
 set_graph_style()
 
@@ -241,7 +240,6 @@ g + facet_edges(~Weekday) +
   theme(legend.position = 'bottom')
 
 ```
-
 :::
 
 ## Working with facet_nodes()
@@ -264,12 +262,11 @@ g + facet_nodes(~Department)+
 
 ```
 
-
 # Network Metric Analysis
 
 ## Computing centrality indices
 
-Centrality measures are a collection of statistical indices use to describe the relative important of the actors are to a network. There are four well-known centrality measures, namely: degree, betweenness, closeness and eigenvector. 
+Centrality measures are a collection of statistical indices use to describe the relative important of the actors are to a network. There are four well-known centrality measures, namely: degree, betweenness, closeness and eigenvector.
 
 ```{r}
 g <- GAStech_graph %>%
@@ -313,19 +310,15 @@ g + theme_graph()
 
 ```
 
-
 # Building Interactive Network Graph with visNetwork
 
 **visNetwork()** is a R package for network visualization, using vis.js javascript library.
 
 **visNetwork()** function uses a nodes list and edges list to create an interactive graph.
 
-The nodes list must include an “id” column, and the edge list must have “from” and “to” columns.
-The function also plots the labels for the nodes, using the names of the actors from the “label” column in the node list.
-The resulting graph is fun to play around with.
+The nodes list must include an "id" column, and the edge list must have "from" and "to" columns. The function also plots the labels for the nodes, using the names of the actors from the "label" column in the node list. The resulting graph is fun to play around with.
 
-You can move the nodes and the graph will use an algorithm to keep the nodes properly spaced.
-You can also zoom in and out on the plot and move it around to re-center it.
+You can move the nodes and the graph will use an algorithm to keep the nodes properly spaced. You can also zoom in and out on the plot and move it around to re-center it.
 
 ## Data Prep
 
@@ -360,12 +353,12 @@ visNetwork(GAStech_nodes,
 
 ```
 
-
 ## Working with visual attributes - Nodes
 
-visNetwork() looks for a field called “group” in the nodes object and colour the nodes according to the values of the group field.
+visNetwork() looks for a field called "group" in the nodes object and colour the nodes according to the values of the group field.
 
 The code chunk below rename Department field to group.
+
 ```{r}
 GAStech_nodes <- GAStech_nodes %>%
   rename(group = Department) 
@@ -384,9 +377,7 @@ visNetwork(GAStech_nodes,
 
 ## Working with visual attributes - Edges
 
-In the code run below visEdges() is used to symbolise the edges.
-- The argument arrows is used to define where to place the arrow.
-- The smooth argument is used to plot the edges using a smooth curve.
+In the code run below visEdges() is used to symbolise the edges. - The argument arrows is used to define where to place the arrow. - The smooth argument is used to plot the edges using a smooth curve.
 
 ```{r}
 visNetwork(GAStech_nodes,
@@ -411,5 +402,3 @@ visNetwork(GAStech_nodes,
   visLegend() %>%
   visLayout(randomSeed = 123)
 ```
-
-

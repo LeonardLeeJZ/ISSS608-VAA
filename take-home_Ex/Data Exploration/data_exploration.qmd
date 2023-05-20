@@ -1,0 +1,29 @@
+---
+title: "Data Exploration"
+author: "Leonard Lee"
+---
+
+```{r}
+pacman::p_load(igraph, tidygraph, ggraph, 
+               visNetwork, lubridate, clock,
+               tidyverse, graphlayouts, jsonlite)
+
+```
+
+
+```{r}
+carp <- fromJSON("data/carp.json")
+catfish <- fromJSON("data/catfish.json")
+c_mac <- fromJSON("data/chub_mackerel.json")
+cod <- fromJSON("data/cod2.json")
+herring <- fromJSON("data/herring.json")
+lichen <- fromJSON("data/lichen.json")
+mac <- fromJSON("data/mackerel.json")
+pol <- fromJSON("data/pollock.json")
+salmon <- fromJSON("data/salmon.json")
+sal_wgl <- fromJSON("data/salmon_wgl.json")
+shark <- fromJSON("data/shark.json")
+tuna <- fromJSON("data/tuna.json")
+
+
+```

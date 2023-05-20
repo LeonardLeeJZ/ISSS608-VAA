@@ -427,6 +427,13 @@
     "text": "Welcome to ISSS608 Visual Analytics and Applications. In this website, you will find Leonard Lee’s coursework prepared for this course."
   },
   {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html",
+    "title": "Data Exploration",
+    "section": "",
+    "text": "pacman::p_load(igraph, tidygraph, ggraph, \n               visNetwork, lubridate, clock,\n               tidyverse, graphlayouts, jsonlite)\n\n\ncarp <- fromJSON(\"data/carp.json\")\ncatfish <- fromJSON(\"data/catfish.json\")\nc_mac <- fromJSON(\"data/chub_mackerel.json\")\ncod <- fromJSON(\"data/cod2.json\")\nherring <- fromJSON(\"data/herring.json\")\nlichen <- fromJSON(\"data/lichen.json\")\nmac <- fromJSON(\"data/mackerel.json\")\npol <- fromJSON(\"data/pollock.json\")\nsalmon <- fromJSON(\"data/salmon.json\")\nsal_wgl <- fromJSON(\"data/salmon_wgl.json\")\nshark <- fromJSON(\"data/shark.json\")\ntuna <- fromJSON(\"data/tuna.json\")"
+  },
+  {
     "objectID": "take-home_Ex/take-home_Ex01/take-home_Ex01.html",
     "href": "take-home_Ex/take-home_Ex01/take-home_Ex01.html",
     "title": "Take-Home Exercise 1",
@@ -537,5 +544,12 @@
     "title": "Take-Home Exercise 1",
     "section": "Data Limitations and Further Analysis",
     "text": "Data Limitations and Further Analysis\n\n\nSample selection method does not assure us of accurate representation, as there is no information on demographic distribution and survey methods.\nCorrelation does not equate causation. While there are indicative signs of some association between joviality scores and select variables, the data collected may not be holistic enough to completely capture the nuance of all factors involved. This can be mitigated through conducting several rounds of survey and to ensure the population is well-accounted for."
+  },
+  {
+    "objectID": "take-home_Ex/take-home_Ex02/take-home_Ex02.html",
+    "href": "take-home_Ex/take-home_Ex02/take-home_Ex02.html",
+    "title": "Take-Home Exercise 2",
+    "section": "",
+    "text": "Weight field calculating number of times target communicated with the source.\n(multiple source to target links at diff times)\nIn and out weight (In degree and out degree)\nAggregate out big network\n(In class ex reference to weight field)\n\n\nShow me the good stuff\npacman::p_load(igraph, tidygraph, ggraph, \n               visNetwork, lubridate, clock,\n               tidyverse, graphlayouts, jsonlite)\n\n\n\n\nShow me the good stuff\nMC2 <- fromJSON(\"data/mc2_challenge_graph.json\")\n\n\n\n\nShow me the good stuff\n#MC2_nodes <- as_tibble(MC2$nodes) %>%\n  #select(id, type, country) #using select function to reorganise into desired order of columns"
   }
 ]
