@@ -60,54 +60,20 @@ MC2_edges <- MC2_edges %>%
 
 # rename columns
 MC2_edges <- MC2_edges %>%
-  rename('Source' = 'source', 
-         'Target' = 'target', 
-         'Value_OMU' = 'valueofgoods_omu', 
+  rename('Value_OMU' = 'valueofgoods_omu', 
          'Value_USD' = 'valueofgoodsusd', 
          'Weight_KG' = 'weightkg', 
          'HS_Code' = 'hscode', 
          'Arrival_Date' = 'arrivaldate')
 
-# rename columns
-MC2_nodes <- MC2_nodes %>%
-  rename('company' = 'id')
 ```
 
 ## Check for NA in from and to
 ```{r}
-MC2_edges <- MC2_edges[complete.cases(MC2_edges[, c("Source", "Target")]), ]
+MC2_edges <- MC2_edges[complete.cases(MC2_edges[, c("source", "target")]), ]
 
 ```
 
-```{r}
-class(MC2_nodes$company)
-MC2_nodes$company <- as.character(MC2_nodes$company)
-
-```
-
-
-```{r}
-MC2_nodes <- transform(MC2_nodes, id = as.integer(factor(company, levels = unique(company))))
-
-
-MC2_edges$Source <- MC2_nodes$id[match(MC2_edges$Source, MC2_nodes$company)]
-MC2_edges$Target <- MC2_nodes$id[match(MC2_edges$Target, MC2_nodes$company)]
-
-
-```
-
-```{r}
-MC2_nodes <- MC2_nodes %>%
-  select(id, everything())
-
-```
-
-I have my link and nodes, create graph network (use biz network to make it interactive)
-
-do the same for bundle, get a snap shot, then select the fishes that have interesting ones.
-using HS code, can find out that a lot of rows are irrelevant (not related to fishing)
-
-Alternatively can filter by fish HS codes after selecting for fish.
 
 # BUNDLE EXPERIMENTATION
 
@@ -404,43 +370,98 @@ filtered_MC2_edges <- MC2_edges[MC2_edges$HS_Code %in% unique_hscodes, ]
 
 ```{r}
 MC2_edges_aggregated <- filtered_MC2_edges %>%
-  group_by(Source,Target) %>%
+  group_by(source,target) %>%
   summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
             Value_USD_Total = sum(Value_USD, na.rm = TRUE),
             Count = n(),
             Average_OMU = mean(Value_OMU, na.rm = TRUE),
             Average_USD = mean(Value_USD, na.rm = TRUE),
             Total_Weight_KG = sum(Weight_KG, na.rm = TRUE),
-            Average_Weight_KG = mean(Weight_KG, na.rm = TRUE))
-
-
-```
-
-## Interactive Graph
-
-```{r}
-MC_edges_aggregated2 <- filtered_dataset %>%
-  left_join(MC2_nodes, by = c("Source" = "id")) %>%
-  left_join(MC2_nodes, by = c("Target" = "id")) %>%
-   group_by(Source, Target) %>%
-    summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
-            Value_USD_Total = sum(Value_USD, na.rm = TRUE),
-            Count = n(),
-            Average_OMU = mean(Value_OMU, na.rm = TRUE),
-            Average_USD = mean(Value_USD, na.rm = TRUE)) %>%
+            Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>%
   ungroup()
+
+```
+## Exploring cut-points to focus dataset
+
+::: panel-tabset
+
+## Mean and Median
+```{r}
+
+
+mean_links <- mean(MC2_edges_aggregated$Count)
+median_links <- median(MC2_edges_aggregated$Count)
+
+
+print(mean_links)
+print(median_links)
+
+
+```
+## Boxplot Distribution
+
+```{r}
+ggplot(MC2_edges_aggregated, aes(y = Count)) +
+  geom_boxplot(fill = "steelblue", color = "black") +
+  labs(y = "Count", title = "Boxplot of Count")
+
+```
+
+## Boxplot (zoomed)
+
+```{r}
+ggplot(MC2_edges_aggregated, aes(y = Count)) +
+  geom_boxplot(fill = "steelblue", color = "black") +
+  labs(y = "Count", title = "Boxplot of Count") +
+  ylim(0, 50)
+
+```
+:::
+
+
+::: {.cushbox .cushicon}
+
+Based on the boxplots, we see that the data is bottom heavy, which is consistent with the median score of 2. Given that we are interested in abnormal data (large counts), we will filter the bulk of the data by the mean value(19.8) to focus our examination of links above this connection threshold.
+
+:::
+
+
+## Filter at cut-point 19.8
+
+```{r}
+filtered_dataset <- subset(MC2_edges_aggregated, Count > 19.8)
+```
+## Create Graph
+
+```{r}
+MC2d_filtered <- distinct(filtered_dataset)
+```
+
+
+```{r}
+id1 <- MC2d_filtered %>%
+  select(source) %>%
+  rename(id = source)
+id2 <- MC2d_filtered %>%
+  select(target) %>%
+  rename(id = target)
+mc2_nodes_extracted <- rbind(id1, id2) %>%
+  distinct()
+
 ```
 
 ```{r}
-MC_edges_aggregated2 <- MC_edges_aggregated2 %>%
-  rename('from' = 'Source',
-         'to' = 'Target')
+mc2_graph <- tbl_graph(nodes = mc2_nodes_extracted,
+                       edges = MC2d_filtered,
+                       directed = TRUE)
 
 ```
 
 ```{r}
-still too large
-#visNetwork(MC2_nodes, 
-           #MC_edges_aggregated2)
+ggraph(mc2_graph,
+       layout = "fr") +
+  geom_edge_link(aes()) +
+  geom_node_point(aes()) +
+  theme_graph()
 
 ```
