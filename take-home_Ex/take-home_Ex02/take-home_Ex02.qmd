@@ -103,13 +103,13 @@ MC2_edges <- MC2_edges[complete.cases(MC2_edges[, c("source", "target")]), ]
 colSums(is.na(MC2_edges))
 
 ```
-::: {.cushbox .cushicon}
+::: {.bubblebox .bubbleicon}
 While there are missing (NA) fields in **Value_OMU** and **Value_USD**, the key columns being examined (**source** and **target**) do not possess any missing values.
 :::
 
 # 4 Data Exploration and Comparison
 
-::: {.bubblebox .bubbleicon}
+::: {.cushbox .cushicon}
 To determine which bundles of predictive network models are reliable, we will first visualise the respective network models, before comparing them with the same links extracted from MC2.
 
 :::
@@ -294,7 +294,7 @@ mcmac_graph
 
 :::
 
-`## 4.3 Cod
+## 4.3 Cod
 
 ```{r}
 cod_nodes <- as_tibble(cod$nodes) %>%
