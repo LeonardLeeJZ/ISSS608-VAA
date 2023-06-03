@@ -416,7 +416,7 @@ par(las=2) #doesn't work to rotate labels
 :::
 
 ::: {.bubblebox .bubbleicon}
-Based on the collinearity checks, we observe that the highest scoring variable (householdSize) scored at 5.69, suggesting moderate correlation between householdSize and joviality, which means they may share some common variance but are not highly correlated to cause multicollinearity. 
+Based on the collinearity checks, we observe that the highest scoring variable (householdSize) scored at 5.69, suggesting moderate correlation between householdSize and joviality, which means they may share some common variance but are not highly correlated to cause multicollinearity.
 :::
 
 ## 5.2 Financial Variables
@@ -518,7 +518,7 @@ dem_Exp_PropC
 ## 5.3 Association Testing (Chi-Squared Test)
 
 ::: {.bubblebox .bubbleicon}
-Of the variables tested, only Education Level is significantly associated with Expense Proportion Category (p <0.05).
+Of the variables tested, only Education Level is significantly associated with Expense Proportion Category (p \<0.05).
 
 We therefore reject the null hypothesis that there is no association between the variables.
 :::
@@ -643,10 +643,8 @@ ggbetweenstats(Joined_data, x = interestGroup, y = joviality) +
 
 1)  A significantly higher mean joviality score is observed in both Middle and Lower income groups, while the lowest mean score is observed in the High income group.
 
-2)  P-value is >0.05 for all variables except for Income Group, with marginal difference between means within the variables.
-
+2)  P-value is \>0.05 for all variables except for Income Group, with marginal difference between means within the variables.
 :::
-
 
 ## 5.5 Wage across Education Levels
 
@@ -716,14 +714,10 @@ For Visualisation ease, values \> 10,000 for Wage have been obscured through lim
 :::
 
 ::: {.bubblebox .bubbleicon}
-
 It is observed that the mean wage/income for participants is higher when they have been educated to a further extent, as observed in Visualisation, where the boxplot depicts increasing mean values as education level increases.
-
-
 :::
 
 ## 5.6 Have Kids/Joviality
-
 
 ::: panel-tabeset
 ### Animated Plot Depicting Uncertainty
@@ -768,12 +762,8 @@ ggplotly(p, tooltip = c("y", "group_mean", "group_median", "lower", "upper")) %>
 :::
 
 ::: {.bubblebox .bubbleicon}
-
 The plot highlights the uncertainty associated with comparing joviality with the variable of having children, this is supported by the boxplot, which depicts relatively equal mean scores for joviality between participants with and without children. This indicates that there is no significant inclination observed between the two different states (having children or not).
-
 :::
-
-
 
 ### 5.7 EPC/Have Kids/Education Level/Joviality
 
@@ -798,14 +788,13 @@ ggplotly(ExpP)
 ```
 
 ::: {.bubblebox .bubbleicon}
+1)  Participants who spent a high proportion of their income record the highest mean joviality score across all categories observed in the plot.
 
-1) Participants who spent a high proportion of their income record the highest mean joviality score across all categories observed in the plot. 
-
-2) However, in less educated groups (High School or College, Low Education), joviality scores are higher when participants spend a low proportion of their income. 
-
+2)  However, in less educated groups (High School or College, Low Education), joviality scores are higher when participants spend a low proportion of their income.
 :::
 
 ## Spending Streams and Joviality
+
 ```{r}
 
 # Calculate the correlation coefficients between joviality and the types of expenses
@@ -814,34 +803,29 @@ correlation_matrix <- cor(Joined_data[c("Shelter", "Education", "Food", "Recreat
 # Check the correlation matrix
 correlation_matrix
 ```
-::: {.bubblebox .bubbleicon}
 
-Correlation Analysis tells us that of all the types of expenditure, Recreation has the largest correlation coeffiecient (-0.25), but is still considered a weak negative association. 
+::: {.bubblebox .bubbleicon}
+Correlation Analysis tells us that of all the types of expenditure, Recreation has the largest correlation coeffiecient (-0.25), but is still considered a weak negative association.
 
 The results suggest that while slight shifts in joviality might be observed with reductions in Food and Recreation spending, it may not be significant enough to justify the town's spendings.
-
 :::
 
 ## 6 Recommendations
 
 ::: {.bubblebox .bubbleicon}
+1)  Based on the analyses performed thus far, Income Level and Expense Proportion Category comparisons seem to draw the most difference in joviality scores.
 
-1) Based on the analyses performed thus far, Income Level and Expense Proportion Category comparisons seem to draw the most difference in joviality scores.
-
-Specifically, proportion of spending between education levels seems to suggest that despite the relatively higher mean income associated with better education, those who spend less actually feel less happy than those who have a high expense proportion. 
+Specifically, proportion of spending between education levels seems to suggest that despite the relatively higher mean income associated with better education, those who spend less actually feel less happy than those who have a high expense proportion.
 
 This suggests there is a population of Graduates and High School/College Graduants who may benefit from new sources of expenditure. Despite weak positive correlation between Shelter spending and joviality, it is suggested that the town explore developing a small number of high quality residences for this group of people.
 
-2) The town can also look into affordability schemes for middle to low income earners, so as to reduce the number of people within the Low-Middle and Middle-High Expense Proportion Categories.
-
-::: 
+2)  The town can also look into affordability schemes for middle to low income earners, so as to reduce the number of people within the Low-Middle and Middle-High Expense Proportion Categories.
+:::
 
 ## Data Limitations and Further Analysis
 
 ::: {.bubblebox .bubbleicon}
+1)  Sample selection method does not assure us of accurate representation, as there is no information on demographic distribution and survey methods.
 
-1) Sample selection method does not assure us of accurate representation, as there is no information on demographic distribution and survey methods.
-
-2) Correlation does not equate causation. While there are indicative signs of some association between joviality scores and select variables, the data collected may not be holistic enough to completely capture the nuance of all factors involved. This can be mitigated through conducting several rounds of survey and to ensure the population is well-accounted for.
-
+2)  Correlation does not equate causation. While there are indicative signs of some association between joviality scores and select variables, the data collected may not be holistic enough to completely capture the nuance of all factors involved. This can be mitigated through conducting several rounds of survey and to ensure the population is well-accounted for.
 :::

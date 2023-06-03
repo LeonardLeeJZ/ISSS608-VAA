@@ -3,14 +3,60 @@ title: "Data Exploration"
 author: "Leonard Lee"
 ---
 
+
 ```{r}
 pacman::p_load(igraph, tidygraph, ggraph, 
                visNetwork, lubridate, clock,
                tidyverse, graphlayouts, jsonlite)
 
+
 ```
 
-```{r}
+``{r}
+MC2 <- fromJSON("data/mc2_challenge_graph.json")
+
+``
+
+``{r}
+MC2_nodes <- as_tibble(MC2$nodes) %>%
+  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns
+
+MC2_edges <- as_tibble(MC2$links) %>%
+  select(source, target, valueofgoods_omu, valueofgoodsusd, weightkg, hscode, arrivaldate)
+``
+
+## Remove all duplicate rows
+
+``{r}
+MC2_edges <- MC2_edges %>% distinct()
+MC2_nodes <- MC2_nodes %>% distinct()
+
+``
+``{r}
+MC2_edges <- MC2_edges %>%
+  mutate(Month = month(arrivaldate,
+                        label = TRUE,
+                        abbr = FALSE))
+
+# rename columns
+MC2_edges <- MC2_edges %>%
+  rename('Value_OMU' = 'valueofgoods_omu', 
+         'Value_USD' = 'valueofgoodsusd', 
+         'Weight_KG' = 'weightkg', 
+         'HS_Code' = 'hscode', 
+         'Arrival_Date' = 'arrivaldate')
+``
+
+## Check for NA in from and to
+
+``{r}
+MC2_edges <- MC2_edges[complete.cases(MC2_edges[, c("source", "target")]), ]
+``
+
+# BUNDLE EXPERIMENTATION
+
+``{r}
+
 carp <- fromJSON("data/carp.json")
 catfish <- fromJSON("data/catfish.json")
 c_mac <- fromJSON("data/chub_mackerel.json")
@@ -24,9 +70,11 @@ sal_wgl <- fromJSON("data/salmon_wgl.json")
 shark <- fromJSON("data/shark.json")
 tuna <- fromJSON("data/tuna.json")
 
-```
+``
 
-```{r}
+## Carp
+
+``{r}
 carp_nodes <- as_tibble(carp$nodes) %>%
   select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns
 
@@ -35,34 +83,122 @@ carp_edges <- as_tibble(carp$links) %>%
 
 # rename columns
 carp_edges <- carp_edges %>%
-  rename('Source' = 'source', 
-         'Target' = 'target', 
+  rename('source' = 'source', 
+         'target' = 'target', 
          'Value_OMU' = 'valueofgoods_omu', 
          'Weight_KG' = 'weightkg', 
          'HS_Code' = 'hscode', 
          'Arrival_Date' = 'arrivaldate')
   
-```
+``
 
-```{r}
-c_mac_nodes <- as_tibble(c_mac$nodes) %>%
+``{r}
+carp_edges_aggregated <- carp_edges %>%
+  group_by(source,target, HS_Code) %>%
+  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
+            Count = n(),
+            Average_OMU = mean(Value_OMU, na.rm = TRUE),
+            Total_Weight_KG = sum(Weight_KG, na.rm = TRUE),
+            Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>%
+  ungroup()
+
+``
+
+## Visualise Carp
+``{r}
+
+id1 <- carp_edges_aggregated %>%
+  select(source) %>%
+  rename(id = source)
+id2 <- carp_edges_aggregated %>%
+  select(target) %>%
+  rename(id = target)
+carp_nodes_extract <- rbind(id1, id2) %>%
+  distinct()
+
+``
+
+``{r}
+carp_graph <- tbl_graph(nodes = carp_nodes_extract,
+                       edges = carp_edges_aggregated,
+                       directed = TRUE)
+
+``
+
+`{r}
+ggraph(carp_graph,
+       layout = "fr") +
+  geom_edge_link(aes()) +
+  geom_node_point(aes()) +
+  theme_graph()
+
+``
+
+
+## C_mac
+
+``{r}
+cmac_nodes <- as_tibble(c_mac$nodes) %>%
   select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns
 
-c_mac_edges <- as_tibble(c_mac$links) %>%
+cmac_edges <- as_tibble(c_mac$links) %>%
   select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)
 
 # rename columns
-c_mac_edges <- c_mac_edges %>%
-  rename('Source' = 'source', 
-         'Target' = 'target', 
+cmac_edges <- cmac_edges %>%
+  rename('source' = 'source', 
+         'target' = 'target', 
          'Value_OMU' = 'valueofgoods_omu', 
          'Weight_KG' = 'weightkg', 
          'HS_Code' = 'hscode', 
          'Arrival_Date' = 'arrivaldate')
   
-```
+``
 
-```{r}
+``{r}
+cmac_edges_aggregated <- cmac_edges %>%
+  group_by(source,target, HS_Code) %>%
+  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
+            Count = n(),
+            Average_OMU = mean(Value_OMU, na.rm = TRUE),
+            Total_Weight_KG = sum(Weight_KG, na.rm = TRUE),
+            Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>%
+  ungroup()
+
+``
+
+
+## Visualise C_Mac
+``{r}
+
+id1 <- cmac_edges_aggregated %>%
+  select(source) %>%
+  rename(id = source)
+id2 <- cmac_edges_aggregated %>%
+  select(target) %>%
+  rename(id = target)
+cmac_nodes_extract <- rbind(id1, id2) %>%
+  distinct()
+``
+
+``{r}
+cmac_graph <- tbl_graph(nodes = cmac_nodes_extract,
+                       edges = cmac_edges_aggregated,
+                       directed = TRUE)
+
+``
+
+``{r}
+ggraph(cmac_graph,
+       layout = "fr") +
+  geom_edge_link(aes()) +
+  geom_node_point(aes()) +
+  theme_graph()
+``
+
+## Cod
+
+``{r}
 cod_nodes <- as_tibble(cod$nodes) %>%
   select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns
 
@@ -71,18 +207,61 @@ cod_edges <- as_tibble(cod$links) %>%
 
 # rename columns
 cod_edges <- cod_edges %>%
-  rename('Source' = 'source', 
-         'Target' = 'target', 
+  rename('source' = 'source', 
+         'target' = 'target', 
          'Value_OMU' = 'valueofgoods_omu', 
          'Weight_KG' = 'weightkg', 
          'HS_Code' = 'hscode', 
          'Arrival_Date' = 'arrivaldate')
   
-```
+``
+
+``{r}
+cod_edges_aggregated <- cod_edges %>%
+  group_by(source,target, HS_Code) %>%
+  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
+            Count = n(),
+            Average_OMU = mean(Value_OMU, na.rm = TRUE),
+            Total_Weight_KG = sum(Weight_KG, na.rm = TRUE),
+            Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>%
+  ungroup()
+``
+
+## Visualise Cod
+``{r}
+
+id1 <- cod_edges_aggregated %>%
+  select(source) %>%
+  rename(id = source)
+id2 <- cod_edges_aggregated %>%
+  select(target) %>%
+  rename(id = target)
+cod_nodes_extract <- rbind(id1, id2) %>%
+  distinct()
+
+``
+
+``{r}
+cod_graph <- tbl_graph(nodes = cod_nodes_extract,
+                       edges = cod_edges_aggregated,
+                       directed = TRUE)
+
+``
+
+``{r}
+ggraph(cod_graph,
+       layout = "fr") +
+  geom_edge_link(aes()) +
+  geom_node_point(aes()) +
+  theme_graph()
+
+``
+
+## Catfish
 
 Catfish sus, no weight data (underreporting/overreporting is a trait of illegal fishing?)
 
-```{r}
+``{r}
 catfish_nodes <- as_tibble(catfish$nodes) %>%
   select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns
 
@@ -91,15 +270,58 @@ catfish_edges <- as_tibble(catfish$links) %>%
 
 # rename columns
 catfish_edges <- catfish_edges %>%
-  rename('Source' = 'source', 
-         'Target' = 'target', 
+  rename('source' = 'source', 
+         'target' = 'target', 
          'Value_OMU' = 'valueofgoods_omu', 
          'HS_Code' = 'hscode', 
          'Arrival_Date' = 'arrivaldate')
   
-```
+``
 
-```{r}
+``{r}
+catfish_edges_aggregated <- catfish_edges %>%
+  group_by(source,target, HS_Code) %>%
+  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
+            Count = n(),
+            Average_OMU = mean(Value_OMU, na.rm = TRUE)) %>%
+  ungroup()
+
+``
+
+## Visualise Catfish
+``{r}
+
+id1 <- catfish_edges_aggregated %>%
+  select(source) %>%
+  rename(id = source)
+id2 <- catfish_edges_aggregated %>%
+  select(target) %>%
+  rename(id = target)
+catfish_nodes_extract <- rbind(id1, id2) %>%
+  distinct()
+
+``
+
+``{r}
+catfish_graph <- tbl_graph(nodes = catfish_nodes_extract,
+                       edges = catfish_edges_aggregated,
+                       directed = TRUE)
+
+``
+
+``{r}
+ggraph(catfish_graph,
+       layout = "fr") +
+  geom_edge_link(aes()) +
+  geom_node_point(aes()) +
+  theme_graph()
+
+``
+
+
+## Herring
+
+``{r}
 herring_nodes <- as_tibble(herring$nodes) %>%
   select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns
 
@@ -108,16 +330,60 @@ herring_edges <- as_tibble(herring$links) %>%
 
 # rename columns
 herring_edges <- herring_edges %>%
-  rename('Source' = 'source', 
-         'Target' = 'target', 
+  rename('source' = 'source', 
+         'target' = 'target', 
          'Value_OMU' = 'valueofgoods_omu', 
          'Weight_KG' = 'weightkg', 
          'HS_Code' = 'hscode', 
          'Arrival_Date' = 'arrivaldate')
   
-```
+``
 
-```{r}
+``{r}
+herring_edges_aggregated <- herring_edges %>%
+  group_by(source,target, HS_Code) %>%
+  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
+            Count = n(),
+            Average_OMU = mean(Value_OMU, na.rm = TRUE),
+            Total_Weight_KG = sum(Weight_KG, na.rm = TRUE),
+            Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>%
+  ungroup()
+
+``
+
+## Visualise Herring
+``{r}
+
+id1 <- herring_edges_aggregated %>%
+  select(source) %>%
+  rename(id = source)
+id2 <- herring_edges_aggregated %>%
+  select(target) %>%
+  rename(id = target)
+herring_nodes_extract <- rbind(id1, id2) %>%
+  distinct()
+
+``
+
+``{r}
+herring_graph <- tbl_graph(nodes = herring_nodes_extract,
+                       edges = herring_edges_aggregated,
+                       directed = TRUE)
+
+``
+
+``{r}
+ggraph(herring_graph,
+       layout = "fr") +
+  geom_edge_link(aes()) +
+  geom_node_point(aes()) +
+  theme_graph()
+
+``
+
+## Lichen
+
+``{r}
 lichen_node <- as_tibble(lichen$nodes) %>%
   select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns
 
@@ -126,16 +392,60 @@ lichen_edges <- as_tibble(lichen$links) %>%
 
 # rename columns
 lichen_edges <- lichen_edges %>%
-  rename('Source' = 'source', 
-         'Target' = 'target', 
+  rename('source' = 'source', 
+         'target' = 'target', 
          'Value_OMU' = 'valueofgoods_omu', 
          'Weight_KG' = 'weightkg', 
          'HS_Code' = 'hscode', 
          'Arrival_Date' = 'arrivaldate')
   
-```
+``
 
-```{r}
+``{r}
+lichen_edges_aggregated <- lichen_edges %>%
+  group_by(source,target, HS_Code) %>%
+  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
+            Count = n(),
+            Average_OMU = mean(Value_OMU, na.rm = TRUE),
+            Total_Weight_KG = sum(Weight_KG, na.rm = TRUE),
+            Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>%
+  ungroup()
+
+``
+
+## Visualise Lichen
+``{r}
+
+id1 <- lichen_edges_aggregated %>%
+  select(source) %>%
+  rename(id = source)
+id2 <- lichen_edges_aggregated %>%
+  select(target) %>%
+  rename(id = target)
+lichen_nodes_extract <- rbind(id1, id2) %>%
+  distinct()
+
+``
+
+``{r}
+lichen_graph <- tbl_graph(nodes = lichen_nodes_extract,
+                       edges = lichen_edges_aggregated,
+                       directed = TRUE)
+
+``
+
+``{r}
+ggraph(lichen_graph,
+       layout = "fr") +
+  geom_edge_link(aes()) +
+  geom_node_point(aes()) +
+  theme_graph()
+
+``
+
+## Mac
+
+``{r}
 mac_nodes <- as_tibble(mac$nodes) %>%
   select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns
 
@@ -144,15 +454,57 @@ mac_edges <- as_tibble(mac$links) %>%
 
 # rename columns
 mac_edges <- mac_edges %>%
-  rename('Source' = 'source', 
-         'Target' = 'target', 
+  rename('source' = 'source', 
+         'target' = 'target', 
          'Value_OMU' = 'valueofgoods_omu', 
          'HS_Code' = 'hscode', 
          'Arrival_Date' = 'arrivaldate')
-  
-```
+ 
+``
 
-```{r}
+``{r}
+mac_edges_aggregated <- mac_edges %>%
+  group_by(source,target, HS_Code) %>%
+  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
+            Count = n(),
+            Average_OMU = mean(Value_OMU, na.rm = TRUE)) %>%
+  ungroup()
+
+``
+
+## Visualise Mac
+``{r}
+
+id1 <- mac_edges_aggregated %>%
+  select(source) %>%
+  rename(id = source)
+id2 <- mac_edges_aggregated %>%
+  select(target) %>%
+  rename(id = target)
+mac_nodes_extract <- rbind(id1, id2) %>%
+  distinct()
+
+``
+
+``{r}
+mac_graph <- tbl_graph(nodes = mac_nodes_extract,
+                       edges = mac_edges_aggregated,
+                       directed = TRUE)
+
+``
+
+``{r}
+ggraph(mac_graph,
+       layout = "fr") +
+  geom_edge_link(aes()) +
+  geom_node_point(aes()) +
+  theme_graph()
+
+``
+
+## Pollock
+
+``{r}
 pol_nodes <- as_tibble(pol$nodes) %>%
   select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns
 
@@ -161,34 +513,121 @@ pol_edges <- as_tibble(pol$links) %>%
 
 # rename columns
 pol_edges <- pol_edges %>%
-  rename('Source' = 'source', 
-         'Target' = 'target', 
+  rename('source' = 'source', 
+         'target' = 'target', 
          'Value_OMU' = 'valueofgoods_omu', 
          'Weight_KG' = 'weightkg', 
          'HS_Code' = 'hscode', 
          'Arrival_Date' = 'arrivaldate')
   
-```
+``
 
-```{r}
-sal_wgl_nodes <- as_tibble(sal_wgl$nodes) %>%
+``{r}
+pol_edges_aggregated <- pol_edges %>%
+  group_by(source,target, HS_Code) %>%
+  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
+            Count = n(),
+            Average_OMU = mean(Value_OMU, na.rm = TRUE),
+            Total_Weight_KG = sum(Weight_KG, na.rm = TRUE),
+            Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>%
+  ungroup()
+
+``
+
+## Visualise Pollock
+``{r}
+
+id1 <- pol_edges_aggregated %>%
+  select(source) %>%
+  rename(id = source)
+id2 <- pol_edges_aggregated %>%
+  select(target) %>%
+  rename(id = target)
+pol_nodes_extract <- rbind(id1, id2) %>%
+  distinct()
+
+``
+
+``{r}
+pol_graph <- tbl_graph(nodes = pol_nodes_extract,
+                       edges = pol_edges_aggregated,
+                       directed = TRUE)
+
+``
+
+``{r}
+ggraph(pol_graph,
+       layout = "fr") +
+  geom_edge_link(aes()) +
+  geom_node_point(aes()) +
+  theme_graph()
+``
+
+## Sal WGL
+
+``{r}
+salw_nodes <- as_tibble(sal_wgl$nodes) %>%
   select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns
 
-sal_wgl_edges <- as_tibble(sal_wgl$links) %>%
+salw_edges <- as_tibble(sal_wgl$links) %>%
   select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)
 
 # rename columns
-sal_wgl_edges <- sal_wgl_edges %>%
-  rename('Source' = 'source', 
-         'Target' = 'target', 
+salw_edges <- salw_edges %>%
+  rename('source' = 'source', 
+         'target' = 'target', 
          'Value_OMU' = 'valueofgoods_omu', 
          'Weight_KG' = 'weightkg', 
          'HS_Code' = 'hscode', 
          'Arrival_Date' = 'arrivaldate')
   
-```
+``
 
-```{r}
+``{r}
+salw_edges_aggregated <- salw_edges %>%
+  group_by(source,target, HS_Code) %>%
+  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
+            Count = n(),
+            Average_OMU = mean(Value_OMU, na.rm = TRUE),
+            Total_Weight_KG = sum(Weight_KG, na.rm = TRUE),
+            Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>%
+  ungroup()
+
+``
+
+## Visualise Sal WGL
+``{r}
+
+id1 <- salw_edges_aggregated %>%
+  select(source) %>%
+  rename(id = source)
+id2 <- salw_edges_aggregated %>%
+  select(target) %>%
+  rename(id = target)
+sal_wgl_nodes_extract <- rbind(id1, id2) %>%
+  distinct()
+
+``
+
+``{r}
+sal_wgl_graph <- tbl_graph(nodes = sal_wgl_nodes_extract,
+                       edges = salw_edges_aggregated,
+                       directed = TRUE)
+
+``
+
+``{r}
+ggraph(sal_wgl_graph,
+       layout = "fr") +
+  geom_edge_link(aes()) +
+  geom_node_point(aes()) +
+  theme_graph()
+
+``
+
+## Salmon
+
+``{r}
 salmon_nodes <- as_tibble(salmon$nodes) %>%
   select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns
 
@@ -197,16 +636,60 @@ salmon_edges <- as_tibble(salmon$links) %>%
 
 # rename columns
 salmon_edges <- salmon_edges %>%
-  rename('Source' = 'source', 
-         'Target' = 'target', 
+  rename('source' = 'source', 
+         'target' = 'target', 
          'Value_OMU' = 'valueofgoods_omu', 
          'Weight_KG' = 'weightkg', 
          'HS_Code' = 'hscode', 
          'Arrival_Date' = 'arrivaldate')
   
-```
+``
 
-```{r}
+``{r}
+salmon_edges_aggregated <- salmon_edges %>%
+  group_by(source,target, HS_Code) %>%
+  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
+            Count = n(),
+            Average_OMU = mean(Value_OMU, na.rm = TRUE),
+            Total_Weight_KG = sum(Weight_KG, na.rm = TRUE),
+            Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>%
+  ungroup()
+
+``
+
+## Visualise Salmon
+``{r}
+
+id1 <- salmon_edges_aggregated %>%
+  select(source) %>%
+  rename(id = source)
+id2 <- salmon_edges_aggregated %>%
+  select(target) %>%
+  rename(id = target)
+salmon_nodes_extract <- rbind(id1, id2) %>%
+  distinct()
+
+``
+
+``{r}
+salmon_graph <- tbl_graph(nodes = salmon_nodes_extract,
+                       edges = salmon_edges_aggregated,
+                       directed = TRUE)
+
+``
+
+``{r}
+ggraph(salmon_graph,
+       layout = "fr") +
+  geom_edge_link(aes()) +
+  geom_node_point(aes()) +
+  theme_graph()
+
+``
+
+## Shark
+
+``{r}
 shark_nodes <- as_tibble(shark$nodes) %>%
   select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns
 
@@ -215,16 +698,47 @@ shark_edges <- as_tibble(shark$links) %>%
 
 # rename columns
 shark_edges <- shark_edges %>%
-  rename('Source' = 'source', 
-         'Target' = 'target', 
+  rename('source' = 'source', 
+         'target' = 'target', 
          'Value_OMU' = 'valueofgoods_omu', 
          'Weight_KG' = 'weightkg', 
          'HS_Code' = 'hscode', 
          'Arrival_Date' = 'arrivaldate')
   
-```
+``
 
-```{r}
+``{r}
+
+id1 <- shark_edges %>%
+  select(source) %>%
+  rename(id = source)
+id2 <- shark_edges %>%
+  select(target) %>%
+  rename(id = target)
+shark_nodes_extract <- rbind(id1, id2) %>%
+  distinct()
+
+``
+
+``{r}
+shark_graph <- tbl_graph(nodes = shark_nodes_extract,
+                       edges = shark_edges,
+                       directed = TRUE)
+
+``
+
+``{r}
+ggraph(shark_graph,
+       layout = "fr") +
+  geom_edge_link(aes()) +
+  geom_node_point(aes()) +
+  theme_graph()
+
+``
+
+## Tuna
+
+``{r}
 tuna_nodes <- as_tibble(tuna$nodes) %>%
   select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns
 
@@ -233,38 +747,381 @@ tuna_edges <- as_tibble(tuna$links) %>%
 
 # rename columns
 tuna_edges <- tuna_edges %>%
-  rename('Source' = 'source', 
-         'Target' = 'target', 
+  rename('source' = 'source', 
+         'target' = 'target', 
          'Value_OMU' = 'valueofgoods_omu', 
          'HS_Code' = 'hscode', 
          'Arrival_Date' = 'arrivaldate')
   
-```
+``
 
-```{r}
+## Visualise Tuna
+``{r}
 
-c_mac_edges <- c_mac_edges %>% distinct()
+id1 <- tuna_edges %>%
+  select(source) %>%
+  rename(id = source)
+id2 <- tuna_edges %>%
+  select(target) %>%
+  rename(id = target)
+tuna_nodes_extract <- rbind(id1, id2) %>%
+  distinct()
 
-carp_edges <- carp_edges %>% distinct()
+``
 
-catfish_edges <- catfish_edges %>% distinct()
+``{r}
+tuna_graph <- tbl_graph(nodes = tuna_nodes_extract,
+                       edges = tuna_edges,
+                       directed = TRUE)
 
-cod_edges <- cod_edges %>% distinct()
+``
 
-herring_edges <- herring_edges %>% distinct()
+``{r}
+ggraph(tuna_graph,
+       layout = "fr") +
+  geom_edge_link(aes()) +
+  geom_node_point(aes()) +
+  theme_graph()
 
-lichen_edges <- lichen_edges %>% distinct()
+``
 
-mac_edges <- mac_edges %>% distinct()
 
-pol_edges <- pol_edges %>% distinct()
 
-sal_wgl_edges <- sal_wgl_edges %>% distinct()
+all_edges<- c("carp_edges", "c_mac_edges", "cod_edges", "catfish_edges", "herring_edges", "lichen_edges", "mac_edges", "pol_edges", "salmon_edges", "sal_wgl_edges", "shark_edges", "tuna_edges")  # Add more dataset names as needed
 
-salmon_edges <- salmon_edges %>% distinct()
 
-shark_edges <- shark_edges %>% distinct()
 
-tuna_edges <- tuna_edges %>% distinct()
 
-```
+
+unique_hscodes <- character()  # Initialize an empty vector to store unique hs codes
+
+for (all_edges in all_edges) {
+  dataset <- get(all_edges)  # Extract the dataset
+  
+  unique_hscodes <- unique(c(unique_hscodes, dataset$HS_Code))  # Extract unique hs codes and append to the vector
+}
+
+
+
+
+## Remove all rows with HS_codes irrelevant to bundles
+
+
+
+filtered_MC2_edges <- MC2_edges[MC2_edges$HS_Code %in% unique_hscodes, ]
+
+
+
+
+
+## Aggregate
+
+``{r}
+MC2_edges_aggregated <- filtered_MC2_edges %>%
+  group_by(source,target) %>%
+  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
+            Value_USD_Total = sum(Value_USD, na.rm = TRUE),
+            Count = n(),
+            Average_OMU = mean(Value_OMU, na.rm = TRUE),
+            Average_USD = mean(Value_USD, na.rm = TRUE),
+            Total_Weight_KG = sum(Weight_KG, na.rm = TRUE),
+            Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>%
+  ungroup()
+
+``
+
+
+# TEST
+``{r}
+
+# Assuming your datasets are named MC2 and carp_edges
+
+# Extract the matched rows using subsetting
+matched_rows <- carp_edges_aggregated[carp_edges_aggregated$source %in% MC2$source & carp_edges_aggregated$target %in% MC2$target, ]
+
+# Print the matched rows
+print(matched_rows)
+
+``
+
+## Exploring cut-points to focus dataset
+
+#::: panel-tabset
+## Mean and Median
+
+
+
+
+mean_links <- mean(MC2_edges_aggregated$Count)
+median_links <- median(MC2_edges_aggregated$Count)
+
+
+print(mean_links)
+print(median_links)
+
+
+
+
+## Boxplot Distribution
+
+
+ggplot(MC2_edges_aggregated, aes(y = Count)) +
+  geom_boxplot(fill = "steelblue", color = "black") +
+  labs(y = "Count", title = "Boxplot of Count")
+
+
+
+## Boxplot (zoomed)
+
+
+ggplot(MC2_edges_aggregated, aes(y = Count)) +
+  geom_boxplot(fill = "steelblue", color = "black") +
+  labs(y = "Count", title = "Boxplot of Count") +
+  ylim(0, 50)
+
+
+#:::
+
+::: {.cushbox .cushicon}
+Based on the boxplots, we see that the data is bottom heavy, which is consistent with the median score of 2. Given that we are interested in abnormal data (large counts), we will filter the bulk of the data by the mean value(19.8) to focus our examination of links above this connection threshold.
+:::
+
+## Filter at cut-point 19.8
+
+
+filtered_dataset <- subset(MC2_edges_aggregated, Count > 19.8)
+
+
+## Create Graph
+
+
+MC2d_filtered <- distinct(filtered_dataset)
+
+
+
+id1 <- MC2d_filtered %>%
+  select(source) %>%
+  rename(id = source)
+id2 <- MC2d_filtered %>%
+  select(target) %>%
+  rename(id = target)
+mc2_nodes_extracted <- rbind(id1, id2) %>%
+  distinct()
+
+
+
+
+mc2_graph <- tbl_graph(nodes = mc2_nodes_extracted,
+                       edges = MC2d_filtered,
+                       directed = TRUE)
+
+
+
+ggraph(mc2_graph,
+       layout = "fr") +
+  geom_edge_link(aes()) +
+  geom_node_point(aes()) +
+  theme_graph()
+
+
+Filter further to remove orphan nodes
+
+
+ChubMC2_edges <- MC2_edges %>%
+  filter(HS_Code %in% c_mac_edges$HS_Code)
+
+
+
+ChubMC2_edges$Arrival_Date <- as.Date(ChubMC2_edges$Arrival_Date)
+
+
+
+
+yearly_datasets <- split(ChubMC2_edges, format(ChubMC2_edges$Arrival_Date, "%Y"))
+
+
+
+
+
+
+dataset_2028 <- yearly_datasets[["2028"]]
+
+
+
+
+dataset_2029 <- yearly_datasets[["2029"]]
+
+dataset_2030 <- yearly_datasets[["2030"]]
+
+dataset_2031 <- yearly_datasets[["2031"]]
+
+dataset_2032 <- yearly_datasets[["2032"]]
+
+dataset_2033 <- yearly_datasets[["2033"]]
+
+dataset_2034 <- yearly_datasets[["2034"]]
+
+
+
+
+Agg_2028 <- dataset_2028 %>%
+  group_by(source,target) %>%
+  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
+            Value_USD_Total = sum(Value_USD, na.rm = TRUE),
+            Count = n(),
+            Average_OMU = mean(Value_OMU, na.rm = TRUE),
+            Average_USD = mean(Value_USD, na.rm = TRUE),
+            Total_Weight_KG = sum(Weight_KG, na.rm = TRUE),
+            Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>%
+  ungroup()
+
+
+
+
+Agg_2029 <- dataset_2029 %>%
+  group_by(source,target) %>%
+  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
+            Value_USD_Total = sum(Value_USD, na.rm = TRUE),
+            Count = n(),
+            Average_OMU = mean(Value_OMU, na.rm = TRUE),
+            Average_USD = mean(Value_USD, na.rm = TRUE),
+            Total_Weight_KG = sum(Weight_KG, na.rm = TRUE),
+            Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>%
+  ungroup()
+
+
+
+Agg_2030 <- dataset_2030 %>%
+  group_by(source,target) %>%
+  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
+            Value_USD_Total = sum(Value_USD, na.rm = TRUE),
+            Count = n(),
+            Average_OMU = mean(Value_OMU, na.rm = TRUE),
+            Average_USD = mean(Value_USD, na.rm = TRUE),
+            Total_Weight_KG = sum(Weight_KG, na.rm = TRUE),
+            Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>%
+  ungroup()
+
+
+
+
+Agg_2031 <- dataset_2031 %>%
+  group_by(source,target) %>%
+  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
+            Value_USD_Total = sum(Value_USD, na.rm = TRUE),
+            Count = n(),
+            Average_OMU = mean(Value_OMU, na.rm = TRUE),
+            Average_USD = mean(Value_USD, na.rm = TRUE),
+            Total_Weight_KG = sum(Weight_KG, na.rm = TRUE),
+            Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>%
+  ungroup()
+
+
+
+
+Agg_2032 <- dataset_2032 %>%
+  group_by(source,target) %>%
+  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
+            Value_USD_Total = sum(Value_USD, na.rm = TRUE),
+            Count = n(),
+            Average_OMU = mean(Value_OMU, na.rm = TRUE),
+            Average_USD = mean(Value_USD, na.rm = TRUE),
+            Total_Weight_KG = sum(Weight_KG, na.rm = TRUE),
+            Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>%
+  ungroup()
+
+
+
+
+``{r}
+Agg_2033 <- dataset_2033 %>%
+  group_by(source,target) %>%
+  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
+            Value_USD_Total = sum(Value_USD, na.rm = TRUE),
+            Count = n(),
+            Average_OMU = mean(Value_OMU, na.rm = TRUE),
+            Average_USD = mean(Value_USD, na.rm = TRUE),
+            Total_Weight_KG = sum(Weight_KG, na.rm = TRUE),
+            Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>%
+  ungroup()
+
+``
+``{r}
+Agg_2034 <- dataset_2034 %>%
+  group_by(source,target) %>%
+  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
+            Value_USD_Total = sum(Value_USD, na.rm = TRUE),
+            Count = n(),
+            Average_OMU = mean(Value_OMU, na.rm = TRUE),
+            Average_USD = mean(Value_USD, na.rm = TRUE),
+            Total_Weight_KG = sum(Weight_KG, na.rm = TRUE),
+            Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>%
+  ungroup()
+
+
+``
+``{r}
+
+ggplot(Agg_2028, aes(y = Count)) +
+  geom_boxplot(fill = "steelblue", color = "black") +
+  labs(y = "Count", title = "Boxplot of Count")
+``
+
+``{r}
+threshold <- quantile(Agg_2028$Count, probs = 0.99)
+
+# Filter the dataset to keep only the top 20%
+filter_Agg2028 <- Agg_2028 %>%
+  filter(Count >= threshold)
+
+
+``
+
+2028 Sample graph
+
+``{r}
+d_Agg2028 <- distinct(Agg_2028, source, target)
+``
+
+
+
+``{r}
+id1 <- Agg_2028 %>%
+  select(source) %>%
+  rename(id = source)
+id2 <- Agg_2028 %>%
+  select(target) %>%
+  rename(id = target)
+Agg_2028_extracted <- rbind(id1, id2) %>%
+  distinct()
+
+``
+
+``{r}
+graph_2028 <- tbl_graph(nodes = Agg_2028_extracted,
+                       edges = Agg_2028,
+                       directed = TRUE)
+
+``
+
+``{r}
+ggraph(graph_2028,
+       layout = "fr") +
+  geom_edge_link(aes()) +
+  geom_node_point(aes()) +
+  theme_graph()
+
+``
+
+``{r}
+degree_centrality <- degree(graph_2028)
+
+# View the degree centrality values
+max_degree <- max(degree_centrality)
+most_central_nodes <- which(degree_centrality == max_degree)
+
+summary(degree_centrality)
+
+
+``
+

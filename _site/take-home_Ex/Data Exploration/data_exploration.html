@@ -123,6 +123,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 }</script>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -239,7 +240,94 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#remove-all-duplicate-rows" id="toc-remove-all-duplicate-rows" class="nav-link active" data-scroll-target="#remove-all-duplicate-rows">Remove all duplicate rows</a></li>
+  <li><a href="#rename-columns" id="toc-rename-columns" class="nav-link" data-scroll-target="#rename-columns">rename columns</a>
+  <ul class="collapse">
+  <li><a href="#check-for-na-in-from-and-to" id="toc-check-for-na-in-from-and-to" class="nav-link" data-scroll-target="#check-for-na-in-from-and-to">Check for NA in from and to</a></li>
+  </ul></li>
+  <li><a href="#bundle-experimentation" id="toc-bundle-experimentation" class="nav-link" data-scroll-target="#bundle-experimentation">BUNDLE EXPERIMENTATION</a>
+  <ul class="collapse">
+  <li><a href="#carp" id="toc-carp" class="nav-link" data-scroll-target="#carp">Carp</a></li>
+  </ul></li>
+  <li><a href="#rename-columns-1" id="toc-rename-columns-1" class="nav-link" data-scroll-target="#rename-columns-1">rename columns</a>
+  <ul class="collapse">
+  <li><a href="#visualise-carp" id="toc-visualise-carp" class="nav-link" data-scroll-target="#visualise-carp">Visualise Carp</a></li>
+  <li><a href="#c_mac" id="toc-c_mac" class="nav-link" data-scroll-target="#c_mac">C_mac</a></li>
+  </ul></li>
+  <li><a href="#rename-columns-2" id="toc-rename-columns-2" class="nav-link" data-scroll-target="#rename-columns-2">rename columns</a>
+  <ul class="collapse">
+  <li><a href="#visualise-c_mac" id="toc-visualise-c_mac" class="nav-link" data-scroll-target="#visualise-c_mac">Visualise C_Mac</a></li>
+  <li><a href="#cod" id="toc-cod" class="nav-link" data-scroll-target="#cod">Cod</a></li>
+  </ul></li>
+  <li><a href="#rename-columns-3" id="toc-rename-columns-3" class="nav-link" data-scroll-target="#rename-columns-3">rename columns</a>
+  <ul class="collapse">
+  <li><a href="#visualise-cod" id="toc-visualise-cod" class="nav-link" data-scroll-target="#visualise-cod">Visualise Cod</a></li>
+  <li><a href="#catfish" id="toc-catfish" class="nav-link" data-scroll-target="#catfish">Catfish</a></li>
+  </ul></li>
+  <li><a href="#rename-columns-4" id="toc-rename-columns-4" class="nav-link" data-scroll-target="#rename-columns-4">rename columns</a>
+  <ul class="collapse">
+  <li><a href="#visualise-catfish" id="toc-visualise-catfish" class="nav-link" data-scroll-target="#visualise-catfish">Visualise Catfish</a></li>
+  <li><a href="#herring" id="toc-herring" class="nav-link" data-scroll-target="#herring">Herring</a></li>
+  </ul></li>
+  <li><a href="#rename-columns-5" id="toc-rename-columns-5" class="nav-link" data-scroll-target="#rename-columns-5">rename columns</a>
+  <ul class="collapse">
+  <li><a href="#visualise-herring" id="toc-visualise-herring" class="nav-link" data-scroll-target="#visualise-herring">Visualise Herring</a></li>
+  <li><a href="#lichen" id="toc-lichen" class="nav-link" data-scroll-target="#lichen">Lichen</a></li>
+  </ul></li>
+  <li><a href="#rename-columns-6" id="toc-rename-columns-6" class="nav-link" data-scroll-target="#rename-columns-6">rename columns</a>
+  <ul class="collapse">
+  <li><a href="#visualise-lichen" id="toc-visualise-lichen" class="nav-link" data-scroll-target="#visualise-lichen">Visualise Lichen</a></li>
+  <li><a href="#mac" id="toc-mac" class="nav-link" data-scroll-target="#mac">Mac</a></li>
+  </ul></li>
+  <li><a href="#rename-columns-7" id="toc-rename-columns-7" class="nav-link" data-scroll-target="#rename-columns-7">rename columns</a>
+  <ul class="collapse">
+  <li><a href="#visualise-mac" id="toc-visualise-mac" class="nav-link" data-scroll-target="#visualise-mac">Visualise Mac</a></li>
+  <li><a href="#pollock" id="toc-pollock" class="nav-link" data-scroll-target="#pollock">Pollock</a></li>
+  </ul></li>
+  <li><a href="#rename-columns-8" id="toc-rename-columns-8" class="nav-link" data-scroll-target="#rename-columns-8">rename columns</a>
+  <ul class="collapse">
+  <li><a href="#visualise-pollock" id="toc-visualise-pollock" class="nav-link" data-scroll-target="#visualise-pollock">Visualise Pollock</a></li>
+  <li><a href="#sal-wgl" id="toc-sal-wgl" class="nav-link" data-scroll-target="#sal-wgl">Sal WGL</a></li>
+  </ul></li>
+  <li><a href="#rename-columns-9" id="toc-rename-columns-9" class="nav-link" data-scroll-target="#rename-columns-9">rename columns</a>
+  <ul class="collapse">
+  <li><a href="#visualise-sal-wgl" id="toc-visualise-sal-wgl" class="nav-link" data-scroll-target="#visualise-sal-wgl">Visualise Sal WGL</a></li>
+  <li><a href="#salmon" id="toc-salmon" class="nav-link" data-scroll-target="#salmon">Salmon</a></li>
+  </ul></li>
+  <li><a href="#rename-columns-10" id="toc-rename-columns-10" class="nav-link" data-scroll-target="#rename-columns-10">rename columns</a>
+  <ul class="collapse">
+  <li><a href="#visualise-salmon" id="toc-visualise-salmon" class="nav-link" data-scroll-target="#visualise-salmon">Visualise Salmon</a></li>
+  <li><a href="#shark" id="toc-shark" class="nav-link" data-scroll-target="#shark">Shark</a></li>
+  </ul></li>
+  <li><a href="#rename-columns-11" id="toc-rename-columns-11" class="nav-link" data-scroll-target="#rename-columns-11">rename columns</a>
+  <ul class="collapse">
+  <li><a href="#tuna" id="toc-tuna" class="nav-link" data-scroll-target="#tuna">Tuna</a></li>
+  </ul></li>
+  <li><a href="#rename-columns-12" id="toc-rename-columns-12" class="nav-link" data-scroll-target="#rename-columns-12">rename columns</a>
+  <ul class="collapse">
+  <li><a href="#visualise-tuna" id="toc-visualise-tuna" class="nav-link" data-scroll-target="#visualise-tuna">Visualise Tuna</a></li>
+  <li><a href="#remove-all-rows-with-hs_codes-irrelevant-to-bundles" id="toc-remove-all-rows-with-hs_codes-irrelevant-to-bundles" class="nav-link" data-scroll-target="#remove-all-rows-with-hs_codes-irrelevant-to-bundles">Remove all rows with HS_codes irrelevant to bundles</a></li>
+  <li><a href="#aggregate" id="toc-aggregate" class="nav-link" data-scroll-target="#aggregate">Aggregate</a></li>
+  </ul></li>
+  <li><a href="#test" id="toc-test" class="nav-link" data-scroll-target="#test">TEST</a></li>
+  <li><a href="#assuming-your-datasets-are-named-mc2-and-carp_edges" id="toc-assuming-your-datasets-are-named-mc2-and-carp_edges" class="nav-link" data-scroll-target="#assuming-your-datasets-are-named-mc2-and-carp_edges">Assuming your datasets are named MC2 and carp_edges</a></li>
+  <li><a href="#extract-the-matched-rows-using-subsetting" id="toc-extract-the-matched-rows-using-subsetting" class="nav-link" data-scroll-target="#extract-the-matched-rows-using-subsetting">Extract the matched rows using subsetting</a></li>
+  <li><a href="#print-the-matched-rows" id="toc-print-the-matched-rows" class="nav-link" data-scroll-target="#print-the-matched-rows">Print the matched rows</a>
+  <ul class="collapse">
+  <li><a href="#exploring-cut-points-to-focus-dataset" id="toc-exploring-cut-points-to-focus-dataset" class="nav-link" data-scroll-target="#exploring-cut-points-to-focus-dataset">Exploring cut-points to focus dataset</a></li>
+  <li><a href="#boxplot-distribution" id="toc-boxplot-distribution" class="nav-link" data-scroll-target="#boxplot-distribution">Boxplot Distribution</a></li>
+  <li><a href="#boxplot-zoomed" id="toc-boxplot-zoomed" class="nav-link" data-scroll-target="#boxplot-zoomed">Boxplot (zoomed)</a></li>
+  <li><a href="#filter-at-cut-point-19.8" id="toc-filter-at-cut-point-19.8" class="nav-link" data-scroll-target="#filter-at-cut-point-19.8">Filter at cut-point 19.8</a></li>
+  <li><a href="#create-graph" id="toc-create-graph" class="nav-link" data-scroll-target="#create-graph">Create Graph</a></li>
+  </ul></li>
+  <li><a href="#filter-the-dataset-to-keep-only-the-top-20" id="toc-filter-the-dataset-to-keep-only-the-top-20" class="nav-link" data-scroll-target="#filter-the-dataset-to-keep-only-the-top-20">Filter the dataset to keep only the top 20%</a></li>
+  <li><a href="#view-the-degree-centrality-values" id="toc-view-the-degree-centrality-values" class="nav-link" data-scroll-target="#view-the-degree-centrality-values">View the degree centrality values</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -272,237 +360,384 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>               visNetwork, lubridate, clock,</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>               tidyverse, graphlayouts, jsonlite)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>carp <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">"data/carp.json"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>catfish <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">"data/catfish.json"</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>c_mac <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">"data/chub_mackerel.json"</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>cod <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">"data/cod2.json"</span>)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>herring <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">"data/herring.json"</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>lichen <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">"data/lichen.json"</span>)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>mac <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">"data/mackerel.json"</span>)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>pol <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">"data/pollock.json"</span>)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>salmon <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">"data/salmon.json"</span>)</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>sal_wgl <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">"data/salmon_wgl.json"</span>)</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>shark <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">"data/shark.json"</span>)</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>tuna <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">"data/tuna.json"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>carp_nodes <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(carp<span class="sc">$</span>nodes) <span class="sc">%&gt;%</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id,shpcountry, rcvcountry) <span class="co">#using select function to reorganise into desired order of columns</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>carp_edges <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(carp<span class="sc">$</span>links) <span class="sc">%&gt;%</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># rename columns</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>carp_edges <span class="ot">&lt;-</span> carp_edges <span class="sc">%&gt;%</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">'Source'</span> <span class="ot">=</span> <span class="st">'source'</span>, </span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Target'</span> <span class="ot">=</span> <span class="st">'target'</span>, </span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Value_OMU'</span> <span class="ot">=</span> <span class="st">'valueofgoods_omu'</span>, </span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Weight_KG'</span> <span class="ot">=</span> <span class="st">'weightkg'</span>, </span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>         <span class="st">'HS_Code'</span> <span class="ot">=</span> <span class="st">'hscode'</span>, </span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Arrival_Date'</span> <span class="ot">=</span> <span class="st">'arrivaldate'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>c_mac_nodes <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(c_mac<span class="sc">$</span>nodes) <span class="sc">%&gt;%</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id,shpcountry, rcvcountry) <span class="co">#using select function to reorganise into desired order of columns</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>c_mac_edges <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(c_mac<span class="sc">$</span>links) <span class="sc">%&gt;%</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># rename columns</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>c_mac_edges <span class="ot">&lt;-</span> c_mac_edges <span class="sc">%&gt;%</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">'Source'</span> <span class="ot">=</span> <span class="st">'source'</span>, </span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Target'</span> <span class="ot">=</span> <span class="st">'target'</span>, </span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Value_OMU'</span> <span class="ot">=</span> <span class="st">'valueofgoods_omu'</span>, </span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Weight_KG'</span> <span class="ot">=</span> <span class="st">'weightkg'</span>, </span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>         <span class="st">'HS_Code'</span> <span class="ot">=</span> <span class="st">'hscode'</span>, </span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Arrival_Date'</span> <span class="ot">=</span> <span class="st">'arrivaldate'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>cod_nodes <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(cod<span class="sc">$</span>nodes) <span class="sc">%&gt;%</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id,shpcountry, rcvcountry) <span class="co">#using select function to reorganise into desired order of columns</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>cod_edges <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(cod<span class="sc">$</span>links) <span class="sc">%&gt;%</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># rename columns</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>cod_edges <span class="ot">&lt;-</span> cod_edges <span class="sc">%&gt;%</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">'Source'</span> <span class="ot">=</span> <span class="st">'source'</span>, </span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Target'</span> <span class="ot">=</span> <span class="st">'target'</span>, </span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Value_OMU'</span> <span class="ot">=</span> <span class="st">'valueofgoods_omu'</span>, </span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Weight_KG'</span> <span class="ot">=</span> <span class="st">'weightkg'</span>, </span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>         <span class="st">'HS_Code'</span> <span class="ot">=</span> <span class="st">'hscode'</span>, </span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Arrival_Date'</span> <span class="ot">=</span> <span class="st">'arrivaldate'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<p>``{r} MC2 &lt;- fromJSON(“data/mc2_challenge_graph.json”)</p>
+<p>``</p>
+<p>``{r} MC2_nodes &lt;- as_tibble(MC2$nodes) %&gt;% select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns</p>
+<p>MC2_edges &lt;- as_tibble(MC2$links) %&gt;% select(source, target, valueofgoods_omu, valueofgoodsusd, weightkg, hscode, arrivaldate) ``</p>
+<section id="remove-all-duplicate-rows" class="level2">
+<h2 class="anchored" data-anchor-id="remove-all-duplicate-rows">Remove all duplicate rows</h2>
+<p>``{r} MC2_edges &lt;- MC2_edges %&gt;% distinct() MC2_nodes &lt;- MC2_nodes %&gt;% distinct()</p>
+<p><code></code>{r} MC2_edges &lt;- MC2_edges %&gt;% mutate(Month = month(arrivaldate, label = TRUE, abbr = FALSE))</p>
+</section>
+<section id="rename-columns" class="level1">
+<h1>rename columns</h1>
+<p>MC2_edges &lt;- MC2_edges %&gt;% rename(‘Value_OMU’ = ‘valueofgoods_omu’, ‘Value_USD’ = ‘valueofgoodsusd’, ‘Weight_KG’ = ‘weightkg’, ‘HS_Code’ = ‘hscode’, ‘Arrival_Date’ = ‘arrivaldate’) ``</p>
+<section id="check-for-na-in-from-and-to" class="level2">
+<h2 class="anchored" data-anchor-id="check-for-na-in-from-and-to">Check for NA in from and to</h2>
+<p><code>{r} MC2_edges &lt;- MC2_edges[complete.cases(MC2_edges[, c("source", "target")]), ]</code></p>
+</section>
+</section>
+<section id="bundle-experimentation" class="level1">
+<h1>BUNDLE EXPERIMENTATION</h1>
+<p>``{r}</p>
+<p>carp &lt;- fromJSON(“data/carp.json”) catfish &lt;- fromJSON(“data/catfish.json”) c_mac &lt;- fromJSON(“data/chub_mackerel.json”) cod &lt;- fromJSON(“data/cod2.json”) herring &lt;- fromJSON(“data/herring.json”) lichen &lt;- fromJSON(“data/lichen.json”) mac &lt;- fromJSON(“data/mackerel.json”) pol &lt;- fromJSON(“data/pollock.json”) salmon &lt;- fromJSON(“data/salmon.json”) sal_wgl &lt;- fromJSON(“data/salmon_wgl.json”) shark &lt;- fromJSON(“data/shark.json”) tuna &lt;- fromJSON(“data/tuna.json”)</p>
+<p>``</p>
+<section id="carp" class="level2">
+<h2 class="anchored" data-anchor-id="carp">Carp</h2>
+<p>``{r} carp_nodes &lt;- as_tibble(carp$nodes) %&gt;% select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns</p>
+<p>carp_edges &lt;- as_tibble(carp$links) %&gt;% select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)</p>
+</section>
+</section>
+<section id="rename-columns-1" class="level1">
+<h1>rename columns</h1>
+<p>carp_edges &lt;- carp_edges %&gt;% rename(‘source’ = ‘source’, ‘target’ = ‘target’, ‘Value_OMU’ = ‘valueofgoods_omu’, ‘Weight_KG’ = ‘weightkg’, ‘HS_Code’ = ‘hscode’, ‘Arrival_Date’ = ‘arrivaldate’)</p>
+<p>``</p>
+<p>``{r} carp_edges_aggregated &lt;- carp_edges %&gt;% group_by(source,target, HS_Code) %&gt;% summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE), Count = n(), Average_OMU = mean(Value_OMU, na.rm = TRUE), Total_Weight_KG = sum(Weight_KG, na.rm = TRUE), Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %&gt;% ungroup()</p>
+<p>``</p>
+<section id="visualise-carp" class="level2">
+<h2 class="anchored" data-anchor-id="visualise-carp">Visualise Carp</h2>
+<p>``{r}</p>
+<p>id1 &lt;- carp_edges_aggregated %&gt;% select(source) %&gt;% rename(id = source) id2 &lt;- carp_edges_aggregated %&gt;% select(target) %&gt;% rename(id = target) carp_nodes_extract &lt;- rbind(id1, id2) %&gt;% distinct()</p>
+<p>``</p>
+<p>``{r} carp_graph &lt;- tbl_graph(nodes = carp_nodes_extract, edges = carp_edges_aggregated, directed = TRUE)</p>
+<p>``</p>
+<p>`{r} ggraph(carp_graph, layout = “fr”) + geom_edge_link(aes()) + geom_node_point(aes()) + theme_graph()</p>
+<p>``</p>
+</section>
+<section id="c_mac" class="level2">
+<h2 class="anchored" data-anchor-id="c_mac">C_mac</h2>
+<p>``{r} cmac_nodes &lt;- as_tibble(c_mac$nodes) %&gt;% select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns</p>
+<p>cmac_edges &lt;- as_tibble(c_mac$links) %&gt;% select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)</p>
+</section>
+</section>
+<section id="rename-columns-2" class="level1">
+<h1>rename columns</h1>
+<p>cmac_edges &lt;- cmac_edges %&gt;% rename(‘source’ = ‘source’, ‘target’ = ‘target’, ‘Value_OMU’ = ‘valueofgoods_omu’, ‘Weight_KG’ = ‘weightkg’, ‘HS_Code’ = ‘hscode’, ‘Arrival_Date’ = ‘arrivaldate’)</p>
+<p>``</p>
+<p>``{r} cmac_edges_aggregated &lt;- cmac_edges %&gt;% group_by(source,target, HS_Code) %&gt;% summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE), Count = n(), Average_OMU = mean(Value_OMU, na.rm = TRUE), Total_Weight_KG = sum(Weight_KG, na.rm = TRUE), Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %&gt;% ungroup()</p>
+<p>``</p>
+<section id="visualise-c_mac" class="level2">
+<h2 class="anchored" data-anchor-id="visualise-c_mac">Visualise C_Mac</h2>
+<p>``{r}</p>
+<p>id1 &lt;- cmac_edges_aggregated %&gt;% select(source) %&gt;% rename(id = source) id2 &lt;- cmac_edges_aggregated %&gt;% select(target) %&gt;% rename(id = target) cmac_nodes_extract &lt;- rbind(id1, id2) %&gt;% distinct() ``</p>
+<p>``{r} cmac_graph &lt;- tbl_graph(nodes = cmac_nodes_extract, edges = cmac_edges_aggregated, directed = TRUE)</p>
+<p>``</p>
+<p><code>{r} ggraph(cmac_graph,        layout = "fr") +   geom_edge_link(aes()) +   geom_node_point(aes()) +   theme_graph()</code></p>
+</section>
+<section id="cod" class="level2">
+<h2 class="anchored" data-anchor-id="cod">Cod</h2>
+<p>``{r} cod_nodes &lt;- as_tibble(cod$nodes) %&gt;% select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns</p>
+<p>cod_edges &lt;- as_tibble(cod$links) %&gt;% select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)</p>
+</section>
+</section>
+<section id="rename-columns-3" class="level1">
+<h1>rename columns</h1>
+<p>cod_edges &lt;- cod_edges %&gt;% rename(‘source’ = ‘source’, ‘target’ = ‘target’, ‘Value_OMU’ = ‘valueofgoods_omu’, ‘Weight_KG’ = ‘weightkg’, ‘HS_Code’ = ‘hscode’, ‘Arrival_Date’ = ‘arrivaldate’)</p>
+<p>``</p>
+<p><code>{r} cod_edges_aggregated &lt;- cod_edges %&gt;%   group_by(source,target, HS_Code) %&gt;%   summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),             Count = n(),             Average_OMU = mean(Value_OMU, na.rm = TRUE),             Total_Weight_KG = sum(Weight_KG, na.rm = TRUE),             Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %&gt;%   ungroup()</code></p>
+<section id="visualise-cod" class="level2">
+<h2 class="anchored" data-anchor-id="visualise-cod">Visualise Cod</h2>
+<p>``{r}</p>
+<p>id1 &lt;- cod_edges_aggregated %&gt;% select(source) %&gt;% rename(id = source) id2 &lt;- cod_edges_aggregated %&gt;% select(target) %&gt;% rename(id = target) cod_nodes_extract &lt;- rbind(id1, id2) %&gt;% distinct()</p>
+<p>``</p>
+<p>``{r} cod_graph &lt;- tbl_graph(nodes = cod_nodes_extract, edges = cod_edges_aggregated, directed = TRUE)</p>
+<p>``</p>
+<p>``{r} ggraph(cod_graph, layout = “fr”) + geom_edge_link(aes()) + geom_node_point(aes()) + theme_graph()</p>
+<p>``</p>
+</section>
+<section id="catfish" class="level2">
+<h2 class="anchored" data-anchor-id="catfish">Catfish</h2>
 <p>Catfish sus, no weight data (underreporting/overreporting is a trait of illegal fishing?)</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>catfish_nodes <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(catfish<span class="sc">$</span>nodes) <span class="sc">%&gt;%</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id,shpcountry, rcvcountry) <span class="co">#using select function to reorganise into desired order of columns</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>catfish_edges <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(catfish<span class="sc">$</span>links) <span class="sc">%&gt;%</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(source, target, valueofgoods_omu, hscode, arrivaldate)</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># rename columns</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>catfish_edges <span class="ot">&lt;-</span> catfish_edges <span class="sc">%&gt;%</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">'Source'</span> <span class="ot">=</span> <span class="st">'source'</span>, </span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Target'</span> <span class="ot">=</span> <span class="st">'target'</span>, </span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Value_OMU'</span> <span class="ot">=</span> <span class="st">'valueofgoods_omu'</span>, </span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>         <span class="st">'HS_Code'</span> <span class="ot">=</span> <span class="st">'hscode'</span>, </span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Arrival_Date'</span> <span class="ot">=</span> <span class="st">'arrivaldate'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>``{r} catfish_nodes &lt;- as_tibble(catfish$nodes) %&gt;% select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns</p>
+<p>catfish_edges &lt;- as_tibble(catfish$links) %&gt;% select(source, target, valueofgoods_omu, hscode, arrivaldate)</p>
+</section>
+</section>
+<section id="rename-columns-4" class="level1">
+<h1>rename columns</h1>
+<p>catfish_edges &lt;- catfish_edges %&gt;% rename(‘source’ = ‘source’, ‘target’ = ‘target’, ‘Value_OMU’ = ‘valueofgoods_omu’, ‘HS_Code’ = ‘hscode’, ‘Arrival_Date’ = ‘arrivaldate’)</p>
+<p>``</p>
+<p>``{r} catfish_edges_aggregated &lt;- catfish_edges %&gt;% group_by(source,target, HS_Code) %&gt;% summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE), Count = n(), Average_OMU = mean(Value_OMU, na.rm = TRUE)) %&gt;% ungroup()</p>
+<p>``</p>
+<section id="visualise-catfish" class="level2">
+<h2 class="anchored" data-anchor-id="visualise-catfish">Visualise Catfish</h2>
+<p>``{r}</p>
+<p>id1 &lt;- catfish_edges_aggregated %&gt;% select(source) %&gt;% rename(id = source) id2 &lt;- catfish_edges_aggregated %&gt;% select(target) %&gt;% rename(id = target) catfish_nodes_extract &lt;- rbind(id1, id2) %&gt;% distinct()</p>
+<p>``</p>
+<p>``{r} catfish_graph &lt;- tbl_graph(nodes = catfish_nodes_extract, edges = catfish_edges_aggregated, directed = TRUE)</p>
+<p>``</p>
+<p>``{r} ggraph(catfish_graph, layout = “fr”) + geom_edge_link(aes()) + geom_node_point(aes()) + theme_graph()</p>
+<p>``</p>
+</section>
+<section id="herring" class="level2">
+<h2 class="anchored" data-anchor-id="herring">Herring</h2>
+<p>``{r} herring_nodes &lt;- as_tibble(herring$nodes) %&gt;% select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns</p>
+<p>herring_edges &lt;- as_tibble(herring$links) %&gt;% select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)</p>
+</section>
+</section>
+<section id="rename-columns-5" class="level1">
+<h1>rename columns</h1>
+<p>herring_edges &lt;- herring_edges %&gt;% rename(‘source’ = ‘source’, ‘target’ = ‘target’, ‘Value_OMU’ = ‘valueofgoods_omu’, ‘Weight_KG’ = ‘weightkg’, ‘HS_Code’ = ‘hscode’, ‘Arrival_Date’ = ‘arrivaldate’)</p>
+<p>``</p>
+<p>``{r} herring_edges_aggregated &lt;- herring_edges %&gt;% group_by(source,target, HS_Code) %&gt;% summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE), Count = n(), Average_OMU = mean(Value_OMU, na.rm = TRUE), Total_Weight_KG = sum(Weight_KG, na.rm = TRUE), Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %&gt;% ungroup()</p>
+<p>``</p>
+<section id="visualise-herring" class="level2">
+<h2 class="anchored" data-anchor-id="visualise-herring">Visualise Herring</h2>
+<p>``{r}</p>
+<p>id1 &lt;- herring_edges_aggregated %&gt;% select(source) %&gt;% rename(id = source) id2 &lt;- herring_edges_aggregated %&gt;% select(target) %&gt;% rename(id = target) herring_nodes_extract &lt;- rbind(id1, id2) %&gt;% distinct()</p>
+<p>``</p>
+<p>``{r} herring_graph &lt;- tbl_graph(nodes = herring_nodes_extract, edges = herring_edges_aggregated, directed = TRUE)</p>
+<p>``</p>
+<p>``{r} ggraph(herring_graph, layout = “fr”) + geom_edge_link(aes()) + geom_node_point(aes()) + theme_graph()</p>
+<p>``</p>
+</section>
+<section id="lichen" class="level2">
+<h2 class="anchored" data-anchor-id="lichen">Lichen</h2>
+<p>``{r} lichen_node &lt;- as_tibble(lichen$nodes) %&gt;% select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns</p>
+<p>lichen_edges &lt;- as_tibble(lichen$links) %&gt;% select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)</p>
+</section>
+</section>
+<section id="rename-columns-6" class="level1">
+<h1>rename columns</h1>
+<p>lichen_edges &lt;- lichen_edges %&gt;% rename(‘source’ = ‘source’, ‘target’ = ‘target’, ‘Value_OMU’ = ‘valueofgoods_omu’, ‘Weight_KG’ = ‘weightkg’, ‘HS_Code’ = ‘hscode’, ‘Arrival_Date’ = ‘arrivaldate’)</p>
+<p>``</p>
+<p>``{r} lichen_edges_aggregated &lt;- lichen_edges %&gt;% group_by(source,target, HS_Code) %&gt;% summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE), Count = n(), Average_OMU = mean(Value_OMU, na.rm = TRUE), Total_Weight_KG = sum(Weight_KG, na.rm = TRUE), Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %&gt;% ungroup()</p>
+<p>``</p>
+<section id="visualise-lichen" class="level2">
+<h2 class="anchored" data-anchor-id="visualise-lichen">Visualise Lichen</h2>
+<p>``{r}</p>
+<p>id1 &lt;- lichen_edges_aggregated %&gt;% select(source) %&gt;% rename(id = source) id2 &lt;- lichen_edges_aggregated %&gt;% select(target) %&gt;% rename(id = target) lichen_nodes_extract &lt;- rbind(id1, id2) %&gt;% distinct()</p>
+<p>``</p>
+<p>``{r} lichen_graph &lt;- tbl_graph(nodes = lichen_nodes_extract, edges = lichen_edges_aggregated, directed = TRUE)</p>
+<p>``</p>
+<p>``{r} ggraph(lichen_graph, layout = “fr”) + geom_edge_link(aes()) + geom_node_point(aes()) + theme_graph()</p>
+<p>``</p>
+</section>
+<section id="mac" class="level2">
+<h2 class="anchored" data-anchor-id="mac">Mac</h2>
+<p>``{r} mac_nodes &lt;- as_tibble(mac$nodes) %&gt;% select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns</p>
+<p>mac_edges &lt;- as_tibble(mac$links) %&gt;% select(source, target, valueofgoods_omu, hscode, arrivaldate)</p>
+</section>
+</section>
+<section id="rename-columns-7" class="level1">
+<h1>rename columns</h1>
+<p>mac_edges &lt;- mac_edges %&gt;% rename(‘source’ = ‘source’, ‘target’ = ‘target’, ‘Value_OMU’ = ‘valueofgoods_omu’, ‘HS_Code’ = ‘hscode’, ‘Arrival_Date’ = ‘arrivaldate’)</p>
+<p>``</p>
+<p>``{r} mac_edges_aggregated &lt;- mac_edges %&gt;% group_by(source,target, HS_Code) %&gt;% summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE), Count = n(), Average_OMU = mean(Value_OMU, na.rm = TRUE)) %&gt;% ungroup()</p>
+<p>``</p>
+<section id="visualise-mac" class="level2">
+<h2 class="anchored" data-anchor-id="visualise-mac">Visualise Mac</h2>
+<p>``{r}</p>
+<p>id1 &lt;- mac_edges_aggregated %&gt;% select(source) %&gt;% rename(id = source) id2 &lt;- mac_edges_aggregated %&gt;% select(target) %&gt;% rename(id = target) mac_nodes_extract &lt;- rbind(id1, id2) %&gt;% distinct()</p>
+<p>``</p>
+<p>``{r} mac_graph &lt;- tbl_graph(nodes = mac_nodes_extract, edges = mac_edges_aggregated, directed = TRUE)</p>
+<p>``</p>
+<p>``{r} ggraph(mac_graph, layout = “fr”) + geom_edge_link(aes()) + geom_node_point(aes()) + theme_graph()</p>
+<p>``</p>
+</section>
+<section id="pollock" class="level2">
+<h2 class="anchored" data-anchor-id="pollock">Pollock</h2>
+<p>``{r} pol_nodes &lt;- as_tibble(pol$nodes) %&gt;% select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns</p>
+<p>pol_edges &lt;- as_tibble(pol$links) %&gt;% select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)</p>
+</section>
+</section>
+<section id="rename-columns-8" class="level1">
+<h1>rename columns</h1>
+<p>pol_edges &lt;- pol_edges %&gt;% rename(‘source’ = ‘source’, ‘target’ = ‘target’, ‘Value_OMU’ = ‘valueofgoods_omu’, ‘Weight_KG’ = ‘weightkg’, ‘HS_Code’ = ‘hscode’, ‘Arrival_Date’ = ‘arrivaldate’)</p>
+<p>``</p>
+<p>``{r} pol_edges_aggregated &lt;- pol_edges %&gt;% group_by(source,target, HS_Code) %&gt;% summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE), Count = n(), Average_OMU = mean(Value_OMU, na.rm = TRUE), Total_Weight_KG = sum(Weight_KG, na.rm = TRUE), Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %&gt;% ungroup()</p>
+<p>``</p>
+<section id="visualise-pollock" class="level2">
+<h2 class="anchored" data-anchor-id="visualise-pollock">Visualise Pollock</h2>
+<p>``{r}</p>
+<p>id1 &lt;- pol_edges_aggregated %&gt;% select(source) %&gt;% rename(id = source) id2 &lt;- pol_edges_aggregated %&gt;% select(target) %&gt;% rename(id = target) pol_nodes_extract &lt;- rbind(id1, id2) %&gt;% distinct()</p>
+<p>``</p>
+<p>``{r} pol_graph &lt;- tbl_graph(nodes = pol_nodes_extract, edges = pol_edges_aggregated, directed = TRUE)</p>
+<p>``</p>
+<p><code>{r} ggraph(pol_graph,        layout = "fr") +   geom_edge_link(aes()) +   geom_node_point(aes()) +   theme_graph()</code></p>
+</section>
+<section id="sal-wgl" class="level2">
+<h2 class="anchored" data-anchor-id="sal-wgl">Sal WGL</h2>
+<p>``{r} salw_nodes &lt;- as_tibble(sal_wgl$nodes) %&gt;% select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns</p>
+<p>salw_edges &lt;- as_tibble(sal_wgl$links) %&gt;% select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)</p>
+</section>
+</section>
+<section id="rename-columns-9" class="level1">
+<h1>rename columns</h1>
+<p>salw_edges &lt;- salw_edges %&gt;% rename(‘source’ = ‘source’, ‘target’ = ‘target’, ‘Value_OMU’ = ‘valueofgoods_omu’, ‘Weight_KG’ = ‘weightkg’, ‘HS_Code’ = ‘hscode’, ‘Arrival_Date’ = ‘arrivaldate’)</p>
+<p>``</p>
+<p>``{r} salw_edges_aggregated &lt;- salw_edges %&gt;% group_by(source,target, HS_Code) %&gt;% summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE), Count = n(), Average_OMU = mean(Value_OMU, na.rm = TRUE), Total_Weight_KG = sum(Weight_KG, na.rm = TRUE), Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %&gt;% ungroup()</p>
+<p>``</p>
+<section id="visualise-sal-wgl" class="level2">
+<h2 class="anchored" data-anchor-id="visualise-sal-wgl">Visualise Sal WGL</h2>
+<p>``{r}</p>
+<p>id1 &lt;- salw_edges_aggregated %&gt;% select(source) %&gt;% rename(id = source) id2 &lt;- salw_edges_aggregated %&gt;% select(target) %&gt;% rename(id = target) sal_wgl_nodes_extract &lt;- rbind(id1, id2) %&gt;% distinct()</p>
+<p>``</p>
+<p>``{r} sal_wgl_graph &lt;- tbl_graph(nodes = sal_wgl_nodes_extract, edges = salw_edges_aggregated, directed = TRUE)</p>
+<p>``</p>
+<p>``{r} ggraph(sal_wgl_graph, layout = “fr”) + geom_edge_link(aes()) + geom_node_point(aes()) + theme_graph()</p>
+<p>``</p>
+</section>
+<section id="salmon" class="level2">
+<h2 class="anchored" data-anchor-id="salmon">Salmon</h2>
+<p>``{r} salmon_nodes &lt;- as_tibble(salmon$nodes) %&gt;% select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns</p>
+<p>salmon_edges &lt;- as_tibble(salmon$links) %&gt;% select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)</p>
+</section>
+</section>
+<section id="rename-columns-10" class="level1">
+<h1>rename columns</h1>
+<p>salmon_edges &lt;- salmon_edges %&gt;% rename(‘source’ = ‘source’, ‘target’ = ‘target’, ‘Value_OMU’ = ‘valueofgoods_omu’, ‘Weight_KG’ = ‘weightkg’, ‘HS_Code’ = ‘hscode’, ‘Arrival_Date’ = ‘arrivaldate’)</p>
+<p>``</p>
+<p>``{r} salmon_edges_aggregated &lt;- salmon_edges %&gt;% group_by(source,target, HS_Code) %&gt;% summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE), Count = n(), Average_OMU = mean(Value_OMU, na.rm = TRUE), Total_Weight_KG = sum(Weight_KG, na.rm = TRUE), Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %&gt;% ungroup()</p>
+<p>``</p>
+<section id="visualise-salmon" class="level2">
+<h2 class="anchored" data-anchor-id="visualise-salmon">Visualise Salmon</h2>
+<p>``{r}</p>
+<p>id1 &lt;- salmon_edges_aggregated %&gt;% select(source) %&gt;% rename(id = source) id2 &lt;- salmon_edges_aggregated %&gt;% select(target) %&gt;% rename(id = target) salmon_nodes_extract &lt;- rbind(id1, id2) %&gt;% distinct()</p>
+<p>``</p>
+<p>``{r} salmon_graph &lt;- tbl_graph(nodes = salmon_nodes_extract, edges = salmon_edges_aggregated, directed = TRUE)</p>
+<p>``</p>
+<p>``{r} ggraph(salmon_graph, layout = “fr”) + geom_edge_link(aes()) + geom_node_point(aes()) + theme_graph()</p>
+<p>``</p>
+</section>
+<section id="shark" class="level2">
+<h2 class="anchored" data-anchor-id="shark">Shark</h2>
+<p>``{r} shark_nodes &lt;- as_tibble(shark$nodes) %&gt;% select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns</p>
+<p>shark_edges &lt;- as_tibble(shark$links) %&gt;% select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)</p>
+</section>
+</section>
+<section id="rename-columns-11" class="level1">
+<h1>rename columns</h1>
+<p>shark_edges &lt;- shark_edges %&gt;% rename(‘source’ = ‘source’, ‘target’ = ‘target’, ‘Value_OMU’ = ‘valueofgoods_omu’, ‘Weight_KG’ = ‘weightkg’, ‘HS_Code’ = ‘hscode’, ‘Arrival_Date’ = ‘arrivaldate’)</p>
+<p>``</p>
+<p>``{r}</p>
+<p>id1 &lt;- shark_edges %&gt;% select(source) %&gt;% rename(id = source) id2 &lt;- shark_edges %&gt;% select(target) %&gt;% rename(id = target) shark_nodes_extract &lt;- rbind(id1, id2) %&gt;% distinct()</p>
+<p>``</p>
+<p>``{r} shark_graph &lt;- tbl_graph(nodes = shark_nodes_extract, edges = shark_edges, directed = TRUE)</p>
+<p>``</p>
+<p>``{r} ggraph(shark_graph, layout = “fr”) + geom_edge_link(aes()) + geom_node_point(aes()) + theme_graph()</p>
+<p>``</p>
+<section id="tuna" class="level2">
+<h2 class="anchored" data-anchor-id="tuna">Tuna</h2>
+<p>``{r} tuna_nodes &lt;- as_tibble(tuna$nodes) %&gt;% select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns</p>
+<p>tuna_edges &lt;- as_tibble(tuna$links) %&gt;% select(source, target, valueofgoods_omu, hscode, arrivaldate)</p>
+</section>
+</section>
+<section id="rename-columns-12" class="level1">
+<h1>rename columns</h1>
+<p>tuna_edges &lt;- tuna_edges %&gt;% rename(‘source’ = ‘source’, ‘target’ = ‘target’, ‘Value_OMU’ = ‘valueofgoods_omu’, ‘HS_Code’ = ‘hscode’, ‘Arrival_Date’ = ‘arrivaldate’)</p>
+<p>``</p>
+<section id="visualise-tuna" class="level2">
+<h2 class="anchored" data-anchor-id="visualise-tuna">Visualise Tuna</h2>
+<p>``{r}</p>
+<p>id1 &lt;- tuna_edges %&gt;% select(source) %&gt;% rename(id = source) id2 &lt;- tuna_edges %&gt;% select(target) %&gt;% rename(id = target) tuna_nodes_extract &lt;- rbind(id1, id2) %&gt;% distinct()</p>
+<p>``</p>
+<p>``{r} tuna_graph &lt;- tbl_graph(nodes = tuna_nodes_extract, edges = tuna_edges, directed = TRUE)</p>
+<p>``</p>
+<p>``{r} ggraph(tuna_graph, layout = “fr”) + geom_edge_link(aes()) + geom_node_point(aes()) + theme_graph()</p>
+<p>``</p>
+<p>all_edges&lt;- c(“carp_edges”, “c_mac_edges”, “cod_edges”, “catfish_edges”, “herring_edges”, “lichen_edges”, “mac_edges”, “pol_edges”, “salmon_edges”, “sal_wgl_edges”, “shark_edges”, “tuna_edges”) # Add more dataset names as needed</p>
+<p>unique_hscodes &lt;- character() # Initialize an empty vector to store unique hs codes</p>
+<p>for (all_edges in all_edges) { dataset &lt;- get(all_edges) # Extract the dataset</p>
+<p>unique_hscodes &lt;- unique(c(unique_hscodes, dataset$HS_Code)) # Extract unique hs codes and append to the vector }</p>
+</section>
+<section id="remove-all-rows-with-hs_codes-irrelevant-to-bundles" class="level2">
+<h2 class="anchored" data-anchor-id="remove-all-rows-with-hs_codes-irrelevant-to-bundles">Remove all rows with HS_codes irrelevant to bundles</h2>
+<p>filtered_MC2_edges &lt;- MC2_edges[MC2_edges$HS_Code %in% unique_hscodes, ]</p>
+</section>
+<section id="aggregate" class="level2">
+<h2 class="anchored" data-anchor-id="aggregate">Aggregate</h2>
+<p>``{r} MC2_edges_aggregated &lt;- filtered_MC2_edges %&gt;% group_by(source,target) %&gt;% summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE), Value_USD_Total = sum(Value_USD, na.rm = TRUE), Count = n(), Average_OMU = mean(Value_OMU, na.rm = TRUE), Average_USD = mean(Value_USD, na.rm = TRUE), Total_Weight_KG = sum(Weight_KG, na.rm = TRUE), Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %&gt;% ungroup()</p>
+<p>``</p>
+</section>
+</section>
+<section id="test" class="level1">
+<h1>TEST</h1>
+<p>``{r}</p>
+</section>
+<section id="assuming-your-datasets-are-named-mc2-and-carp_edges" class="level1">
+<h1>Assuming your datasets are named MC2 and carp_edges</h1>
+</section>
+<section id="extract-the-matched-rows-using-subsetting" class="level1">
+<h1>Extract the matched rows using subsetting</h1>
+<p>matched_rows &lt;- carp_edges_aggregated[carp_edges_aggregated<span class="math inline">\(source %in% MC2\)</span>source &amp; carp_edges_aggregated<span class="math inline">\(target %in% MC2\)</span>target, ]</p>
+</section>
+<section id="print-the-matched-rows" class="level1">
+<h1>Print the matched rows</h1>
+<p>print(matched_rows)</p>
+<p>``</p>
+<section id="exploring-cut-points-to-focus-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="exploring-cut-points-to-focus-dataset">Exploring cut-points to focus dataset</h2>
+<p>#::: panel-tabset ## Mean and Median</p>
+<p>mean_links &lt;- mean(MC2_edges_aggregated<span class="math inline">\(Count) median_links &lt;- median(MC2_edges_aggregated\)</span>Count)</p>
+<p>print(mean_links) print(median_links)</p>
+</section>
+<section id="boxplot-distribution" class="level2">
+<h2 class="anchored" data-anchor-id="boxplot-distribution">Boxplot Distribution</h2>
+<p>ggplot(MC2_edges_aggregated, aes(y = Count)) + geom_boxplot(fill = “steelblue”, color = “black”) + labs(y = “Count”, title = “Boxplot of Count”)</p>
+</section>
+<section id="boxplot-zoomed" class="level2">
+<h2 class="anchored" data-anchor-id="boxplot-zoomed">Boxplot (zoomed)</h2>
+<p>ggplot(MC2_edges_aggregated, aes(y = Count)) + geom_boxplot(fill = “steelblue”, color = “black”) + labs(y = “Count”, title = “Boxplot of Count”) + ylim(0, 50)</p>
+<p>#:::</p>
+<div class="cushbox cushicon">
+<p>Based on the boxplots, we see that the data is bottom heavy, which is consistent with the median score of 2. Given that we are interested in abnormal data (large counts), we will filter the bulk of the data by the mean value(19.8) to focus our examination of links above this connection threshold.</p>
 </div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>herring_nodes <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(herring<span class="sc">$</span>nodes) <span class="sc">%&gt;%</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id,shpcountry, rcvcountry) <span class="co">#using select function to reorganise into desired order of columns</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>herring_edges <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(herring<span class="sc">$</span>links) <span class="sc">%&gt;%</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># rename columns</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>herring_edges <span class="ot">&lt;-</span> herring_edges <span class="sc">%&gt;%</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">'Source'</span> <span class="ot">=</span> <span class="st">'source'</span>, </span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Target'</span> <span class="ot">=</span> <span class="st">'target'</span>, </span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Value_OMU'</span> <span class="ot">=</span> <span class="st">'valueofgoods_omu'</span>, </span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Weight_KG'</span> <span class="ot">=</span> <span class="st">'weightkg'</span>, </span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>         <span class="st">'HS_Code'</span> <span class="ot">=</span> <span class="st">'hscode'</span>, </span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Arrival_Date'</span> <span class="ot">=</span> <span class="st">'arrivaldate'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>lichen_node <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(lichen<span class="sc">$</span>nodes) <span class="sc">%&gt;%</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id,shpcountry, rcvcountry) <span class="co">#using select function to reorganise into desired order of columns</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>lichen_edges <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(lichen<span class="sc">$</span>links) <span class="sc">%&gt;%</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># rename columns</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>lichen_edges <span class="ot">&lt;-</span> lichen_edges <span class="sc">%&gt;%</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">'Source'</span> <span class="ot">=</span> <span class="st">'source'</span>, </span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Target'</span> <span class="ot">=</span> <span class="st">'target'</span>, </span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Value_OMU'</span> <span class="ot">=</span> <span class="st">'valueofgoods_omu'</span>, </span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Weight_KG'</span> <span class="ot">=</span> <span class="st">'weightkg'</span>, </span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>         <span class="st">'HS_Code'</span> <span class="ot">=</span> <span class="st">'hscode'</span>, </span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Arrival_Date'</span> <span class="ot">=</span> <span class="st">'arrivaldate'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>mac_nodes <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(mac<span class="sc">$</span>nodes) <span class="sc">%&gt;%</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id,shpcountry, rcvcountry) <span class="co">#using select function to reorganise into desired order of columns</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>mac_edges <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(mac<span class="sc">$</span>links) <span class="sc">%&gt;%</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(source, target, valueofgoods_omu, hscode, arrivaldate)</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># rename columns</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>mac_edges <span class="ot">&lt;-</span> mac_edges <span class="sc">%&gt;%</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">'Source'</span> <span class="ot">=</span> <span class="st">'source'</span>, </span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Target'</span> <span class="ot">=</span> <span class="st">'target'</span>, </span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Value_OMU'</span> <span class="ot">=</span> <span class="st">'valueofgoods_omu'</span>, </span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>         <span class="st">'HS_Code'</span> <span class="ot">=</span> <span class="st">'hscode'</span>, </span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Arrival_Date'</span> <span class="ot">=</span> <span class="st">'arrivaldate'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pol_nodes <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(pol<span class="sc">$</span>nodes) <span class="sc">%&gt;%</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id,shpcountry, rcvcountry) <span class="co">#using select function to reorganise into desired order of columns</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>pol_edges <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(pol<span class="sc">$</span>links) <span class="sc">%&gt;%</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># rename columns</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>pol_edges <span class="ot">&lt;-</span> pol_edges <span class="sc">%&gt;%</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">'Source'</span> <span class="ot">=</span> <span class="st">'source'</span>, </span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Target'</span> <span class="ot">=</span> <span class="st">'target'</span>, </span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Value_OMU'</span> <span class="ot">=</span> <span class="st">'valueofgoods_omu'</span>, </span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Weight_KG'</span> <span class="ot">=</span> <span class="st">'weightkg'</span>, </span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>         <span class="st">'HS_Code'</span> <span class="ot">=</span> <span class="st">'hscode'</span>, </span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Arrival_Date'</span> <span class="ot">=</span> <span class="st">'arrivaldate'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>sal_wgl_nodes <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(sal_wgl<span class="sc">$</span>nodes) <span class="sc">%&gt;%</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id,shpcountry, rcvcountry) <span class="co">#using select function to reorganise into desired order of columns</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>sal_wgl_edges <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(sal_wgl<span class="sc">$</span>links) <span class="sc">%&gt;%</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># rename columns</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>sal_wgl_edges <span class="ot">&lt;-</span> sal_wgl_edges <span class="sc">%&gt;%</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">'Source'</span> <span class="ot">=</span> <span class="st">'source'</span>, </span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Target'</span> <span class="ot">=</span> <span class="st">'target'</span>, </span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Value_OMU'</span> <span class="ot">=</span> <span class="st">'valueofgoods_omu'</span>, </span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Weight_KG'</span> <span class="ot">=</span> <span class="st">'weightkg'</span>, </span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>         <span class="st">'HS_Code'</span> <span class="ot">=</span> <span class="st">'hscode'</span>, </span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Arrival_Date'</span> <span class="ot">=</span> <span class="st">'arrivaldate'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>salmon_nodes <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(salmon<span class="sc">$</span>nodes) <span class="sc">%&gt;%</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id,shpcountry, rcvcountry) <span class="co">#using select function to reorganise into desired order of columns</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>salmon_edges <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(salmon<span class="sc">$</span>links) <span class="sc">%&gt;%</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># rename columns</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>salmon_edges <span class="ot">&lt;-</span> salmon_edges <span class="sc">%&gt;%</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">'Source'</span> <span class="ot">=</span> <span class="st">'source'</span>, </span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Target'</span> <span class="ot">=</span> <span class="st">'target'</span>, </span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Value_OMU'</span> <span class="ot">=</span> <span class="st">'valueofgoods_omu'</span>, </span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Weight_KG'</span> <span class="ot">=</span> <span class="st">'weightkg'</span>, </span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>         <span class="st">'HS_Code'</span> <span class="ot">=</span> <span class="st">'hscode'</span>, </span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Arrival_Date'</span> <span class="ot">=</span> <span class="st">'arrivaldate'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>shark_nodes <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(shark<span class="sc">$</span>nodes) <span class="sc">%&gt;%</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id,shpcountry, rcvcountry) <span class="co">#using select function to reorganise into desired order of columns</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>shark_edges <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(shark<span class="sc">$</span>links) <span class="sc">%&gt;%</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co"># rename columns</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>shark_edges <span class="ot">&lt;-</span> shark_edges <span class="sc">%&gt;%</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">'Source'</span> <span class="ot">=</span> <span class="st">'source'</span>, </span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Target'</span> <span class="ot">=</span> <span class="st">'target'</span>, </span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Value_OMU'</span> <span class="ot">=</span> <span class="st">'valueofgoods_omu'</span>, </span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Weight_KG'</span> <span class="ot">=</span> <span class="st">'weightkg'</span>, </span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>         <span class="st">'HS_Code'</span> <span class="ot">=</span> <span class="st">'hscode'</span>, </span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Arrival_Date'</span> <span class="ot">=</span> <span class="st">'arrivaldate'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>tuna_nodes <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(tuna<span class="sc">$</span>nodes) <span class="sc">%&gt;%</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id,shpcountry, rcvcountry) <span class="co">#using select function to reorganise into desired order of columns</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>tuna_edges <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(tuna<span class="sc">$</span>links) <span class="sc">%&gt;%</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(source, target, valueofgoods_omu, hscode, arrivaldate)</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co"># rename columns</span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>tuna_edges <span class="ot">&lt;-</span> tuna_edges <span class="sc">%&gt;%</span></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">'Source'</span> <span class="ot">=</span> <span class="st">'source'</span>, </span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Target'</span> <span class="ot">=</span> <span class="st">'target'</span>, </span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Value_OMU'</span> <span class="ot">=</span> <span class="st">'valueofgoods_omu'</span>, </span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>         <span class="st">'HS_Code'</span> <span class="ot">=</span> <span class="st">'hscode'</span>, </span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Arrival_Date'</span> <span class="ot">=</span> <span class="st">'arrivaldate'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>c_mac_edges <span class="ot">&lt;-</span> c_mac_edges <span class="sc">%&gt;%</span> <span class="fu">distinct</span>()</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>carp_edges <span class="ot">&lt;-</span> carp_edges <span class="sc">%&gt;%</span> <span class="fu">distinct</span>()</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>catfish_edges <span class="ot">&lt;-</span> catfish_edges <span class="sc">%&gt;%</span> <span class="fu">distinct</span>()</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>cod_edges <span class="ot">&lt;-</span> cod_edges <span class="sc">%&gt;%</span> <span class="fu">distinct</span>()</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>herring_edges <span class="ot">&lt;-</span> herring_edges <span class="sc">%&gt;%</span> <span class="fu">distinct</span>()</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>lichen_edges <span class="ot">&lt;-</span> lichen_edges <span class="sc">%&gt;%</span> <span class="fu">distinct</span>()</span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>mac_edges <span class="ot">&lt;-</span> mac_edges <span class="sc">%&gt;%</span> <span class="fu">distinct</span>()</span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>pol_edges <span class="ot">&lt;-</span> pol_edges <span class="sc">%&gt;%</span> <span class="fu">distinct</span>()</span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>sal_wgl_edges <span class="ot">&lt;-</span> sal_wgl_edges <span class="sc">%&gt;%</span> <span class="fu">distinct</span>()</span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>salmon_edges <span class="ot">&lt;-</span> salmon_edges <span class="sc">%&gt;%</span> <span class="fu">distinct</span>()</span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>shark_edges <span class="ot">&lt;-</span> shark_edges <span class="sc">%&gt;%</span> <span class="fu">distinct</span>()</span>
-<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>tuna_edges <span class="ot">&lt;-</span> tuna_edges <span class="sc">%&gt;%</span> <span class="fu">distinct</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+</section>
+<section id="filter-at-cut-point-19.8" class="level2">
+<h2 class="anchored" data-anchor-id="filter-at-cut-point-19.8">Filter at cut-point 19.8</h2>
+<p>filtered_dataset &lt;- subset(MC2_edges_aggregated, Count &gt; 19.8)</p>
+</section>
+<section id="create-graph" class="level2">
+<h2 class="anchored" data-anchor-id="create-graph">Create Graph</h2>
+<p>MC2d_filtered &lt;- distinct(filtered_dataset)</p>
+<p>id1 &lt;- MC2d_filtered %&gt;% select(source) %&gt;% rename(id = source) id2 &lt;- MC2d_filtered %&gt;% select(target) %&gt;% rename(id = target) mc2_nodes_extracted &lt;- rbind(id1, id2) %&gt;% distinct()</p>
+<p>mc2_graph &lt;- tbl_graph(nodes = mc2_nodes_extracted, edges = MC2d_filtered, directed = TRUE)</p>
+<p>ggraph(mc2_graph, layout = “fr”) + geom_edge_link(aes()) + geom_node_point(aes()) + theme_graph()</p>
+<p>Filter further to remove orphan nodes</p>
+<p>ChubMC2_edges &lt;- MC2_edges %&gt;% filter(HS_Code %in% c_mac_edges$HS_Code)</p>
+<p>ChubMC2_edges<span class="math inline">\(Arrival_Date &lt;- as.Date(ChubMC2_edges\)</span>Arrival_Date)</p>
+<p>yearly_datasets &lt;- split(ChubMC2_edges, format(ChubMC2_edges$Arrival_Date, “%Y”))</p>
+<p>dataset_2028 &lt;- yearly_datasets[[“2028”]]</p>
+<p>dataset_2029 &lt;- yearly_datasets[[“2029”]]</p>
+<p>dataset_2030 &lt;- yearly_datasets[[“2030”]]</p>
+<p>dataset_2031 &lt;- yearly_datasets[[“2031”]]</p>
+<p>dataset_2032 &lt;- yearly_datasets[[“2032”]]</p>
+<p>dataset_2033 &lt;- yearly_datasets[[“2033”]]</p>
+<p>dataset_2034 &lt;- yearly_datasets[[“2034”]]</p>
+<p>Agg_2028 &lt;- dataset_2028 %&gt;% group_by(source,target) %&gt;% summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE), Value_USD_Total = sum(Value_USD, na.rm = TRUE), Count = n(), Average_OMU = mean(Value_OMU, na.rm = TRUE), Average_USD = mean(Value_USD, na.rm = TRUE), Total_Weight_KG = sum(Weight_KG, na.rm = TRUE), Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %&gt;% ungroup()</p>
+<p>Agg_2029 &lt;- dataset_2029 %&gt;% group_by(source,target) %&gt;% summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE), Value_USD_Total = sum(Value_USD, na.rm = TRUE), Count = n(), Average_OMU = mean(Value_OMU, na.rm = TRUE), Average_USD = mean(Value_USD, na.rm = TRUE), Total_Weight_KG = sum(Weight_KG, na.rm = TRUE), Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %&gt;% ungroup()</p>
+<p>Agg_2030 &lt;- dataset_2030 %&gt;% group_by(source,target) %&gt;% summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE), Value_USD_Total = sum(Value_USD, na.rm = TRUE), Count = n(), Average_OMU = mean(Value_OMU, na.rm = TRUE), Average_USD = mean(Value_USD, na.rm = TRUE), Total_Weight_KG = sum(Weight_KG, na.rm = TRUE), Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %&gt;% ungroup()</p>
+<p>Agg_2031 &lt;- dataset_2031 %&gt;% group_by(source,target) %&gt;% summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE), Value_USD_Total = sum(Value_USD, na.rm = TRUE), Count = n(), Average_OMU = mean(Value_OMU, na.rm = TRUE), Average_USD = mean(Value_USD, na.rm = TRUE), Total_Weight_KG = sum(Weight_KG, na.rm = TRUE), Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %&gt;% ungroup()</p>
+<p>Agg_2032 &lt;- dataset_2032 %&gt;% group_by(source,target) %&gt;% summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE), Value_USD_Total = sum(Value_USD, na.rm = TRUE), Count = n(), Average_OMU = mean(Value_OMU, na.rm = TRUE), Average_USD = mean(Value_USD, na.rm = TRUE), Total_Weight_KG = sum(Weight_KG, na.rm = TRUE), Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %&gt;% ungroup()</p>
+<p>``{r} Agg_2033 &lt;- dataset_2033 %&gt;% group_by(source,target) %&gt;% summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE), Value_USD_Total = sum(Value_USD, na.rm = TRUE), Count = n(), Average_OMU = mean(Value_OMU, na.rm = TRUE), Average_USD = mean(Value_USD, na.rm = TRUE), Total_Weight_KG = sum(Weight_KG, na.rm = TRUE), Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %&gt;% ungroup()</p>
+<p><code></code>{r} Agg_2034 &lt;- dataset_2034 %&gt;% group_by(source,target) %&gt;% summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE), Value_USD_Total = sum(Value_USD, na.rm = TRUE), Count = n(), Average_OMU = mean(Value_OMU, na.rm = TRUE), Average_USD = mean(Value_USD, na.rm = TRUE), Total_Weight_KG = sum(Weight_KG, na.rm = TRUE), Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %&gt;% ungroup()</p>
+<p><code></code>{r}</p>
+<p>ggplot(Agg_2028, aes(y = Count)) + geom_boxplot(fill = “steelblue”, color = “black”) + labs(y = “Count”, title = “Boxplot of Count”) ``</p>
+<p>``{r} threshold &lt;- quantile(Agg_2028$Count, probs = 0.99)</p>
+</section>
+</section>
+<section id="filter-the-dataset-to-keep-only-the-top-20" class="level1">
+<h1>Filter the dataset to keep only the top 20%</h1>
+<p>filter_Agg2028 &lt;- Agg_2028 %&gt;% filter(Count &gt;= threshold)</p>
+<p>``</p>
+<p>2028 Sample graph</p>
+<p><code>{r} d_Agg2028 &lt;- distinct(Agg_2028, source, target)</code></p>
+<p>``{r} id1 &lt;- Agg_2028 %&gt;% select(source) %&gt;% rename(id = source) id2 &lt;- Agg_2028 %&gt;% select(target) %&gt;% rename(id = target) Agg_2028_extracted &lt;- rbind(id1, id2) %&gt;% distinct()</p>
+<p>``</p>
+<p>``{r} graph_2028 &lt;- tbl_graph(nodes = Agg_2028_extracted, edges = Agg_2028, directed = TRUE)</p>
+<p>``</p>
+<p>``{r} ggraph(graph_2028, layout = “fr”) + geom_edge_link(aes()) + geom_node_point(aes()) + theme_graph()</p>
+<p>``</p>
+<p>``{r} degree_centrality &lt;- degree(graph_2028)</p>
+</section>
+<section id="view-the-degree-centrality-values" class="level1">
+<h1>View the degree centrality values</h1>
+<p>max_degree &lt;- max(degree_centrality) most_central_nodes &lt;- which(degree_centrality == max_degree)</p>
+<p>summary(degree_centrality)</p>
+<p>``</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

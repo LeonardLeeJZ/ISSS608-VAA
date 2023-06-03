@@ -431,7 +431,7 @@
     "href": "take-home_Ex/Data Exploration/data_exploration.html",
     "title": "Data Exploration",
     "section": "",
-    "text": "pacman::p_load(igraph, tidygraph, ggraph, \n               visNetwork, lubridate, clock,\n               tidyverse, graphlayouts, jsonlite)\n\n\ncarp <- fromJSON(\"data/carp.json\")\ncatfish <- fromJSON(\"data/catfish.json\")\nc_mac <- fromJSON(\"data/chub_mackerel.json\")\ncod <- fromJSON(\"data/cod2.json\")\nherring <- fromJSON(\"data/herring.json\")\nlichen <- fromJSON(\"data/lichen.json\")\nmac <- fromJSON(\"data/mackerel.json\")\npol <- fromJSON(\"data/pollock.json\")\nsalmon <- fromJSON(\"data/salmon.json\")\nsal_wgl <- fromJSON(\"data/salmon_wgl.json\")\nshark <- fromJSON(\"data/shark.json\")\ntuna <- fromJSON(\"data/tuna.json\")\n\n\ncarp_nodes <- as_tibble(carp$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\ncarp_edges <- as_tibble(carp$links) %>%\n  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)\n\n# rename columns\ncarp_edges <- carp_edges %>%\n  rename('Source' = 'source', \n         'Target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'Weight_KG' = 'weightkg', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')\n\n\nc_mac_nodes <- as_tibble(c_mac$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\nc_mac_edges <- as_tibble(c_mac$links) %>%\n  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)\n\n# rename columns\nc_mac_edges <- c_mac_edges %>%\n  rename('Source' = 'source', \n         'Target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'Weight_KG' = 'weightkg', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')\n\n\ncod_nodes <- as_tibble(cod$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\ncod_edges <- as_tibble(cod$links) %>%\n  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)\n\n# rename columns\ncod_edges <- cod_edges %>%\n  rename('Source' = 'source', \n         'Target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'Weight_KG' = 'weightkg', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')\n\nCatfish sus, no weight data (underreporting/overreporting is a trait of illegal fishing?)\n\ncatfish_nodes <- as_tibble(catfish$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\ncatfish_edges <- as_tibble(catfish$links) %>%\n  select(source, target, valueofgoods_omu, hscode, arrivaldate)\n\n# rename columns\ncatfish_edges <- catfish_edges %>%\n  rename('Source' = 'source', \n         'Target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')\n\n\nherring_nodes <- as_tibble(herring$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\nherring_edges <- as_tibble(herring$links) %>%\n  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)\n\n# rename columns\nherring_edges <- herring_edges %>%\n  rename('Source' = 'source', \n         'Target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'Weight_KG' = 'weightkg', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')\n\n\nlichen_node <- as_tibble(lichen$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\nlichen_edges <- as_tibble(lichen$links) %>%\n  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)\n\n# rename columns\nlichen_edges <- lichen_edges %>%\n  rename('Source' = 'source', \n         'Target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'Weight_KG' = 'weightkg', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')\n\n\nmac_nodes <- as_tibble(mac$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\nmac_edges <- as_tibble(mac$links) %>%\n  select(source, target, valueofgoods_omu, hscode, arrivaldate)\n\n# rename columns\nmac_edges <- mac_edges %>%\n  rename('Source' = 'source', \n         'Target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')\n\n\npol_nodes <- as_tibble(pol$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\npol_edges <- as_tibble(pol$links) %>%\n  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)\n\n# rename columns\npol_edges <- pol_edges %>%\n  rename('Source' = 'source', \n         'Target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'Weight_KG' = 'weightkg', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')\n\n\nsal_wgl_nodes <- as_tibble(sal_wgl$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\nsal_wgl_edges <- as_tibble(sal_wgl$links) %>%\n  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)\n\n# rename columns\nsal_wgl_edges <- sal_wgl_edges %>%\n  rename('Source' = 'source', \n         'Target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'Weight_KG' = 'weightkg', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')\n\n\nsalmon_nodes <- as_tibble(salmon$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\nsalmon_edges <- as_tibble(salmon$links) %>%\n  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)\n\n# rename columns\nsalmon_edges <- salmon_edges %>%\n  rename('Source' = 'source', \n         'Target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'Weight_KG' = 'weightkg', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')\n\n\nshark_nodes <- as_tibble(shark$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\nshark_edges <- as_tibble(shark$links) %>%\n  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)\n\n# rename columns\nshark_edges <- shark_edges %>%\n  rename('Source' = 'source', \n         'Target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'Weight_KG' = 'weightkg', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')\n\n\ntuna_nodes <- as_tibble(tuna$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\ntuna_edges <- as_tibble(tuna$links) %>%\n  select(source, target, valueofgoods_omu, hscode, arrivaldate)\n\n# rename columns\ntuna_edges <- tuna_edges %>%\n  rename('Source' = 'source', \n         'Target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')\n\n\nc_mac_edges <- c_mac_edges %>% distinct()\n\ncarp_edges <- carp_edges %>% distinct()\n\ncatfish_edges <- catfish_edges %>% distinct()\n\ncod_edges <- cod_edges %>% distinct()\n\nherring_edges <- herring_edges %>% distinct()\n\nlichen_edges <- lichen_edges %>% distinct()\n\nmac_edges <- mac_edges %>% distinct()\n\npol_edges <- pol_edges %>% distinct()\n\nsal_wgl_edges <- sal_wgl_edges %>% distinct()\n\nsalmon_edges <- salmon_edges %>% distinct()\n\nshark_edges <- shark_edges %>% distinct()\n\ntuna_edges <- tuna_edges %>% distinct()"
+    "text": "pacman::p_load(igraph, tidygraph, ggraph, \n               visNetwork, lubridate, clock,\n               tidyverse, graphlayouts, jsonlite)\n``{r} MC2 <- fromJSON(“data/mc2_challenge_graph.json”)\n``\n``{r} MC2_nodes <- as_tibble(MC2$nodes) %>% select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\nMC2_edges <- as_tibble(MC2$links) %>% select(source, target, valueofgoods_omu, valueofgoodsusd, weightkg, hscode, arrivaldate) ``"
   },
   {
     "objectID": "take-home_Ex/take-home_Ex01/take-home_Ex01.html",
@@ -550,14 +550,14 @@
     "href": "take-home_Ex/take-home_Ex02/take-home_Ex02.html",
     "title": "Take-Home Exercise 2",
     "section": "",
-    "text": "Weight field calculating number of times target communicated with the source.\n(multiple source to target links at diff times)\nIn and out weight (In degree and out degree)\nAggregate out big network\n(In class ex reference to weight field)"
+    "text": "Show me the good stuff\npacman::p_load(igraph, tidygraph, ggraph, \n               visNetwork, lubridate, clock,\n               tidyverse, graphlayouts, jsonlite)"
   },
   {
     "objectID": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#remove-all-duplicate-rows",
     "href": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#remove-all-duplicate-rows",
     "title": "Take-Home Exercise 2",
-    "section": "Remove all duplicate rows",
-    "text": "Remove all duplicate rows\n\n\nShow me the good stuff\nMC2_edges <- MC2_edges %>% distinct()\nMC2_nodes <- MC2_nodes %>% distinct()\n\n\n\n\nShow me the good stuff\nMC2_edges <- MC2_edges %>%\n  mutate(Month = month(arrivaldate,\n                        label = TRUE,\n                        abbr = FALSE))\n\n# rename columns\nMC2_edges <- MC2_edges %>%\n  rename('Value_OMU' = 'valueofgoods_omu', \n         'Value_USD' = 'valueofgoodsusd', \n         'Weight_KG' = 'weightkg', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')"
+    "section": "3.2 Remove all duplicate rows",
+    "text": "3.2 Remove all duplicate rows\n\n\nShow me the good stuff\nMC2_edges <- MC2_edges %>% distinct()\nMC2_nodes <- MC2_nodes %>% distinct()"
   },
   {
     "objectID": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#check-for-na-in-from-and-to",
@@ -570,43 +570,43 @@
     "objectID": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#carp",
     "href": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#carp",
     "title": "Take-Home Exercise 2",
-    "section": "Carp",
-    "text": "Carp\n\n\nShow me the good stuff\ncarp_nodes <- as_tibble(carp$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\ncarp_edges <- as_tibble(carp$links) %>%\n  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)\n\n# rename columns\ncarp_edges <- carp_edges %>%\n  rename('Source' = 'source', \n         'Target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'Weight_KG' = 'weightkg', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')"
+    "section": "4.1 Carp",
+    "text": "4.1 Carp\n\n\nShow me the good stuff\ncarp_nodes <- as_tibble(carp$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\ncarp_edges <- as_tibble(carp$links) %>%\n  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)\n\n# rename columns\ncarp_edges <- carp_edges %>%\n  rename('source' = 'source', \n         'target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'Weight_KG' = 'weightkg', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')\n\n\n\n\nShow me the good stuff\ncarp_edges_aggregated <- carp_edges %>%\n  group_by(source,target, HS_Code) %>%\n  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),\n            Count = n(),\n            Average_OMU = mean(Value_OMU, na.rm = TRUE),\n            Total_Weight_KG = sum(Weight_KG, na.rm = TRUE),\n            Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>%\n  ungroup()\n\n\n\nVisualise CarpMatching Carp\n\n\n\n\nShow me the good stuff\nid1 <- carp_edges_aggregated %>%\n  select(source) %>%\n  rename(id = source)\nid2 <- carp_edges_aggregated %>%\n  select(target) %>%\n  rename(id = target)\ncarp_nodes_extract <- rbind(id1, id2) %>%\n  distinct()\n\ncarp_graph <- tbl_graph(nodes = carp_nodes_extract,\n                       edges = carp_edges_aggregated,\n                       directed = TRUE)\n\nggraph(carp_graph,\n       layout = \"fr\") +\n  geom_edge_link(aes()) +\n  geom_node_point(aes()) +\n  theme_graph()\n\n\n\n\n\n\n\n\n\nShow me the good stuff\n# Assuming your datasets are named MC2 and carp_edges\n\n# Extract the matched rows using subsetting\nmatched_carp <- carp_edges_aggregated[carp_edges_aggregated$source %in% MC2_edges$source & carp_edges_aggregated$target %in% MC2_edges$target, ]\n\n# Print the matched rows\nprint(matched_carp)\n\n\n# A tibble: 151 × 8\n   source       target HS_Code Value_OMU_Total Count Average_OMU Total_Weight_KG\n   <chr>        <chr>    <int>           <dbl> <int>       <dbl>           <int>\n 1 Adriatic Sq… \"Gree…  840999               0     1         NaN            5510\n 2 AquaBite Li… \"Mar …  160419           63125     1       63125           20775\n 3 Arunachal P… \"Fine…  870323               0     1         NaN             125\n 4 Arunachal P… \"Gulf…  850440               0     1         NaN              15\n 5 Arunachal P… \"Oka …  850140               0     1         NaN             360\n 6 Bahía del S… \"Mada…  392690               0     1         NaN             245\n 7 Baltic Spra… \"Selo…  611610           77515     1       77515            6745\n 8 Baltic Spra… \"Salt…  630790               0     1         NaN           13655\n 9 Barents Sea… \"Nige…  620342          154140     1      154140           14460\n10 Barents Sea… \"hǎi …  620462          525425     1      525425           44220\n# ℹ 141 more rows\n# ℹ 1 more variable: Average_Weight_KG <dbl>\n\n\nShow me the good stuff\nid1 <- matched_carp %>%\n  select(source) %>%\n  rename(id = source)\nid2 <- matched_carp %>%\n  select(target) %>%\n  rename(id = target)\nmatcarp_extract <- rbind(id1, id2) %>%\n  distinct()\n\nmatcarp_graph <- tbl_graph(nodes = matcarp_extract,\n                       edges = matched_carp,\n                       directed = TRUE)\n\nggraph(matcarp_graph,\n       layout = \"fr\") +\n  geom_edge_link(aes()) +\n  geom_node_point(aes()) +\n  theme_graph()"
   },
   {
     "objectID": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#c_mac",
     "href": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#c_mac",
     "title": "Take-Home Exercise 2",
-    "section": "C_mac",
-    "text": "C_mac\n\n\nShow me the good stuff\nc_mac_nodes <- as_tibble(c_mac$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\nc_mac_edges <- as_tibble(c_mac$links) %>%\n  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)\n\n# rename columns\nc_mac_edges <- c_mac_edges %>%\n  rename('Source' = 'source', \n         'Target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'Weight_KG' = 'weightkg', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')"
+    "section": "4.2 C_mac",
+    "text": "4.2 C_mac\n\n\nShow me the good stuff\ncmac_nodes <- as_tibble(c_mac$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\ncmac_edges <- as_tibble(c_mac$links) %>%\n  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)\n\n# rename columns\ncmac_edges <- cmac_edges %>%\n  rename('source' = 'source', \n         'target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'Weight_KG' = 'weightkg', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')\n\n\n\n\nShow me the good stuff\ncmac_edges_aggregated <- cmac_edges %>%\n  group_by(source,target, HS_Code) %>%\n  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),\n            Count = n(),\n            Average_OMU = mean(Value_OMU, na.rm = TRUE),\n            Total_Weight_KG = sum(Weight_KG, na.rm = TRUE),\n            Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>%\n  ungroup()\n\n\n\nVisualise C_Mac\n\n\nShow me the good stuff\nid1 <- cmac_edges_aggregated %>%\n  select(source) %>%\n  rename(id = source)\nid2 <- cmac_edges_aggregated %>%\n  select(target) %>%\n  rename(id = target)\ncmac_nodes_extract <- rbind(id1, id2) %>%\n  distinct()\n\n\n\n\nShow me the good stuff\ncmac_graph <- tbl_graph(nodes = cmac_nodes_extract,\n                       edges = cmac_edges_aggregated,\n                       directed = TRUE)\n\n\n\n\nShow me the good stuff\nggraph(cmac_graph,\n       layout = \"fr\") +\n  geom_edge_link(aes()) +\n  geom_node_point(aes()) +\n  theme_graph()"
   },
   {
     "objectID": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#cod",
     "href": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#cod",
     "title": "Take-Home Exercise 2",
-    "section": "Cod",
-    "text": "Cod\n\n\nShow me the good stuff\ncod_nodes <- as_tibble(cod$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\ncod_edges <- as_tibble(cod$links) %>%\n  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)\n\n# rename columns\ncod_edges <- cod_edges %>%\n  rename('Source' = 'source', \n         'Target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'Weight_KG' = 'weightkg', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')"
+    "section": "4.3 Cod",
+    "text": "4.3 Cod\n\n\nShow me the good stuff\ncod_nodes <- as_tibble(cod$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\ncod_edges <- as_tibble(cod$links) %>%\n  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)\n\n# rename columns\ncod_edges <- cod_edges %>%\n  rename('source' = 'source', \n         'target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'Weight_KG' = 'weightkg', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')\n\n\n\n\nShow me the good stuff\ncod_edges_aggregated <- cod_edges %>%\n  group_by(source,target, HS_Code) %>%\n  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),\n            Count = n(),\n            Average_OMU = mean(Value_OMU, na.rm = TRUE),\n            Total_Weight_KG = sum(Weight_KG, na.rm = TRUE),\n            Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>%\n  ungroup()\n\n\n\nVisualise Cod\n\n\nShow me the good stuff\nid1 <- cod_edges_aggregated %>%\n  select(source) %>%\n  rename(id = source)\nid2 <- cod_edges_aggregated %>%\n  select(target) %>%\n  rename(id = target)\ncod_nodes_extract <- rbind(id1, id2) %>%\n  distinct()\n\n\n\n\nShow me the good stuff\ncod_graph <- tbl_graph(nodes = cod_nodes_extract,\n                       edges = cod_edges_aggregated,\n                       directed = TRUE)\n\n\n\n\nShow me the good stuff\nggraph(cod_graph,\n       layout = \"fr\") +\n  geom_edge_link(aes()) +\n  geom_node_point(aes()) +\n  theme_graph()"
   },
   {
     "objectID": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#catfish",
     "href": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#catfish",
     "title": "Take-Home Exercise 2",
-    "section": "Catfish",
-    "text": "Catfish\nCatfish sus, no weight data (underreporting/overreporting is a trait of illegal fishing?)\n\n\nShow me the good stuff\ncatfish_nodes <- as_tibble(catfish$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\ncatfish_edges <- as_tibble(catfish$links) %>%\n  select(source, target, valueofgoods_omu, hscode, arrivaldate)\n\n# rename columns\ncatfish_edges <- catfish_edges %>%\n  rename('Source' = 'source', \n         'Target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')"
+    "section": "4.4 Catfish",
+    "text": "4.4 Catfish\nCatfish sus, no weight data (underreporting/overreporting is a trait of illegal fishing?)\n\n\nShow me the good stuff\ncatfish_nodes <- as_tibble(catfish$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\ncatfish_edges <- as_tibble(catfish$links) %>%\n  select(source, target, valueofgoods_omu, hscode, arrivaldate)\n\n# rename columns\ncatfish_edges <- catfish_edges %>%\n  rename('source' = 'source', \n         'target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')\n\n\n\n\nShow me the good stuff\ncatfish_edges_aggregated <- catfish_edges %>%\n  group_by(source,target, HS_Code) %>%\n  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),\n            Count = n(),\n            Average_OMU = mean(Value_OMU, na.rm = TRUE)) %>%\n  ungroup()\n\n\n\nVisualise Catfish\n\n\nShow me the good stuff\nid1 <- catfish_edges_aggregated %>%\n  select(source) %>%\n  rename(id = source)\nid2 <- catfish_edges_aggregated %>%\n  select(target) %>%\n  rename(id = target)\ncatfish_nodes_extract <- rbind(id1, id2) %>%\n  distinct()\n\n\n\n\nShow me the good stuff\ncatfish_graph <- tbl_graph(nodes = catfish_nodes_extract,\n                       edges = catfish_edges_aggregated,\n                       directed = TRUE)\n\n\n\n\nShow me the good stuff\nggraph(catfish_graph,\n       layout = \"fr\") +\n  geom_edge_link(aes()) +\n  geom_node_point(aes()) +\n  theme_graph()"
   },
   {
     "objectID": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#herring",
     "href": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#herring",
     "title": "Take-Home Exercise 2",
-    "section": "Herring",
-    "text": "Herring\n\n\nShow me the good stuff\nherring_nodes <- as_tibble(herring$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\nherring_edges <- as_tibble(herring$links) %>%\n  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)\n\n# rename columns\nherring_edges <- herring_edges %>%\n  rename('Source' = 'source', \n         'Target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'Weight_KG' = 'weightkg', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')"
+    "section": "4.5 Herring",
+    "text": "4.5 Herring\n\n\nShow me the good stuff\nherring_nodes <- as_tibble(herring$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\nherring_edges <- as_tibble(herring$links) %>%\n  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)\n\n# rename columns\nherring_edges <- herring_edges %>%\n  rename('source' = 'source', \n         'target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'Weight_KG' = 'weightkg', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')\n\n\n\n\nShow me the good stuff\nherring_edges_aggregated <- herring_edges %>%\n  group_by(source,target, HS_Code) %>%\n  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),\n            Count = n(),\n            Average_OMU = mean(Value_OMU, na.rm = TRUE),\n            Total_Weight_KG = sum(Weight_KG, na.rm = TRUE),\n            Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>%\n  ungroup()\n\n\n\nVisualise Herring\n\n\nShow me the good stuff\nid1 <- herring_edges_aggregated %>%\n  select(source) %>%\n  rename(id = source)\nid2 <- herring_edges_aggregated %>%\n  select(target) %>%\n  rename(id = target)\nherring_nodes_extract <- rbind(id1, id2) %>%\n  distinct()\n\n\n\n\nShow me the good stuff\nherring_graph <- tbl_graph(nodes = herring_nodes_extract,\n                       edges = herring_edges_aggregated,\n                       directed = TRUE)\n\n\n\n\nShow me the good stuff\nggraph(herring_graph,\n       layout = \"fr\") +\n  geom_edge_link(aes()) +\n  geom_node_point(aes()) +\n  theme_graph()"
   },
   {
     "objectID": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#lichen",
     "href": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#lichen",
     "title": "Take-Home Exercise 2",
-    "section": "Lichen",
-    "text": "Lichen\n\n\nShow me the good stuff\nlichen_node <- as_tibble(lichen$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\nlichen_edges <- as_tibble(lichen$links) %>%\n  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)\n\n# rename columns\nlichen_edges <- lichen_edges %>%\n  rename('Source' = 'source', \n         'Target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'Weight_KG' = 'weightkg', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')"
+    "section": "4.6 Lichen",
+    "text": "4.6 Lichen\n\n\nShow me the good stuff\nlichen_node <- as_tibble(lichen$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\nlichen_edges <- as_tibble(lichen$links) %>%\n  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)\n\n# rename columns\nlichen_edges <- lichen_edges %>%\n  rename('source' = 'source', \n         'target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'Weight_KG' = 'weightkg', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')\n\n\n\n\nShow me the good stuff\nlichen_edges_aggregated <- lichen_edges %>%\n  group_by(source,target, HS_Code) %>%\n  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),\n            Count = n(),\n            Average_OMU = mean(Value_OMU, na.rm = TRUE),\n            Total_Weight_KG = sum(Weight_KG, na.rm = TRUE),\n            Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>%\n  ungroup()\n\n\n\nVisualise Lichen\n\n\nShow me the good stuff\nid1 <- lichen_edges_aggregated %>%\n  select(source) %>%\n  rename(id = source)\nid2 <- lichen_edges_aggregated %>%\n  select(target) %>%\n  rename(id = target)\nlichen_nodes_extract <- rbind(id1, id2) %>%\n  distinct()\n\n\n\n\nShow me the good stuff\nlichen_graph <- tbl_graph(nodes = lichen_nodes_extract,\n                       edges = lichen_edges_aggregated,\n                       directed = TRUE)\n\n\n\n\nShow me the good stuff\nggraph(lichen_graph,\n       layout = \"fr\") +\n  geom_edge_link(aes()) +\n  geom_node_point(aes()) +\n  theme_graph()"
   },
   {
     "objectID": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#mac",
@@ -619,15 +619,15 @@
     "objectID": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#pollock",
     "href": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#pollock",
     "title": "Take-Home Exercise 2",
-    "section": "Pollock",
-    "text": "Pollock\n\n\nShow me the good stuff\npol_nodes <- as_tibble(pol$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\npol_edges <- as_tibble(pol$links) %>%\n  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)\n\n# rename columns\npol_edges <- pol_edges %>%\n  rename('Source' = 'source', \n         'Target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'Weight_KG' = 'weightkg', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')"
+    "section": "4.8 Pollock",
+    "text": "4.8 Pollock\n\n\nShow me the good stuff\npol_nodes <- as_tibble(pol$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\npol_edges <- as_tibble(pol$links) %>%\n  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)\n\n# rename columns\npol_edges <- pol_edges %>%\n  rename('source' = 'source', \n         'target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'Weight_KG' = 'weightkg', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')\n\n\n\n\nShow me the good stuff\npol_edges_aggregated <- pol_edges %>%\n  group_by(source,target, HS_Code) %>%\n  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),\n            Count = n(),\n            Average_OMU = mean(Value_OMU, na.rm = TRUE),\n            Total_Weight_KG = sum(Weight_KG, na.rm = TRUE),\n            Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>%\n  ungroup()\n\n\n\nVisualise Pollock\n\n\nShow me the good stuff\nid1 <- pol_edges_aggregated %>%\n  select(source) %>%\n  rename(id = source)\nid2 <- pol_edges_aggregated %>%\n  select(target) %>%\n  rename(id = target)\npol_nodes_extract <- rbind(id1, id2) %>%\n  distinct()\n\n\n\n\nShow me the good stuff\npol_graph <- tbl_graph(nodes = pol_nodes_extract,\n                       edges = pol_edges_aggregated,\n                       directed = TRUE)\n\n\n\n\nShow me the good stuff\nggraph(pol_graph,\n       layout = \"fr\") +\n  geom_edge_link(aes()) +\n  geom_node_point(aes()) +\n  theme_graph()"
   },
   {
     "objectID": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#sal-wgl",
     "href": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#sal-wgl",
     "title": "Take-Home Exercise 2",
-    "section": "Sal WGL",
-    "text": "Sal WGL\n\n\nShow me the good stuff\nsal_wgl_nodes <- as_tibble(sal_wgl$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\nsal_wgl_edges <- as_tibble(sal_wgl$links) %>%\n  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)\n\n# rename columns\nsal_wgl_edges <- sal_wgl_edges %>%\n  rename('Source' = 'source', \n         'Target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'Weight_KG' = 'weightkg', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')"
+    "section": "4.9 Sal WGL",
+    "text": "4.9 Sal WGL\n\n\nShow me the good stuff\nsalw_nodes <- as_tibble(sal_wgl$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\nsalw_edges <- as_tibble(sal_wgl$links) %>%\n  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)\n\n# rename columns\nsalw_edges <- salw_edges %>%\n  rename('source' = 'source', \n         'target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'Weight_KG' = 'weightkg', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')\n\n\n\n\nShow me the good stuff\nsalw_edges_aggregated <- salw_edges %>%\n  group_by(source,target, HS_Code) %>%\n  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),\n            Count = n(),\n            Average_OMU = mean(Value_OMU, na.rm = TRUE),\n            Total_Weight_KG = sum(Weight_KG, na.rm = TRUE),\n            Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>%\n  ungroup()\n\n\n\nVisualise Sal WGL\n\n\nShow me the good stuff\nid1 <- salw_edges_aggregated %>%\n  select(source) %>%\n  rename(id = source)\nid2 <- salw_edges_aggregated %>%\n  select(target) %>%\n  rename(id = target)\nsal_wgl_nodes_extract <- rbind(id1, id2) %>%\n  distinct()\n\n\n\n\nShow me the good stuff\nsal_wgl_graph <- tbl_graph(nodes = sal_wgl_nodes_extract,\n                       edges = salw_edges_aggregated,\n                       directed = TRUE)\n\n\n\n\nShow me the good stuff\nggraph(sal_wgl_graph,\n       layout = \"fr\") +\n  geom_edge_link(aes()) +\n  geom_node_point(aes()) +\n  theme_graph()\n\n\n\n\n\n\n\n4.10 Salmon\n\n\nShow me the good stuff\nsalmon_nodes <- as_tibble(salmon$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\nsalmon_edges <- as_tibble(salmon$links) %>%\n  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)\n\n# rename columns\nsalmon_edges <- salmon_edges %>%\n  rename('source' = 'source', \n         'target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'Weight_KG' = 'weightkg', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')\n\n\n\n\nShow me the good stuff\nsalmon_edges_aggregated <- salmon_edges %>%\n  group_by(source,target, HS_Code) %>%\n  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),\n            Count = n(),\n            Average_OMU = mean(Value_OMU, na.rm = TRUE),\n            Total_Weight_KG = sum(Weight_KG, na.rm = TRUE),\n            Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>%\n  ungroup()\n\n\n\n\nVisualise Salmon\n\n\nShow me the good stuff\nid1 <- salmon_edges_aggregated %>%\n  select(source) %>%\n  rename(id = source)\nid2 <- salmon_edges_aggregated %>%\n  select(target) %>%\n  rename(id = target)\nsalmon_nodes_extract <- rbind(id1, id2) %>%\n  distinct()\n\n\n\n\nShow me the good stuff\nsalmon_graph <- tbl_graph(nodes = salmon_nodes_extract,\n                       edges = salmon_edges_aggregated,\n                       directed = TRUE)\n\n\n\n\nShow me the good stuff\nggraph(salmon_graph,\n       layout = \"fr\") +\n  geom_edge_link(aes()) +\n  geom_node_point(aes()) +\n  theme_graph()"
   },
   {
     "objectID": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#salmon",
@@ -640,15 +640,15 @@
     "objectID": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#shark",
     "href": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#shark",
     "title": "Take-Home Exercise 2",
-    "section": "Shark",
-    "text": "Shark\n\n\nShow me the good stuff\nshark_nodes <- as_tibble(shark$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\nshark_edges <- as_tibble(shark$links) %>%\n  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)\n\n# rename columns\nshark_edges <- shark_edges %>%\n  rename('Source' = 'source', \n         'Target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'Weight_KG' = 'weightkg', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')"
+    "section": "4.11 Shark",
+    "text": "4.11 Shark\n\n\nShow me the good stuff\nshark_nodes <- as_tibble(shark$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\nshark_edges <- as_tibble(shark$links) %>%\n  select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)\n\n# rename columns\nshark_edges <- shark_edges %>%\n  rename('source' = 'source', \n         'target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'Weight_KG' = 'weightkg', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')\n\n\n\nVisualise Shark\n\n\nShow me the good stuff\nid1 <- shark_edges %>%\n  select(source) %>%\n  rename(id = source)\nid2 <- shark_edges %>%\n  select(target) %>%\n  rename(id = target)\nshark_nodes_extract <- rbind(id1, id2) %>%\n  distinct()\n\n\n\n\nShow me the good stuff\nshark_graph <- tbl_graph(nodes = shark_nodes_extract,\n                       edges = shark_edges,\n                       directed = TRUE)\n\n\n\n\nShow me the good stuff\nggraph(shark_graph,\n       layout = \"fr\") +\n  geom_edge_link(aes()) +\n  geom_node_point(aes()) +\n  theme_graph()"
   },
   {
     "objectID": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#tuna",
     "href": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#tuna",
     "title": "Take-Home Exercise 2",
-    "section": "Tuna",
-    "text": "Tuna\n\n\nShow me the good stuff\ntuna_nodes <- as_tibble(tuna$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\ntuna_edges <- as_tibble(tuna$links) %>%\n  select(source, target, valueofgoods_omu, hscode, arrivaldate)\n\n# rename columns\ntuna_edges <- tuna_edges %>%\n  rename('Source' = 'source', \n         'Target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')"
+    "section": "4.12 Tuna",
+    "text": "4.12 Tuna\n\n\nShow me the good stuff\ntuna_nodes <- as_tibble(tuna$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\ntuna_edges <- as_tibble(tuna$links) %>%\n  select(source, target, valueofgoods_omu, hscode, arrivaldate)\n\n# rename columns\ntuna_edges <- tuna_edges %>%\n  rename('source' = 'source', \n         'target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')\n\n\n\nVisualise Tuna\n\n\nShow me the good stuff\nid1 <- tuna_edges %>%\n  select(source) %>%\n  rename(id = source)\nid2 <- tuna_edges %>%\n  select(target) %>%\n  rename(id = target)\ntuna_nodes_extract <- rbind(id1, id2) %>%\n  distinct()\n\n\n\n\nShow me the good stuff\ntuna_graph <- tbl_graph(nodes = tuna_nodes_extract,\n                       edges = tuna_edges,\n                       directed = TRUE)\n\n\n\n\nShow me the good stuff\nggraph(tuna_graph,\n       layout = \"fr\") +\n  geom_edge_link(aes()) +\n  geom_node_point(aes()) +\n  theme_graph()"
   },
   {
     "objectID": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#remove-duplicates",
@@ -691,5 +691,278 @@
     "title": "Take-Home Exercise 2",
     "section": "Create Graph",
     "text": "Create Graph\n\n\nShow me the good stuff\nMC2d_filtered <- distinct(filtered_dataset)\n\n\n\n\nShow me the good stuff\nid1 <- MC2d_filtered %>%\n  select(source) %>%\n  rename(id = source)\nid2 <- MC2d_filtered %>%\n  select(target) %>%\n  rename(id = target)\nmc2_nodes_extracted <- rbind(id1, id2) %>%\n  distinct()\n\n\n\n\nShow me the good stuff\nmc2_graph <- tbl_graph(nodes = mc2_nodes_extracted,\n                       edges = MC2d_filtered,\n                       directed = TRUE)\n\n\n\n\nShow me the good stuff\nggraph(mc2_graph,\n       layout = \"fr\") +\n  geom_edge_link(aes()) +\n  geom_node_point(aes()) +\n  theme_graph()"
+  },
+  {
+    "objectID": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#reorganise-dataset",
+    "href": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#reorganise-dataset",
+    "title": "Take-Home Exercise 2",
+    "section": "3.1 Reorganise Dataset",
+    "text": "3.1 Reorganise Dataset\n\n\nShow me the good stuff\nMC2_nodes <- as_tibble(MC2$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\nMC2_edges <- as_tibble(MC2$links) %>%\n  select(source, target, valueofgoods_omu, valueofgoodsusd, weightkg, hscode, arrivaldate)"
+  },
+  {
+    "objectID": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#rename-columns",
+    "href": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#rename-columns",
+    "title": "Take-Home Exercise 2",
+    "section": "3.2 Rename Columns",
+    "text": "3.2 Rename Columns\n\n\nShow me the good stuff\nMC2_edges <- MC2_edges %>%\n  mutate(Month = month(arrivaldate,\n                        label = TRUE,\n                        abbr = FALSE))\n\n# rename columns\nMC2_edges <- MC2_edges %>%\n  rename('Value_OMU' = 'valueofgoods_omu', \n         'Value_USD' = 'valueofgoodsusd', \n         'Weight_KG' = 'weightkg', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')"
+  },
+  {
+    "objectID": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#remove-rows-with-na-in-sourcetarget-columns",
+    "href": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#remove-rows-with-na-in-sourcetarget-columns",
+    "title": "Take-Home Exercise 2",
+    "section": "3.3 Remove Rows with NA in Source/Target Columns",
+    "text": "3.3 Remove Rows with NA in Source/Target Columns\n\n\nShow me the good stuff\nMC2_edges <- MC2_edges[complete.cases(MC2_edges[, c(\"source\", \"target\")]), ]"
+  },
+  {
+    "objectID": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#mackerel",
+    "href": "take-home_Ex/take-home_Ex02/take-home_Ex02.html#mackerel",
+    "title": "Take-Home Exercise 2",
+    "section": "4.7 Mackerel",
+    "text": "4.7 Mackerel\n\n\nShow me the good stuff\nmac_nodes <- as_tibble(mac$nodes) %>%\n  select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\n\nmac_edges <- as_tibble(mac$links) %>%\n  select(source, target, valueofgoods_omu, hscode, arrivaldate)\n\n# rename columns\nmac_edges <- mac_edges %>%\n  rename('source' = 'source', \n         'target' = 'target', \n         'Value_OMU' = 'valueofgoods_omu', \n         'HS_Code' = 'hscode', \n         'Arrival_Date' = 'arrivaldate')\n\n\n\n\nShow me the good stuff\nmac_edges_aggregated <- mac_edges %>%\n  group_by(source,target, HS_Code) %>%\n  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),\n            Count = n(),\n            Average_OMU = mean(Value_OMU, na.rm = TRUE)) %>%\n  ungroup()\n\n\n\nVisualise Mackerel\n\n\nShow me the good stuff\nid1 <- mac_edges_aggregated %>%\n  select(source) %>%\n  rename(id = source)\nid2 <- mac_edges_aggregated %>%\n  select(target) %>%\n  rename(id = target)\nmac_nodes_extract <- rbind(id1, id2) %>%\n  distinct()\n\n\n\n\nShow me the good stuff\nmac_graph <- tbl_graph(nodes = mac_nodes_extract,\n                       edges = mac_edges_aggregated,\n                       directed = TRUE)\n\n\n\n\nShow me the good stuff\nggraph(mac_graph,\n       layout = \"fr\") +\n  geom_edge_link(aes()) +\n  geom_node_point(aes()) +\n  theme_graph()"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#remove-all-duplicate-rows",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#remove-all-duplicate-rows",
+    "title": "Data Exploration",
+    "section": "Remove all duplicate rows",
+    "text": "Remove all duplicate rows\n``{r} MC2_edges <- MC2_edges %>% distinct() MC2_nodes <- MC2_nodes %>% distinct()\n{r} MC2_edges <- MC2_edges %>% mutate(Month = month(arrivaldate, label = TRUE, abbr = FALSE))"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#check-for-na-in-from-and-to",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#check-for-na-in-from-and-to",
+    "title": "Data Exploration",
+    "section": "Check for NA in from and to",
+    "text": "Check for NA in from and to\n{r} MC2_edges <- MC2_edges[complete.cases(MC2_edges[, c(\"source\", \"target\")]), ]"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#carp",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#carp",
+    "title": "Data Exploration",
+    "section": "Carp",
+    "text": "Carp\n``{r} carp_nodes <- as_tibble(carp$nodes) %>% select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\ncarp_edges <- as_tibble(carp$links) %>% select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#visualise-carp",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#visualise-carp",
+    "title": "Data Exploration",
+    "section": "Visualise Carp",
+    "text": "Visualise Carp\n``{r}\nid1 <- carp_edges_aggregated %>% select(source) %>% rename(id = source) id2 <- carp_edges_aggregated %>% select(target) %>% rename(id = target) carp_nodes_extract <- rbind(id1, id2) %>% distinct()\n``\n``{r} carp_graph <- tbl_graph(nodes = carp_nodes_extract, edges = carp_edges_aggregated, directed = TRUE)\n``\n`{r} ggraph(carp_graph, layout = “fr”) + geom_edge_link(aes()) + geom_node_point(aes()) + theme_graph()\n``"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#c_mac",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#c_mac",
+    "title": "Data Exploration",
+    "section": "C_mac",
+    "text": "C_mac\n``{r} cmac_nodes <- as_tibble(c_mac$nodes) %>% select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\ncmac_edges <- as_tibble(c_mac$links) %>% select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#visualise-c_mac",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#visualise-c_mac",
+    "title": "Data Exploration",
+    "section": "Visualise C_Mac",
+    "text": "Visualise C_Mac\n``{r}\nid1 <- cmac_edges_aggregated %>% select(source) %>% rename(id = source) id2 <- cmac_edges_aggregated %>% select(target) %>% rename(id = target) cmac_nodes_extract <- rbind(id1, id2) %>% distinct() ``\n``{r} cmac_graph <- tbl_graph(nodes = cmac_nodes_extract, edges = cmac_edges_aggregated, directed = TRUE)\n``\n{r} ggraph(cmac_graph,        layout = \"fr\") +   geom_edge_link(aes()) +   geom_node_point(aes()) +   theme_graph()"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#cod",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#cod",
+    "title": "Data Exploration",
+    "section": "Cod",
+    "text": "Cod\n``{r} cod_nodes <- as_tibble(cod$nodes) %>% select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\ncod_edges <- as_tibble(cod$links) %>% select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#visualise-cod",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#visualise-cod",
+    "title": "Data Exploration",
+    "section": "Visualise Cod",
+    "text": "Visualise Cod\n``{r}\nid1 <- cod_edges_aggregated %>% select(source) %>% rename(id = source) id2 <- cod_edges_aggregated %>% select(target) %>% rename(id = target) cod_nodes_extract <- rbind(id1, id2) %>% distinct()\n``\n``{r} cod_graph <- tbl_graph(nodes = cod_nodes_extract, edges = cod_edges_aggregated, directed = TRUE)\n``\n``{r} ggraph(cod_graph, layout = “fr”) + geom_edge_link(aes()) + geom_node_point(aes()) + theme_graph()\n``"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#catfish",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#catfish",
+    "title": "Data Exploration",
+    "section": "Catfish",
+    "text": "Catfish\nCatfish sus, no weight data (underreporting/overreporting is a trait of illegal fishing?)\n``{r} catfish_nodes <- as_tibble(catfish$nodes) %>% select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\ncatfish_edges <- as_tibble(catfish$links) %>% select(source, target, valueofgoods_omu, hscode, arrivaldate)"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#visualise-catfish",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#visualise-catfish",
+    "title": "Data Exploration",
+    "section": "Visualise Catfish",
+    "text": "Visualise Catfish\n``{r}\nid1 <- catfish_edges_aggregated %>% select(source) %>% rename(id = source) id2 <- catfish_edges_aggregated %>% select(target) %>% rename(id = target) catfish_nodes_extract <- rbind(id1, id2) %>% distinct()\n``\n``{r} catfish_graph <- tbl_graph(nodes = catfish_nodes_extract, edges = catfish_edges_aggregated, directed = TRUE)\n``\n``{r} ggraph(catfish_graph, layout = “fr”) + geom_edge_link(aes()) + geom_node_point(aes()) + theme_graph()\n``"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#herring",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#herring",
+    "title": "Data Exploration",
+    "section": "Herring",
+    "text": "Herring\n``{r} herring_nodes <- as_tibble(herring$nodes) %>% select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\nherring_edges <- as_tibble(herring$links) %>% select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#visualise-herring",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#visualise-herring",
+    "title": "Data Exploration",
+    "section": "Visualise Herring",
+    "text": "Visualise Herring\n``{r}\nid1 <- herring_edges_aggregated %>% select(source) %>% rename(id = source) id2 <- herring_edges_aggregated %>% select(target) %>% rename(id = target) herring_nodes_extract <- rbind(id1, id2) %>% distinct()\n``\n``{r} herring_graph <- tbl_graph(nodes = herring_nodes_extract, edges = herring_edges_aggregated, directed = TRUE)\n``\n``{r} ggraph(herring_graph, layout = “fr”) + geom_edge_link(aes()) + geom_node_point(aes()) + theme_graph()\n``"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#lichen",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#lichen",
+    "title": "Data Exploration",
+    "section": "Lichen",
+    "text": "Lichen\n``{r} lichen_node <- as_tibble(lichen$nodes) %>% select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\nlichen_edges <- as_tibble(lichen$links) %>% select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#visualise-lichen",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#visualise-lichen",
+    "title": "Data Exploration",
+    "section": "Visualise Lichen",
+    "text": "Visualise Lichen\n``{r}\nid1 <- lichen_edges_aggregated %>% select(source) %>% rename(id = source) id2 <- lichen_edges_aggregated %>% select(target) %>% rename(id = target) lichen_nodes_extract <- rbind(id1, id2) %>% distinct()\n``\n``{r} lichen_graph <- tbl_graph(nodes = lichen_nodes_extract, edges = lichen_edges_aggregated, directed = TRUE)\n``\n``{r} ggraph(lichen_graph, layout = “fr”) + geom_edge_link(aes()) + geom_node_point(aes()) + theme_graph()\n``"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#mac",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#mac",
+    "title": "Data Exploration",
+    "section": "Mac",
+    "text": "Mac\n``{r} mac_nodes <- as_tibble(mac$nodes) %>% select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\nmac_edges <- as_tibble(mac$links) %>% select(source, target, valueofgoods_omu, hscode, arrivaldate)"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#visualise-mac",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#visualise-mac",
+    "title": "Data Exploration",
+    "section": "Visualise Mac",
+    "text": "Visualise Mac\n``{r}\nid1 <- mac_edges_aggregated %>% select(source) %>% rename(id = source) id2 <- mac_edges_aggregated %>% select(target) %>% rename(id = target) mac_nodes_extract <- rbind(id1, id2) %>% distinct()\n``\n``{r} mac_graph <- tbl_graph(nodes = mac_nodes_extract, edges = mac_edges_aggregated, directed = TRUE)\n``\n``{r} ggraph(mac_graph, layout = “fr”) + geom_edge_link(aes()) + geom_node_point(aes()) + theme_graph()\n``"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#pollock",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#pollock",
+    "title": "Data Exploration",
+    "section": "Pollock",
+    "text": "Pollock\n``{r} pol_nodes <- as_tibble(pol$nodes) %>% select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\npol_edges <- as_tibble(pol$links) %>% select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#visualise-pollock",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#visualise-pollock",
+    "title": "Data Exploration",
+    "section": "Visualise Pollock",
+    "text": "Visualise Pollock\n``{r}\nid1 <- pol_edges_aggregated %>% select(source) %>% rename(id = source) id2 <- pol_edges_aggregated %>% select(target) %>% rename(id = target) pol_nodes_extract <- rbind(id1, id2) %>% distinct()\n``\n``{r} pol_graph <- tbl_graph(nodes = pol_nodes_extract, edges = pol_edges_aggregated, directed = TRUE)\n``\n{r} ggraph(pol_graph,        layout = \"fr\") +   geom_edge_link(aes()) +   geom_node_point(aes()) +   theme_graph()"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#sal-wgl",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#sal-wgl",
+    "title": "Data Exploration",
+    "section": "Sal WGL",
+    "text": "Sal WGL\n``{r} salw_nodes <- as_tibble(sal_wgl$nodes) %>% select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\nsalw_edges <- as_tibble(sal_wgl$links) %>% select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#visualise-sal-wgl",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#visualise-sal-wgl",
+    "title": "Data Exploration",
+    "section": "Visualise Sal WGL",
+    "text": "Visualise Sal WGL\n``{r}\nid1 <- salw_edges_aggregated %>% select(source) %>% rename(id = source) id2 <- salw_edges_aggregated %>% select(target) %>% rename(id = target) sal_wgl_nodes_extract <- rbind(id1, id2) %>% distinct()\n``\n``{r} sal_wgl_graph <- tbl_graph(nodes = sal_wgl_nodes_extract, edges = salw_edges_aggregated, directed = TRUE)\n``\n``{r} ggraph(sal_wgl_graph, layout = “fr”) + geom_edge_link(aes()) + geom_node_point(aes()) + theme_graph()\n``"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#salmon",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#salmon",
+    "title": "Data Exploration",
+    "section": "Salmon",
+    "text": "Salmon\n``{r} salmon_nodes <- as_tibble(salmon$nodes) %>% select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\nsalmon_edges <- as_tibble(salmon$links) %>% select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#visualise-salmon",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#visualise-salmon",
+    "title": "Data Exploration",
+    "section": "Visualise Salmon",
+    "text": "Visualise Salmon\n``{r}\nid1 <- salmon_edges_aggregated %>% select(source) %>% rename(id = source) id2 <- salmon_edges_aggregated %>% select(target) %>% rename(id = target) salmon_nodes_extract <- rbind(id1, id2) %>% distinct()\n``\n``{r} salmon_graph <- tbl_graph(nodes = salmon_nodes_extract, edges = salmon_edges_aggregated, directed = TRUE)\n``\n``{r} ggraph(salmon_graph, layout = “fr”) + geom_edge_link(aes()) + geom_node_point(aes()) + theme_graph()\n``"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#shark",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#shark",
+    "title": "Data Exploration",
+    "section": "Shark",
+    "text": "Shark\n``{r} shark_nodes <- as_tibble(shark$nodes) %>% select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\nshark_edges <- as_tibble(shark$links) %>% select(source, target, valueofgoods_omu, weightkg, hscode, arrivaldate)"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#tuna",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#tuna",
+    "title": "Data Exploration",
+    "section": "Tuna",
+    "text": "Tuna\n``{r} tuna_nodes <- as_tibble(tuna$nodes) %>% select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns\ntuna_edges <- as_tibble(tuna$links) %>% select(source, target, valueofgoods_omu, hscode, arrivaldate)"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#visualise-tuna",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#visualise-tuna",
+    "title": "Data Exploration",
+    "section": "Visualise Tuna",
+    "text": "Visualise Tuna\n``{r}\nid1 <- tuna_edges %>% select(source) %>% rename(id = source) id2 <- tuna_edges %>% select(target) %>% rename(id = target) tuna_nodes_extract <- rbind(id1, id2) %>% distinct()\n``\n``{r} tuna_graph <- tbl_graph(nodes = tuna_nodes_extract, edges = tuna_edges, directed = TRUE)\n``\n``{r} ggraph(tuna_graph, layout = “fr”) + geom_edge_link(aes()) + geom_node_point(aes()) + theme_graph()\n``\nall_edges<- c(“carp_edges”, “c_mac_edges”, “cod_edges”, “catfish_edges”, “herring_edges”, “lichen_edges”, “mac_edges”, “pol_edges”, “salmon_edges”, “sal_wgl_edges”, “shark_edges”, “tuna_edges”) # Add more dataset names as needed\nunique_hscodes <- character() # Initialize an empty vector to store unique hs codes\nfor (all_edges in all_edges) { dataset <- get(all_edges) # Extract the dataset\nunique_hscodes <- unique(c(unique_hscodes, dataset$HS_Code)) # Extract unique hs codes and append to the vector }"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#remove-all-rows-with-hs_codes-irrelevant-to-bundles",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#remove-all-rows-with-hs_codes-irrelevant-to-bundles",
+    "title": "Data Exploration",
+    "section": "Remove all rows with HS_codes irrelevant to bundles",
+    "text": "Remove all rows with HS_codes irrelevant to bundles\nfiltered_MC2_edges <- MC2_edges[MC2_edges$HS_Code %in% unique_hscodes, ]"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#aggregate",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#aggregate",
+    "title": "Data Exploration",
+    "section": "Aggregate",
+    "text": "Aggregate\n``{r} MC2_edges_aggregated <- filtered_MC2_edges %>% group_by(source,target) %>% summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE), Value_USD_Total = sum(Value_USD, na.rm = TRUE), Count = n(), Average_OMU = mean(Value_OMU, na.rm = TRUE), Average_USD = mean(Value_USD, na.rm = TRUE), Total_Weight_KG = sum(Weight_KG, na.rm = TRUE), Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>% ungroup()\n``"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#exploring-cut-points-to-focus-dataset",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#exploring-cut-points-to-focus-dataset",
+    "title": "Data Exploration",
+    "section": "Exploring cut-points to focus dataset",
+    "text": "Exploring cut-points to focus dataset\n#::: panel-tabset ## Mean and Median\nmean_links <- mean(MC2_edges_aggregated\\(Count) median_links <- median(MC2_edges_aggregated\\)Count)\nprint(mean_links) print(median_links)"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#boxplot-distribution",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#boxplot-distribution",
+    "title": "Data Exploration",
+    "section": "Boxplot Distribution",
+    "text": "Boxplot Distribution\nggplot(MC2_edges_aggregated, aes(y = Count)) + geom_boxplot(fill = “steelblue”, color = “black”) + labs(y = “Count”, title = “Boxplot of Count”)"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#boxplot-zoomed",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#boxplot-zoomed",
+    "title": "Data Exploration",
+    "section": "Boxplot (zoomed)",
+    "text": "Boxplot (zoomed)\nggplot(MC2_edges_aggregated, aes(y = Count)) + geom_boxplot(fill = “steelblue”, color = “black”) + labs(y = “Count”, title = “Boxplot of Count”) + ylim(0, 50)\n#:::\n\nBased on the boxplots, we see that the data is bottom heavy, which is consistent with the median score of 2. Given that we are interested in abnormal data (large counts), we will filter the bulk of the data by the mean value(19.8) to focus our examination of links above this connection threshold."
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#filter-at-cut-point-19.8",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#filter-at-cut-point-19.8",
+    "title": "Data Exploration",
+    "section": "Filter at cut-point 19.8",
+    "text": "Filter at cut-point 19.8\nfiltered_dataset <- subset(MC2_edges_aggregated, Count > 19.8)"
+  },
+  {
+    "objectID": "take-home_Ex/Data Exploration/data_exploration.html#create-graph",
+    "href": "take-home_Ex/Data Exploration/data_exploration.html#create-graph",
+    "title": "Data Exploration",
+    "section": "Create Graph",
+    "text": "Create Graph\nMC2d_filtered <- distinct(filtered_dataset)\nid1 <- MC2d_filtered %>% select(source) %>% rename(id = source) id2 <- MC2d_filtered %>% select(target) %>% rename(id = target) mc2_nodes_extracted <- rbind(id1, id2) %>% distinct()\nmc2_graph <- tbl_graph(nodes = mc2_nodes_extracted, edges = MC2d_filtered, directed = TRUE)\nggraph(mc2_graph, layout = “fr”) + geom_edge_link(aes()) + geom_node_point(aes()) + theme_graph()\nFilter further to remove orphan nodes\nChubMC2_edges <- MC2_edges %>% filter(HS_Code %in% c_mac_edges$HS_Code)\nChubMC2_edges\\(Arrival_Date <- as.Date(ChubMC2_edges\\)Arrival_Date)\nyearly_datasets <- split(ChubMC2_edges, format(ChubMC2_edges$Arrival_Date, “%Y”))\ndataset_2028 <- yearly_datasets[[“2028”]]\ndataset_2029 <- yearly_datasets[[“2029”]]\ndataset_2030 <- yearly_datasets[[“2030”]]\ndataset_2031 <- yearly_datasets[[“2031”]]\ndataset_2032 <- yearly_datasets[[“2032”]]\ndataset_2033 <- yearly_datasets[[“2033”]]\ndataset_2034 <- yearly_datasets[[“2034”]]\nAgg_2028 <- dataset_2028 %>% group_by(source,target) %>% summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE), Value_USD_Total = sum(Value_USD, na.rm = TRUE), Count = n(), Average_OMU = mean(Value_OMU, na.rm = TRUE), Average_USD = mean(Value_USD, na.rm = TRUE), Total_Weight_KG = sum(Weight_KG, na.rm = TRUE), Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>% ungroup()\nAgg_2029 <- dataset_2029 %>% group_by(source,target) %>% summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE), Value_USD_Total = sum(Value_USD, na.rm = TRUE), Count = n(), Average_OMU = mean(Value_OMU, na.rm = TRUE), Average_USD = mean(Value_USD, na.rm = TRUE), Total_Weight_KG = sum(Weight_KG, na.rm = TRUE), Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>% ungroup()\nAgg_2030 <- dataset_2030 %>% group_by(source,target) %>% summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE), Value_USD_Total = sum(Value_USD, na.rm = TRUE), Count = n(), Average_OMU = mean(Value_OMU, na.rm = TRUE), Average_USD = mean(Value_USD, na.rm = TRUE), Total_Weight_KG = sum(Weight_KG, na.rm = TRUE), Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>% ungroup()\nAgg_2031 <- dataset_2031 %>% group_by(source,target) %>% summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE), Value_USD_Total = sum(Value_USD, na.rm = TRUE), Count = n(), Average_OMU = mean(Value_OMU, na.rm = TRUE), Average_USD = mean(Value_USD, na.rm = TRUE), Total_Weight_KG = sum(Weight_KG, na.rm = TRUE), Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>% ungroup()\nAgg_2032 <- dataset_2032 %>% group_by(source,target) %>% summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE), Value_USD_Total = sum(Value_USD, na.rm = TRUE), Count = n(), Average_OMU = mean(Value_OMU, na.rm = TRUE), Average_USD = mean(Value_USD, na.rm = TRUE), Total_Weight_KG = sum(Weight_KG, na.rm = TRUE), Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>% ungroup()\n``{r} Agg_2033 <- dataset_2033 %>% group_by(source,target) %>% summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE), Value_USD_Total = sum(Value_USD, na.rm = TRUE), Count = n(), Average_OMU = mean(Value_OMU, na.rm = TRUE), Average_USD = mean(Value_USD, na.rm = TRUE), Total_Weight_KG = sum(Weight_KG, na.rm = TRUE), Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>% ungroup()\n{r} Agg_2034 <- dataset_2034 %>% group_by(source,target) %>% summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE), Value_USD_Total = sum(Value_USD, na.rm = TRUE), Count = n(), Average_OMU = mean(Value_OMU, na.rm = TRUE), Average_USD = mean(Value_USD, na.rm = TRUE), Total_Weight_KG = sum(Weight_KG, na.rm = TRUE), Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>% ungroup()\n{r}\nggplot(Agg_2028, aes(y = Count)) + geom_boxplot(fill = “steelblue”, color = “black”) + labs(y = “Count”, title = “Boxplot of Count”) ``\n``{r} threshold <- quantile(Agg_2028$Count, probs = 0.99)"
+  },
+  {
+    "objectID": "take-home_Ex/take-home_Ex03/take-home_Ex03.html",
+    "href": "take-home_Ex/take-home_Ex03/take-home_Ex03.html",
+    "title": "Take-Home Exercise 3",
+    "section": "",
+    "text": "``{r} pacman::p_load(tidygraph, ggraph, visNetwork, lubridate, clock, ggforce, tidytext, tidyverse, graphlayouts, jsonlite)\n## Importing the data{r} mc3_data <- fromJSON(“data/MC3.json”)\n``"
+  },
+  {
+    "objectID": "take-home_Ex/take-home_Ex03/take-home_Ex03.html#data-preparation",
+    "href": "take-home_Ex/take-home_Ex03/take-home_Ex03.html#data-preparation",
+    "title": "Take-Home Exercise 3",
+    "section": "Data Preparation",
+    "text": "Data Preparation\nDon’t distinct immediately bc there are two diff companies with the same ID (ZH).\n``{r}\nmc3_edges <- as_tibbles(mc3_data$links) %>% # distinct() %>% mutate(country = as.character(country), id = as.character(id), product_services = as.character(product_services), revenue_omu = as.numeric(as.character(revenue.omu)), type = as.character(type)) %>% select(id, country, type, revenue_omu, product_services)\n``"
+  },
+  {
+    "objectID": "take-home_Ex/take-home_Ex03/take-home_Ex03.html#initial-data-exploration",
+    "href": "take-home_Ex/take-home_Ex03/take-home_Ex03.html#initial-data-exploration",
+    "title": "Take-Home Exercise 3",
+    "section": "Initial Data Exploration",
+    "text": "Initial Data Exploration\n\nVisualising Type Field"
   }
 ]

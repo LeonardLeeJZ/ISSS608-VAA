@@ -1,0 +1,50 @@
+---
+title: "Take-Home Exercise 3"
+author: "Leonard Lee"
+
+format:
+  html:
+    code-fold: true
+    code-summary: "Show me the good stuff"
+execute:
+  warning: false
+date: "03 June 2023"
+date-modified: "`r Sys.Date()`"
+---
+
+## Loading the Packages
+
+``{r}
+pacman::p_load(tidygraph, ggraph, visNetwork, lubridate, clock, ggforce, tidytext, tidyverse, graphlayouts, jsonlite)
+
+
+``
+## Importing the data
+``{r}
+mc3_data <- fromJSON("data/MC3.json")
+
+``
+
+## Data Preparation
+Don't distinct immediately bc there are two diff companies with the same ID (ZH).
+
+``{r}
+
+mc3_edges <- as_tibbles(mc3_data$links) %>%
+#  distinct() %>%
+  mutate(country = as.character(country),
+         id = as.character(id),
+         product_services = as.character(product_services),
+         revenue_omu = as.numeric(as.character(revenue.omu)),
+         type = as.character(type)) %>%
+  select(id, country, type, revenue_omu, product_services)
+
+``
+
+## Initial Data Exploration
+
+
+### Visualising Type Field
+         
+         
+
