@@ -31,6 +31,11 @@ MC2 <- fromJSON("data/mc2_challenge_graph.json")
 
 ```
 
+### MC2 Overview
+```{r}
+glimpse(MC2)
+```
+
 ### 2.2 Fish Bundles
 
 ```{r}
@@ -63,7 +68,7 @@ MC2_edges <- as_tibble(MC2$links) %>%
 
 ```
 
-## 3.2 Remove all duplicate rows
+## 3.2 Remove duplicate rows
 
 ```{r}
 MC2_edges <- MC2_edges %>% distinct()
@@ -90,12 +95,24 @@ MC2_edges <- MC2_edges %>%
 
 ## 3.3 Remove Rows with NA in Source/Target Columns
 
+As we are examining links between **source** and **target** columns, we will first remove rows with missing values in these columns as they will not be contributing to the analysis.
+
 ```{r}
 MC2_edges <- MC2_edges[complete.cases(MC2_edges[, c("source", "target")]), ]
 
+colSums(is.na(MC2_edges))
+
 ```
+::: {.cushbox .cushicon}
+While there are missing (NA) fields in **Value_OMU** and **Value_USD**, the key columns being examined (**source** and **target**) do not possess any missing values.
+:::
+
 # 4 Data Exploration and Comparison
 
+::: {.bubblebox .bubbleicon}
+To determine which bundles of predictive network models are reliable, we will first visualise the respective network models, before comparing them with the same links extracted from MC2.
+
+:::
 
 ## 4.1 Carp
 
@@ -115,9 +132,6 @@ carp_edges <- carp_edges %>%
          'HS_Code' = 'hscode', 
          'Arrival_Date' = 'arrivaldate')
   
-```
-
-```{r}
 carp_edges_aggregated <- carp_edges %>%
   group_by(source,target, HS_Code) %>%
   summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
@@ -128,58 +142,65 @@ carp_edges_aggregated <- carp_edges %>%
   ungroup()
 
 ```
+
 ::: panel-tabset
 
 ### Visualise Carp
-```{r}
 
-id1 <- carp_edges_aggregated %>%
+```{r, warning=FALSE}
+
+carp_nodes_extract <- carp_edges_aggregated %>%
   select(source) %>%
-  rename(id = source)
-id2 <- carp_edges_aggregated %>%
-  select(target) %>%
-  rename(id = target)
-carp_nodes_extract <- rbind(id1, id2) %>%
+  rename(id = source) %>%
+  bind_rows(carp_edges_aggregated %>%
+              select(target) %>%
+              rename(id = target)) %>%
   distinct()
 
-carp_graph <- tbl_graph(nodes = carp_nodes_extract,
-                       edges = carp_edges_aggregated,
-                       directed = TRUE)
+carp_nodes <- carp_nodes_extract %>%
+  mutate(id = as.character(id))  # Convert id column to character type
 
-ggraph(carp_graph,
-       layout = "fr") +
-  geom_edge_link(aes()) +
-  geom_node_point(aes()) +
-  theme_graph()
+carp_edges <- carp_edges_aggregated %>%
+  mutate(from = as.character(source),  # Convert source and target columns to character type
+         to = as.character(target))
+
+carp_graph <- visNetwork(nodes = carp_nodes, edges = carp_edges) %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to", color = list(color = "blue", highlight = "red")) %>%
+  visNodes() %>%
+  visOptions(highlightNearest = list(enabled = TRUE, degree = 2, hover = TRUE),
+             nodesIdSelection = TRUE)
+
+
+
+
+carp_graph
+
 
 ```
+
+
 ### Matching Carp
-```{r}
+```{r, warning=FALSE}
 
-# Assuming your datasets are named MC2 and carp_edges
+matched_carp <- carp_edges_aggregated[
+  carp_edges_aggregated$source %in% MC2_edges$source &
+  carp_edges_aggregated$target %in% MC2_edges$target,
+]
 
-# Extract the matched rows using subsetting
-matched_carp <- carp_edges_aggregated[carp_edges_aggregated$source %in% MC2_edges$source & carp_edges_aggregated$target %in% MC2_edges$target, ]
+colnames(matched_carp) <- c("from", "to")
 
+nodes_df1 <- data.frame(id = unique(c(matched_carp$from, matched_carp$to)))
 
-id1 <- matched_carp %>%
-  select(source) %>%
-  rename(id = source)
-id2 <- matched_carp %>%
-  select(target) %>%
-  rename(id = target)
-matcarp_extract <- rbind(id1, id2) %>%
-  distinct()
+mcarp_graph <- visNetwork(nodes = nodes_df1, edges = matched_carp,
+                          width = "100%", height = "400px") %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to", color = list(color = "blue", highlight = "red")) %>%
+  visNodes(title = "id") %>%
+  visOptions(highlightNearest = list(enabled = TRUE, degree = 2, hover = TRUE),
+             nodesIdSelection = TRUE)
 
-matcarp_graph <- tbl_graph(nodes = matcarp_extract,
-                       edges = matched_carp,
-                       directed = TRUE)
-
-ggraph(matcarp_graph,
-       layout = "fr") +
-  geom_edge_link(aes()) +
-  geom_node_point(aes()) +
-  theme_graph()
+mcarp_graph
 
 ```
 
@@ -203,9 +224,6 @@ cmac_edges <- cmac_edges %>%
          'HS_Code' = 'hscode', 
          'Arrival_Date' = 'arrivaldate')
   
-```
-
-```{r}
 cmac_edges_aggregated <- cmac_edges %>%
   group_by(source,target, HS_Code) %>%
   summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
@@ -217,38 +235,66 @@ cmac_edges_aggregated <- cmac_edges %>%
 
 ```
 
+::: panel-tabset
 
-### Visualise C_Mac
-```{r}
+### Visualise Chub Mackerel
+```{r, warning= FALSE}
 
-id1 <- cmac_edges_aggregated %>%
+cmac_nodes_extract <- cmac_edges_aggregated %>%
   select(source) %>%
-  rename(id = source)
-id2 <- cmac_edges_aggregated %>%
-  select(target) %>%
-  rename(id = target)
-cmac_nodes_extract <- rbind(id1, id2) %>%
+  rename(id = source) %>%
+  bind_rows(cmac_edges_aggregated %>%
+              select(target) %>%
+              rename(id = target)) %>%
   distinct()
 
+cmac_nodes <- cmac_nodes_extract %>%
+  mutate(id = as.character(id))  # Convert id column to character type
+
+cmac_edges <- cmac_edges_aggregated %>%
+  mutate(from = as.character(source),  # Convert source and target columns to character type
+         to = as.character(target))
+
+cmac_graph <- visNetwork(nodes = cmac_nodes, edges = cmac_edges) %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to", color = list(color = "blue", highlight = "red")) %>%
+  visNodes() %>%
+  visOptions(highlightNearest = list(enabled = TRUE, degree = 2, hover = TRUE),
+             nodesIdSelection = TRUE)
+
+
+cmac_graph
+
+
 ```
 
-```{r}
-cmac_graph <- tbl_graph(nodes = cmac_nodes_extract,
-                       edges = cmac_edges_aggregated,
-                       directed = TRUE)
+### Matching Chub Mackerel
+```{r, warning=FALSE}
 
+matched_cmac <- cmac_edges_aggregated[
+  cmac_edges_aggregated$source %in% MC2_edges$source &
+  cmac_edges_aggregated$target %in% MC2_edges$target,
+]
+
+colnames(matched_cmac) <- c("from", "to")
+
+nodes_df2 <- data.frame(id = unique(c(matched_cmac$from, matched_cmac$to)))
+
+mcmac_graph <-visNetwork(nodes = nodes_df2, edges = matched_cmac,
+                         width = "100%", height = "400px") %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to", color = list(color = "blue", highlight = "red")) %>%
+  visNodes(title = "id") %>%
+  visOptions(highlightNearest = list(enabled = TRUE, degree = 2, hover = TRUE),
+             nodesIdSelection = TRUE)
+
+
+mcmac_graph
 ```
 
-```{r}
-ggraph(cmac_graph,
-       layout = "fr") +
-  geom_edge_link(aes()) +
-  geom_node_point(aes()) +
-  theme_graph()
+:::
 
-```
-
-## 4.3 Cod
+`## 4.3 Cod
 
 ```{r}
 cod_nodes <- as_tibble(cod$nodes) %>%
@@ -265,10 +311,7 @@ cod_edges <- cod_edges %>%
          'Weight_KG' = 'weightkg', 
          'HS_Code' = 'hscode', 
          'Arrival_Date' = 'arrivaldate')
-  
-```
-
-```{r}
+ 
 cod_edges_aggregated <- cod_edges %>%
   group_by(source,target, HS_Code) %>%
   summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
@@ -280,39 +323,64 @@ cod_edges_aggregated <- cod_edges %>%
 
 ```
 
-### Visualise Cod
-```{r}
+::: panel-tabset
 
-id1 <- cod_edges_aggregated %>%
+### Visualise Cod
+```{r, warning= FALSE}
+cod_nodes_extract <- cod_edges_aggregated %>%
   select(source) %>%
-  rename(id = source)
-id2 <- cod_edges_aggregated %>%
-  select(target) %>%
-  rename(id = target)
-cod_nodes_extract <- rbind(id1, id2) %>%
+  rename(id = source) %>%
+  bind_rows(cod_edges_aggregated %>%
+              select(target) %>%
+              rename(id = target)) %>%
   distinct()
 
+cod_nodes <- cod_nodes_extract %>%
+  mutate(id = as.character(id))  # Convert id column to character type
+
+cod_edges <- cod_edges_aggregated %>%
+  mutate(from = as.character(source),  # Convert source and target columns to character type
+         to = as.character(target))
+
+cod_graph <- visNetwork(nodes = cod_nodes, edges = cod_edges) %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to", color = list(color = "blue", highlight = "red")) %>%
+  visNodes() %>%
+  visOptions(highlightNearest = list(enabled = TRUE, degree = 2, hover = TRUE),
+             nodesIdSelection = TRUE)
+
+
+cod_graph
 ```
 
-```{r}
-cod_graph <- tbl_graph(nodes = cod_nodes_extract,
-                       edges = cod_edges_aggregated,
-                       directed = TRUE)
+### Matching Cod
+```{r, warning=FALSE}
+
+matched_cod <- cod_edges_aggregated[
+  cod_edges_aggregated$source %in% MC2_edges$source &
+  cod_edges_aggregated$target %in% MC2_edges$target,
+]
+
+colnames(matched_cod) <- c("from", "to")
+
+nodes_df3 <- data.frame(id = unique(c(matched_cod$from, matched_cod$to)))
+
+mcod_graph <- visNetwork(nodes = nodes_df3, edges = matched_cod,
+                         width = "100%", height = "400px") %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to", color = list(color = "blue", highlight = "red")) %>%
+  visNodes(title = "id") %>%
+  visOptions(highlightNearest = list(enabled = TRUE, degree = 2, hover = TRUE),
+             nodesIdSelection = TRUE)
+
+mcod_graph 
 
 ```
-
-```{r}
-ggraph(cod_graph,
-       layout = "fr") +
-  geom_edge_link(aes()) +
-  geom_node_point(aes()) +
-  theme_graph()
-
-```
+:::
 
 ## 4.4 Catfish
 
-Catfish sus, no weight data (underreporting/overreporting is a trait of illegal fishing?)
+###no weight data
 
 ```{r}
 catfish_nodes <- as_tibble(catfish$nodes) %>%
@@ -328,10 +396,7 @@ catfish_edges <- catfish_edges %>%
          'Value_OMU' = 'valueofgoods_omu', 
          'HS_Code' = 'hscode', 
          'Arrival_Date' = 'arrivaldate')
-  
-```
 
-```{r}
 catfish_edges_aggregated <- catfish_edges %>%
   group_by(source,target, HS_Code) %>%
   summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
@@ -341,36 +406,70 @@ catfish_edges_aggregated <- catfish_edges %>%
 
 ```
 
-### Visualise Catfish
-```{r}
+::: panel-tabset
 
-id1 <- catfish_edges_aggregated %>%
+### Visualise Catfish
+```{r, warning= FALSE}
+
+catfish_nodes_extract <- catfish_edges_aggregated %>%
   select(source) %>%
-  rename(id = source)
-id2 <- catfish_edges_aggregated %>%
-  select(target) %>%
-  rename(id = target)
-catfish_nodes_extract <- rbind(id1, id2) %>%
+  rename(id = source) %>%
+  bind_rows(catfish_edges_aggregated %>%
+              select(target) %>%
+              rename(id = target)) %>%
   distinct()
 
+catfish_nodes <- catfish_nodes_extract %>%
+  mutate(id = as.character(id))  # Convert id column to character type
+
+catfish_edges <- catfish_edges_aggregated %>%
+  mutate(from = as.character(source),  # Convert source and target columns to character type
+         to = as.character(target))
+
+cat_graph <- visNetwork(nodes = catfish_nodes, edges = catfish_edges) %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to", color = list(color = "blue", highlight = "red")) %>%
+  visNodes() %>%
+  visOptions(highlightNearest = list(enabled = TRUE, degree = 2, hover = TRUE),
+             nodesIdSelection = TRUE)
+
+cat_graph
+
 ```
 
-```{r}
-catfish_graph <- tbl_graph(nodes = catfish_nodes_extract,
-                       edges = catfish_edges_aggregated,
-                       directed = TRUE)
+
+
+### Matching Catfish
+```{r, warning=FALSE}
+
+
+# Match the rows from catfish_edges_aggregated with MC2_edges
+matched_cat <- catfish_edges_aggregated[
+  catfish_edges_aggregated$source %in% MC2_edges$source &
+  catfish_edges_aggregated$target %in% MC2_edges$target,
+]
+
+# Modify the column names in matched_cat
+colnames(matched_cat) <- c("from", "to")
+
+# Create a data frame of unique nodes
+nodes_df4 <- data.frame(id = unique(c(matched_cat$from, matched_cat$to)))
+
+# Create the network graph using visNetwork
+mcat_graph <- visNetwork(nodes = nodes_df4, edges = matched_cat,
+                         width = "100%", height = "400px") %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to", color = list(color = "blue", highlight = "red")) %>%
+  visNodes(title = "id") %>%
+  visOptions(highlightNearest = list(enabled = T, degree = 2, hover = T),
+    nodesIdSelection = TRUE)
+
+
+mcat_graph
+
 
 ```
-
-```{r}
-ggraph(catfish_graph,
-       layout = "fr") +
-  geom_edge_link(aes()) +
-  geom_node_point(aes()) +
-  theme_graph()
-
-```
-
+:::
 
 ## 4.5 Herring
 
@@ -390,9 +489,6 @@ herring_edges <- herring_edges %>%
          'HS_Code' = 'hscode', 
          'Arrival_Date' = 'arrivaldate')
   
-```
-
-```{r}
 herring_edges_aggregated <- herring_edges %>%
   group_by(source,target, HS_Code) %>%
   summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
@@ -403,36 +499,65 @@ herring_edges_aggregated <- herring_edges %>%
   ungroup()
 
 ```
+::: panel-tabset
 
 ### Visualise Herring
 ```{r}
 
-id1 <- herring_edges_aggregated %>%
+herring_nodes_extract <- herring_edges_aggregated %>%
   select(source) %>%
-  rename(id = source)
-id2 <- herring_edges_aggregated %>%
-  select(target) %>%
-  rename(id = target)
-herring_nodes_extract <- rbind(id1, id2) %>%
+  rename(id = source) %>%
+  bind_rows(herring_edges_aggregated %>%
+              select(target) %>%
+              rename(id = target)) %>%
   distinct()
 
+herring_edges <- herring_edges_aggregated %>%
+  mutate(from = as.character(source),  # Convert source and target columns to character type
+         to = as.character(target))
+
+herring_graph <- visNetwork(nodes = herring_nodes_extract, edges = herring_edges) %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to", color = list(color = "blue", highlight = "red")) %>%
+  visNodes() %>%
+  visOptions(highlightNearest = list(enabled = TRUE, degree = 2, hover = TRUE),
+             nodesIdSelection = TRUE)
+
+herring_graph
 ```
+
+### Matching Herring
 
 ```{r}
-herring_graph <- tbl_graph(nodes = herring_nodes_extract,
-                       edges = herring_edges_aggregated,
-                       directed = TRUE)
+
+# Match the rows from herring_edges_aggregated with MC2_edges
+matched_herring <- herring_edges_aggregated[
+  herring_edges_aggregated$source %in% MC2_edges$source &
+  herring_edges_aggregated$target %in% MC2_edges$target,
+]
+
+# Modify the column names in matched_herring
+colnames(matched_herring) <- c("from", "to")
+
+# Create a data frame of unique nodes
+nodes_df_herring <- data.frame(id = unique(c(matched_herring$from, matched_herring$to)))
+
+# Create the network graph using visNetwork
+mherring_graph <- visNetwork(nodes = nodes_df_herring, edges = matched_herring,
+                         width = "100%", height = "400px") %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to", color = list(color = "blue", highlight = "red")) %>%
+  visNodes(title = "id") %>%
+  visOptions(highlightNearest = list(enabled = T, degree = 2, hover = T),
+    nodesIdSelection = TRUE)
+
+
+mherring_graph
+
 
 ```
+:::
 
-```{r}
-ggraph(herring_graph,
-       layout = "fr") +
-  geom_edge_link(aes()) +
-  geom_node_point(aes()) +
-  theme_graph()
-
-```
 
 ## 4.6 Lichen
 
@@ -451,10 +576,7 @@ lichen_edges <- lichen_edges %>%
          'Weight_KG' = 'weightkg', 
          'HS_Code' = 'hscode', 
          'Arrival_Date' = 'arrivaldate')
-  
-```
-
-```{r}
+ 
 lichen_edges_aggregated <- lichen_edges %>%
   group_by(source,target, HS_Code) %>%
   summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
@@ -465,36 +587,66 @@ lichen_edges_aggregated <- lichen_edges %>%
   ungroup()
 
 ```
+::: panel-tabset
 
 ### Visualise Lichen
 ```{r}
 
-id1 <- lichen_edges_aggregated %>%
+lichen_nodes_extract <- lichen_edges_aggregated %>%
   select(source) %>%
-  rename(id = source)
-id2 <- lichen_edges_aggregated %>%
-  select(target) %>%
-  rename(id = target)
-lichen_nodes_extract <- rbind(id1, id2) %>%
+  rename(id = source) %>%
+  bind_rows(lichen_edges_aggregated %>%
+              select(target) %>%
+              rename(id = target)) %>%
   distinct()
 
+lichen_nodes <- lichen_nodes_extract %>%
+  mutate(id = as.character(id))  # Convert id column to character type
+
+lichen_edges <- lichen_edges_aggregated %>%
+  mutate(from = as.character(source),  # Convert source and target columns to character type
+         to = as.character(target))
+
+lichen_graph <- visNetwork(nodes = lichen_nodes, edges = lichen_edges) %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to", color = list(color = "blue", highlight = "red")) %>%
+  visNodes() %>%
+  visOptions(highlightNearest = list(enabled = TRUE, degree = 2, hover = TRUE),
+             nodesIdSelection = TRUE)
+
+lichen_graph
+
 ```
+### Matching Lichen
 
-```{r}
-lichen_graph <- tbl_graph(nodes = lichen_nodes_extract,
-                       edges = lichen_edges_aggregated,
-                       directed = TRUE)
+```{r, warnin= FALSE}
+# Match the rows from lichen_edges_aggregated with MC2_edges
+matched_lichen <- lichen_edges_aggregated[
+  lichen_edges_aggregated$source %in% MC2_edges$source &
+  lichen_edges_aggregated$target %in% MC2_edges$target,
+]
+
+# Modify the column names in matched_lichen
+colnames(matched_lichen) <- c("from", "to")
+
+# Create a data frame of unique nodes
+nodes_df_lichen <- data.frame(id = unique(c(matched_lichen$from, matched_lichen$to)))
+
+# Create the network graph using visNetwork
+mlichen_graph <- visNetwork(nodes = nodes_df_lichen, edges = matched_lichen,
+                         width = "100%", height = "400px") %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to", color = list(color = "blue", highlight = "red")) %>%
+  visNodes(title = "id") %>%
+  visOptions(highlightNearest = list(enabled = T, degree = 2, hover = T),
+    nodesIdSelection = TRUE)
+
+
+mlichen_graph
+
 
 ```
-
-```{r}
-ggraph(lichen_graph,
-       layout = "fr") +
-  geom_edge_link(aes()) +
-  geom_node_point(aes()) +
-  theme_graph()
-
-```
+:::
 
 ## 4.7 Mackerel
 
@@ -513,9 +665,6 @@ mac_edges <- mac_edges %>%
          'HS_Code' = 'hscode', 
          'Arrival_Date' = 'arrivaldate')
   
-```
-
-```{r}
 mac_edges_aggregated <- mac_edges %>%
   group_by(source,target, HS_Code) %>%
   summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
@@ -524,36 +673,68 @@ mac_edges_aggregated <- mac_edges %>%
   ungroup()
 
 ```
+::: panel-tabset
 
 ### Visualise Mackerel
 ```{r}
 
-id1 <- mac_edges_aggregated %>%
+mac_nodes_extract <- mac_edges_aggregated %>%
   select(source) %>%
-  rename(id = source)
-id2 <- mac_edges_aggregated %>%
-  select(target) %>%
-  rename(id = target)
-mac_nodes_extract <- rbind(id1, id2) %>%
+  rename(id = source) %>%
+  bind_rows(mac_edges_aggregated %>%
+              select(target) %>%
+              rename(id = target)) %>%
   distinct()
 
+mac_nodes <- mac_nodes_extract %>%
+  mutate(id = as.character(id))  # Convert id column to character type
+
+mac_edges <- mac_edges_aggregated %>%
+  mutate(from = as.character(source),  # Convert source and target columns to character type
+         to = as.character(target))
+
+mackerel_graph <- visNetwork(nodes = mac_nodes, edges = mac_edges) %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to", color = list(color = "blue", highlight = "red")) %>%
+  visNodes() %>%
+  visOptions(highlightNearest = list(enabled = TRUE, degree = 2, hover = TRUE),
+             nodesIdSelection = TRUE)
+
+mackerel_graph
+
+
 ```
+
+### Matching Mackerel
 
 ```{r}
-mac_graph <- tbl_graph(nodes = mac_nodes_extract,
-                       edges = mac_edges_aggregated,
-                       directed = TRUE)
+# Match the rows from mac_edges_aggregated with MC2_edges
+matched_mackerel <- mac_edges_aggregated[
+  mac_edges_aggregated$source %in% MC2_edges$source &
+  mac_edges_aggregated$target %in% MC2_edges$target,
+]
+
+# Modify the column names in matched_mackerel
+colnames(matched_mackerel) <- c("from", "to")
+
+# Create a data frame of unique nodes
+nodes_df_mackerel <- data.frame(id = unique(c(matched_mackerel$from, matched_mackerel$to)))
+
+# Create the network graph using visNetwork
+mmackerel_graph <- visNetwork(nodes = nodes_df_mackerel, edges = matched_mackerel,
+                         width = "100%", height = "400px") %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to", color = list(color = "blue", highlight = "red")) %>%
+  visNodes(title = "id") %>%
+  visOptions(highlightNearest = list(enabled = T, degree = 2, hover = T),
+    nodesIdSelection = TRUE)
+
+
+mmackerel_graph
+
 
 ```
-
-```{r}
-ggraph(mac_graph,
-       layout = "fr") +
-  geom_edge_link(aes()) +
-  geom_node_point(aes()) +
-  theme_graph()
-
-```
+:::
 
 ## 4.8 Pollock
 
@@ -572,10 +753,8 @@ pol_edges <- pol_edges %>%
          'Weight_KG' = 'weightkg', 
          'HS_Code' = 'hscode', 
          'Arrival_Date' = 'arrivaldate')
-  
-```
 
-```{r}
+
 pol_edges_aggregated <- pol_edges %>%
   group_by(source,target, HS_Code) %>%
   summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
@@ -586,36 +765,65 @@ pol_edges_aggregated <- pol_edges %>%
   ungroup()
 
 ```
+::: panel-tabset
 
 ### Visualise Pollock
 ```{r}
 
-id1 <- pol_edges_aggregated %>%
+pol_nodes_extract <- pol_edges_aggregated %>%
   select(source) %>%
-  rename(id = source)
-id2 <- pol_edges_aggregated %>%
-  select(target) %>%
-  rename(id = target)
-pol_nodes_extract <- rbind(id1, id2) %>%
+  rename(id = source) %>%
+  bind_rows(pol_edges_aggregated %>%
+              select(target) %>%
+              rename(id = target)) %>%
   distinct()
 
+pol_nodes <- pol_nodes_extract %>%
+  mutate(id = as.character(id))  # Convert id column to character type
+
+pol_edges <- pol_edges_aggregated %>%
+  mutate(from = as.character(source),  # Convert source and target columns to character type
+         to = as.character(target))
+
+pol_graph <- visNetwork(nodes = pol_nodes, edges = pol_edges) %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to", color = list(color = "blue", highlight = "red")) %>%
+  visNodes() %>%
+  visOptions(highlightNearest = list(enabled = TRUE, degree = 2, hover = TRUE),
+             nodesIdSelection = TRUE)
+
+pol_graph
 ```
+
+
+### Matching Pollock
 
 ```{r}
-pol_graph <- tbl_graph(nodes = pol_nodes_extract,
-                       edges = pol_edges_aggregated,
-                       directed = TRUE)
+# Match the rows from pol_edges_aggregated with MC2_edges
+matched_pollock <- pol_edges_aggregated[
+  pol_edges_aggregated$source %in% MC2_edges$source &
+  pol_edges_aggregated$target %in% MC2_edges$target,
+]
+
+# Modify the column names in matched_pollock
+colnames(matched_pollock) <- c("from", "to")
+
+# Create a data frame of unique nodes
+nodes_df_pollock <- data.frame(id = unique(c(matched_pollock$from, matched_pollock$to)))
+
+# Create the network graph using visNetwork
+mpol_graph <- visNetwork(nodes = nodes_df_pollock, edges = matched_pollock,
+                         width = "100%", height = "400px") %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to", color = list(color = "blue", highlight = "red")) %>%
+  visNodes(title = "id") %>%
+  visOptions(highlightNearest = list(enabled = T, degree = 2, hover = T),
+    nodesIdSelection = TRUE)
+
+mpol_graph
 
 ```
-
-```{r}
-ggraph(pol_graph,
-       layout = "fr") +
-  geom_edge_link(aes()) +
-  geom_node_point(aes()) +
-  theme_graph()
-
-```
+:::
 
 ## 4.9 Sal WGL
 
@@ -635,9 +843,6 @@ salw_edges <- salw_edges %>%
          'HS_Code' = 'hscode', 
          'Arrival_Date' = 'arrivaldate')
   
-```
-
-```{r}
 salw_edges_aggregated <- salw_edges %>%
   group_by(source,target, HS_Code) %>%
   summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
@@ -648,36 +853,69 @@ salw_edges_aggregated <- salw_edges %>%
   ungroup()
 
 ```
+::: panel-tabset
 
 ### Visualise Sal WGL
 ```{r}
 
-id1 <- salw_edges_aggregated %>%
+sal_wgl_nodes_extract <- salw_edges_aggregated %>%
   select(source) %>%
-  rename(id = source)
-id2 <- salw_edges_aggregated %>%
-  select(target) %>%
-  rename(id = target)
-sal_wgl_nodes_extract <- rbind(id1, id2) %>%
+  rename(id = source) %>%
+  bind_rows(salw_edges_aggregated %>%
+              select(target) %>%
+              rename(id = target)) %>%
   distinct()
 
+sal_wgl_nodes <- sal_wgl_nodes_extract %>%
+  mutate(id = as.character(id))  # Convert id column to character type
+
+sal_wgl_edges <- salw_edges_aggregated %>%
+  mutate(from = as.character(source),  # Convert source and target columns to character type
+         to = as.character(target))
+
+salwgl_graph <- visNetwork(nodes = sal_wgl_nodes, edges = sal_wgl_edges) %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to", color = list(color = "blue", highlight = "red")) %>%
+  visNodes() %>%
+  visOptions(highlightNearest = list(enabled = TRUE, degree = 2, hover = TRUE),
+             nodesIdSelection = TRUE)
+
+salwgl_graph
+
 ```
+
+### Matching Sal WGL
 
 ```{r}
-sal_wgl_graph <- tbl_graph(nodes = sal_wgl_nodes_extract,
-                       edges = salw_edges_aggregated,
-                       directed = TRUE)
+
+# Match the rows from salw_edges_aggregated with MC2_edges
+matched_salwgl <- salw_edges_aggregated[
+  salw_edges_aggregated$source %in% MC2_edges$source &
+  salw_edges_aggregated$target %in% MC2_edges$target,
+]
+
+# Modify the column names in matched_salwgl
+colnames(matched_salwgl) <- c("from", "to")
+
+# Create a data frame of unique nodes
+nodes_df_salwgl <- data.frame(id = unique(c(matched_salwgl$from, matched_salwgl$to)))
+
+# Create the network graph using visNetwork
+msalwgl_graph <- visNetwork(nodes = nodes_df_salwgl, edges = matched_salwgl,
+                         width = "100%", height = "400px") %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to", color = list(color = "blue", highlight = "red")) %>%
+  visNodes(title = "id") %>%
+  visOptions(highlightNearest = list(enabled = T, degree = 2, hover = T),
+    nodesIdSelection = TRUE)
+
+# Display the graph
+msalwgl_graph
+
+
 
 ```
-
-```{r}
-ggraph(sal_wgl_graph,
-       layout = "fr") +
-  geom_edge_link(aes()) +
-  geom_node_point(aes()) +
-  theme_graph()
-
-```
+:::
 
 ### 4.10 Salmon
 
@@ -697,9 +935,7 @@ salmon_edges <- salmon_edges %>%
          'HS_Code' = 'hscode', 
          'Arrival_Date' = 'arrivaldate')
   
-```
 
-```{r}
 salmon_edges_aggregated <- salmon_edges %>%
   group_by(source,target, HS_Code) %>%
   summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
@@ -710,36 +946,68 @@ salmon_edges_aggregated <- salmon_edges %>%
   ungroup()
 
 ```
+::: panel-tabset
 
 ### Visualise Salmon
 ```{r}
 
-id1 <- salmon_edges_aggregated %>%
+salmon_nodes_extract <- salmon_edges_aggregated %>%
   select(source) %>%
-  rename(id = source)
-id2 <- salmon_edges_aggregated %>%
-  select(target) %>%
-  rename(id = target)
-salmon_nodes_extract <- rbind(id1, id2) %>%
+  rename(id = source) %>%
+  bind_rows(salmon_edges_aggregated %>%
+              select(target) %>%
+              rename(id = target)) %>%
   distinct()
 
+salmon_nodes <- salmon_nodes_extract %>%
+  mutate(id = as.character(id))  # Convert id column to character type
+
+salmon_edges <- salmon_edges_aggregated %>%
+  mutate(from = as.character(source),  # Convert source and target columns to character type
+         to = as.character(target))
+
+salmon_graph <- visNetwork(nodes = salmon_nodes, edges = salmon_edges) %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to", color = list(color = "blue", highlight = "red")) %>%
+  visNodes() %>%
+  visOptions(highlightNearest = list(enabled = TRUE, degree = 2, hover = TRUE),
+             nodesIdSelection = TRUE)
+
+salmon_graph
+
+
 ```
+
+### Matching Salmon
 
 ```{r}
-salmon_graph <- tbl_graph(nodes = salmon_nodes_extract,
-                       edges = salmon_edges_aggregated,
-                       directed = TRUE)
+# Match the rows from salmon_edges_aggregated with MC2_edges
+matched_salmon <- salmon_edges_aggregated[
+  salmon_edges_aggregated$source %in% MC2_edges$source &
+  salmon_edges_aggregated$target %in% MC2_edges$target,
+]
+
+# Modify the column names in matched_salmon
+colnames(matched_salmon) <- c("from", "to")
+
+# Create a data frame of unique nodes
+nodes_df_salmon <- data.frame(id = unique(c(matched_salmon$from, matched_salmon$to)))
+
+# Create the network graph using visNetwork
+msalmon_graph <- visNetwork(nodes = nodes_df_salmon, edges = matched_salmon,
+                         width = "100%", height = "400px") %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to", color = list(color = "blue", highlight = "red")) %>%
+  visNodes(title = "id") %>%
+  visOptions(highlightNearest = list(enabled = T, degree = 2, hover = T),
+    nodesIdSelection = TRUE)
+
+# Display the graph
+msalmon_graph
+
 
 ```
-
-```{r}
-ggraph(salmon_graph,
-       layout = "fr") +
-  geom_edge_link(aes()) +
-  geom_node_point(aes()) +
-  theme_graph()
-
-```
+:::
 
 ## 4.11 Shark
 
@@ -758,38 +1026,74 @@ shark_edges <- shark_edges %>%
          'Weight_KG' = 'weightkg', 
          'HS_Code' = 'hscode', 
          'Arrival_Date' = 'arrivaldate')
-  
+
+shark_edges_aggregated <- shark_edges %>%
+  group_by(source,target, HS_Code) %>%
+  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
+            Count = n(),
+            Average_OMU = mean(Value_OMU, na.rm = TRUE),
+            Total_Weight_KG = sum(Weight_KG, na.rm = TRUE),
+            Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>%
+  ungroup()  
 ```
+::: panel-tabset
 
 ### Visualise Shark
 ```{r}
 
-id1 <- shark_edges %>%
+shark_nodes_extract <- shark_edges_aggregated %>%
   select(source) %>%
-  rename(id = source)
-id2 <- shark_edges %>%
-  select(target) %>%
-  rename(id = target)
-shark_nodes_extract <- rbind(id1, id2) %>%
+  rename(id = source) %>%
+  bind_rows(shark_edges_aggregated %>%
+              select(target) %>%
+              rename(id = target)) %>%
   distinct()
 
+shark_edges <- shark_edges_aggregated %>%
+  mutate(from = as.character(source),  # Convert source and target columns to character type
+         to = as.character(target))
+
+shark_graph <- visNetwork(nodes = shark_nodes_extract, edges = shark_edges) %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to", color = list(color = "blue", highlight = "red")) %>%
+  visNodes() %>%
+  visOptions(highlightNearest = list(enabled = TRUE, degree = 2, hover = TRUE),
+             nodesIdSelection = TRUE)
+
+shark_graph
 ```
+
+### Matching Shark
 
 ```{r}
-shark_graph <- tbl_graph(nodes = shark_nodes_extract,
-                       edges = shark_edges,
-                       directed = TRUE)
+
+# Match the rows from shark_edges_aggregated with MC2_edges
+matched_shark <- shark_edges_aggregated[
+  shark_edges_aggregated$source %in% MC2_edges$source &
+  shark_edges_aggregated$target %in% MC2_edges$target,
+]
+
+# Modify the column names in matched_shark
+colnames(matched_shark) <- c("from", "to")
+
+# Create a data frame of unique nodes
+nodes_df_shark <- data.frame(id = unique(c(matched_shark$from, matched_shark$to)))
+
+# Create the network graph using visNetwork
+mshark_graph <- visNetwork(nodes = nodes_df_shark, edges = matched_shark,
+                         width = "100%", height = "400px") %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to", color = list(color = "blue", highlight = "red")) %>%
+  visNodes(title = "id") %>%
+  visOptions(highlightNearest = list(enabled = T, degree = 2, hover = T),
+    nodesIdSelection = TRUE)
+
+# Display the graph
+mshark_graph
+
 
 ```
-
-```{r}
-ggraph(shark_graph,
-       layout = "fr") +
-  geom_edge_link(aes()) +
-  geom_node_point(aes()) +
-  theme_graph()
-
-```
+:::
 
 ## 4.12 Tuna
 
@@ -808,34 +1112,70 @@ tuna_edges <- tuna_edges %>%
          'HS_Code' = 'hscode', 
          'Arrival_Date' = 'arrivaldate')
   
+tuna_edges_aggregated <- tuna_edges %>%
+  group_by(source,target, HS_Code) %>%
+  summarise(Value_OMU_Total = sum(Value_OMU, na.rm = TRUE),
+            Count = n(),
+            Average_OMU = mean(Value_OMU, na.rm = TRUE)) %>%
+  ungroup()
 ```
+::: panel-tabset
 
 ### Visualise Tuna
 ```{r}
 
-id1 <- tuna_edges %>%
+tuna_nodes_extract <- tuna_edges_aggregated %>%
   select(source) %>%
-  rename(id = source)
-id2 <- tuna_edges %>%
-  select(target) %>%
-  rename(id = target)
-tuna_nodes_extract <- rbind(id1, id2) %>%
+  rename(id = source) %>%
+  bind_rows(tuna_edges_aggregated %>%
+              select(target) %>%
+              rename(id = target)) %>%
   distinct()
 
+tuna_edges <- tuna_edges_aggregated %>%
+  mutate(from = as.character(source),  # Convert source and target columns to character type
+         to = as.character(target))
+
+tuna_graph <- visNetwork(nodes = tuna_nodes_extract, edges = tuna_edges) %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to", color = list(color = "blue", highlight = "red")) %>%
+  visNodes() %>%
+  visOptions(highlightNearest = list(enabled = TRUE, degree = 2, hover = TRUE),
+             nodesIdSelection = TRUE)
+
+tuna_graph
+
+
 ```
+
+
+### Matching Tuna
 
 ```{r}
-tuna_graph <- tbl_graph(nodes = tuna_nodes_extract,
-                       edges = tuna_edges,
-                       directed = TRUE)
+# Match the rows from tuna_edges_aggregated with MC2_edges
+matched_tuna <- tuna_edges_aggregated[
+  tuna_edges_aggregated$source %in% MC2_edges$source &
+  tuna_edges_aggregated$target %in% MC2_edges$target,
+]
+
+# Modify the column names in matched_tuna
+colnames(matched_tuna) <- c("from", "to")
+
+# Create a data frame of unique nodes
+nodes_df_tuna <- data.frame(id = unique(c(matched_tuna$from, matched_tuna$to)))
+
+# Create the network graph using visNetwork
+mtuna_graph <- visNetwork(nodes = nodes_df_tuna, edges = matched_tuna,
+                         width = "100%", height = "400px") %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to", color = list(color = "blue", highlight = "red")) %>%
+  visNodes(title = "id") %>%
+  visOptions(highlightNearest = list(enabled = T, degree = 2, hover = T),
+    nodesIdSelection = TRUE)
+
+# Display the graph
+mtuna_graph
+
 
 ```
-
-```{r}
-ggraph(tuna_graph,
-       layout = "fr") +
-  geom_edge_link(aes()) +
-  geom_node_point(aes()) +
-  theme_graph()
-
-```
+:::
