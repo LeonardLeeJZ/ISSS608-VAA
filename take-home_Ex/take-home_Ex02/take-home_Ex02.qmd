@@ -16,7 +16,7 @@ date-modified: "`r Sys.Date()`"
 ```{r}
 pacman::p_load(igraph, tidygraph, ggraph, 
                visNetwork, lubridate, clock,
-               tidyverse, graphlayouts, jsonlite)
+               tidyverse, graphlayouts, jsonlite, patchwor, gridExtra)
 
 
 ```
@@ -172,11 +172,7 @@ carp_graph <- visNetwork(nodes = carp_nodes, edges = carp_edges) %>%
              nodesIdSelection = TRUE)
 
 
-
-
 carp_graph
-
-
 ```
 
 
