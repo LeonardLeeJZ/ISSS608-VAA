@@ -16,7 +16,7 @@ date-modified: "`r Sys.Date()`"
 All required packages for Hands on Exercise 6 are loaded together here.
 
 ```{r}
-pacman::p_load('plotly','tidyverse', 'corrplot', 'ggstatsplot', 'ggcorrplot')
+pacman::p_load('plotly','tidyverse', 'corrplot', 'ggstatsplot', 'ggcorrplot', 'dplyr')
 
 
 ```
@@ -109,7 +109,7 @@ ternaryAxes <- list(
 Initiating a plotly visualization 
 
 ```{r}
-plot_ly(agpop_mutated, a = ~YOUNG, b = ~ACTIVE, c = ~OLD, color = I("black"), type = "scatterternary") %>%  layout(annotations = label("Ternary Markers"), ternary = ternaryAxes )
+plot_ly(agpop_mutated, a = ~YOUNG, b = ~ACTIVE, c = ~OLD, color = I("black"), type = "scatterternary") %>% layout(annotations = label("Ternary Markers"), ternary = ternaryAxes )
 
 ```
 
@@ -185,11 +185,11 @@ One of the major limitation of the correlation matrix is that the scatter plots 
 ## Basic Plot
 
 ```{r}
-ggstatsplot::ggcorrmat(data = wine, cor.vars = 1:11)
+#ggstatsplot::ggcorrmat(data = wine, cor.vars = 1:11)
 
 ## With Title, Subtitles
 
-ggstatsplot::ggcorrmat( data = wine, cor.vars = 1:11, ggcorrplot.args = list(outline.color = "black", hc.order = TRUE, tl.cex = 10), title = "Correlogram for wine dataset", subtitle = "Four pairs are no significant at p \< 0.05" )
+#ggstatsplot::ggcorrmat( data = wine, cor.vars = 1:11, ggcorrplot.args = list(outline.color = "black", hc.order = TRUE, tl.cex = 10), title = "Correlogram for wine dataset", subtitle = "Four pairs are no significant at p < 0.05" )
 ```
 
 :::
