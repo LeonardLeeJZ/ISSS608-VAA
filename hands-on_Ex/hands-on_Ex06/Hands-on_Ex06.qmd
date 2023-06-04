@@ -16,7 +16,8 @@ date-modified: "`r Sys.Date()`"
 All required packages for Hands on Exercise 6 are loaded together here.
 
 ```{r}
-pacman::p_load('plotly', 'tidyverse', 'corrplot', 'ggstatsplot', 'ggcorrplot')
+pacman::p_load('plotly','tidyverse', 'corrplot', 'ggstatsplot', 'ggcorrplot')
+
 
 ```
 
@@ -104,20 +105,11 @@ ternaryAxes <- list(
   baxis = axis("Active"), 
   caxis = axis("Old")
 )
+```
+Initiating a plotly visualization 
 
-# Initiating a plotly visualization 
-plot_ly(
-  agpop_mutated, 
-  a = ~YOUNG, 
-  b = ~ACTIVE, 
-  c = ~OLD, 
-  color = I("black"), 
-  type = "scatterternary"
-) %>%
-  layout(
-    annotations = label("Ternary Markers"), 
-    ternary = ternaryAxes
-  )
+```{r}
+plot_ly(agpop_mutated, a = ~YOUNG, b = ~ACTIVE, c = ~OLD, color = I("black"), type = "scatterternary") %>%  layout(annotations = label("Ternary Markers"), ternary = ternaryAxes )
 
 ```
 
@@ -162,7 +154,7 @@ pairs(wine[,2:12], lower.panel = NULL)
 
 ## With Correlation Coeff
 
-```{r}
+```{r, warning = FALSE}
 
 panel.cor <- function(x, y, digits=2, prefix="", cex.cor, ...) {
 usr <- par("usr")
@@ -192,21 +184,13 @@ One of the major limitation of the correlation matrix is that the scatter plots 
 ::: panel-tabset
 ## Basic Plot
 
+```{r}
 ggstatsplot::ggcorrmat(data = wine, cor.vars = 1:11)
-
 
 ## With Title, Subtitles
 
-
-ggstatsplot::ggcorrmat(
-  data = wine, 
-  cor.vars = 1:11,
-  ggcorrplot.args = list(outline.color = "black", 
-                         hc.order = TRUE,
-                         tl.cex = 10),
-  title    = "Correlogram for wine dataset",
-  subtitle = "Four pairs are no significant at p < 0.05"
-)
+ggstatsplot::ggcorrmat( data = wine, cor.vars = 1:11, ggcorrplot.args = list(outline.color = "black", hc.order = TRUE, tl.cex = 10), title = "Correlogram for wine dataset", subtitle = "Four pairs are no significant at p \< 0.05" )
+```
 
 :::
 
@@ -218,9 +202,13 @@ cor.vars argument is used to compute the correlation matrix needed to build the 
 
 ::: {.cushbox .cushicon}
 The sample sub-code chunk can be used to control specific component of the plot such as the font size of the x-axis, y-axis, and the statistical report.
-
-ggplot.component = list( theme(text=element_text(size=5), axis.text.x = element_text(size = 8), axis.text.y = element_text(size = 8)))
 :::
+
+```{r}
+ggplot.component = list( theme(text=element_text(size=5), axis.text.x = element_text(size = 8), axis.text.y = element_text(size = 8)))
+
+```
+
 
 # 3.2 Multiple Plots
 
@@ -323,11 +311,12 @@ corrplot(wine.cor,
          sig.level = .05)
 
 ```
+
 ## Reorder a corrgram
 
 ::: panel-tabset
-
 ## Corrplot
+
 ```{r}
 corrplot.mixed(wine.cor, 
                lower = "ellipse", 
@@ -353,4 +342,3 @@ corrplot(wine.cor,
 
 ```
 :::
-

@@ -23,20 +23,28 @@ pacman::p_load(igraph, tidygraph, ggraph,
 
 # 2 Importing the Data
 
-::: panel-tabset
+::: {.cushbox .cushicon}
 
+Apart from the main dataset containing over 5.46 million links, there are a total of 12 Fish Bundles, for which we will visualise and compare to the MC2 data by matching them for source and target columns.
+We will first import the datasets.
+:::
+
+::: panel-tabset
 ### 2.1 Main Dataset
+
 ```{r}
 MC2 <- fromJSON("data/mc2_challenge_graph.json")
 
 ```
 
 ### MC2 Overview
+
 ```{r}
 glimpse(MC2)
 ```
 
 ### 2.2 Fish Bundles
+
 
 ```{r}
 
@@ -56,9 +64,15 @@ tuna <- fromJSON("data/tuna.json")
 ```
 :::
 
-# 3 Data Preparation  
+# 3 Data Preparation
+
+::: {.cushbox .cushicon}
+Apart from reorganising the nodes and edges using __select()__, we will also clean the dataset by removing duplicate rows, missing values in source/target columns, and renaming them.
+
+:::
 
 ## 3.1 Reorganise Dataset
+
 ```{r}
 MC2_nodes <- as_tibble(MC2$nodes) %>%
   select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns
@@ -77,6 +91,7 @@ MC2_nodes <- MC2_nodes %>% distinct()
 ```
 
 ## 3.2 Rename Columns
+
 ```{r}
 
 # rename columns
@@ -99,6 +114,7 @@ MC2_edges <- MC2_edges[complete.cases(MC2_edges[, c("source", "target")]), ]
 colSums(is.na(MC2_edges))
 
 ```
+
 ::: {.bubblebox .bubbleicon}
 While there are missing (NA) fields in **Value_OMU** and **Value_USD**, the key columns being examined (**source** and **target**) do not possess any missing values.
 :::
@@ -106,9 +122,14 @@ While there are missing (NA) fields in **Value_OMU** and **Value_USD**, the key 
 # 4 Data Exploration and Comparison
 
 ::: {.cushbox .cushicon}
-To determine which bundles of predictive network models are reliable, we will first visualise the respective network models, before comparing them with the same links extracted from MC2. This is done by extracting in MC2 rows that match the source & target columns in the bundles.
+To determine which bundles of predictive network models are reliable, we will first visualise the respective network models, before comparing them with the same links extracted from MC2. This is done by extracting in MC2 rows that match the source & target columns in the bundles. This is accompanied with a **Jaccard Similiarity Coefficient** calculation to confirm the visual similarities and deteremine how reliable the bundles are.
 
+Jaccard similarity coeifficients are a measure of similarity between two sets. They are commonly used in data science and information retrieval to compare the similarity of two sets of items.
+
+The Jaccard similarity coefficient, also known as the Jaccard index, is defined as the size of the intersection of two sets divided by the size of their union. It is a value between 0 and 1, where 0 indicates no similarity and 1 indicates complete similarity.
 :::
+
+
 
 ## 4.1 Carp
 
@@ -140,9 +161,6 @@ carp_edges_aggregated <- carp_edges %>%
 ```
 
 ::: panel-tabset
-
-
-
 ### Summary
 
 ```{r, warning=FALSE}
@@ -162,6 +180,7 @@ carp_graph <- tbl_graph(nodes = carp_nodes_extract,
 carp_graph
 
 ```
+
 ### Visualisation
 
 ```{r}
@@ -188,8 +207,8 @@ viscarp_graph
 
 ```
 
-
 ### Matching
+
 ```{r, warning=FALSE}
 
 matched_carp <- carp_edges_aggregated[
@@ -236,7 +255,6 @@ vismcarp_graph
 
 ### Jaccard Similarity Score
 
-
 ```{r}
 # Calculate the number of common edges
 common_edgescarp <- intersect(E(carp_graph), E(mcarp_graph))
@@ -248,10 +266,7 @@ jaccard_similaritycarp <- length(common_edgescarp) / (length(E(carp_graph)) + le
 print(jaccard_similaritycarp)
 
 ```
-
-
 :::
-
 
 ## 4.2 Chub Mackerel
 
@@ -284,6 +299,7 @@ cmac_edges_aggregated <- cmac_edges %>%
 
 ::: panel-tabset
 ### Summary
+
 ```{r}
 cmac_nodes_extract <- cmac_edges_aggregated %>%
   select(source) %>%
@@ -333,6 +349,7 @@ viscmac_graph
 ```
 
 ### Matching
+
 ```{r, warning=FALSE}
 
 matched_cmac <- cmac_edges_aggregated[
@@ -371,8 +388,8 @@ vismcmac_graph <- visNetwork(nodes = mcmac_nodes, edges = mcmac_edges) %>%
 vismcmac_graph
 
 ```
-### Jaccard Similarity Score
 
+### Jaccard Similarity Score
 
 ```{r}
 # Calculate the number of common edges
@@ -385,12 +402,9 @@ jaccard_similaritycmac <- length(common_edgescmac) / (length(E(cmac_graph)) + le
 print(jaccard_similaritycmac)
 
 ```
-
 :::
 
 ## 4.3 Cod
-
-
 
 ```{r}
 cod_nodes <- as_tibble(cod$nodes) %>%
@@ -418,8 +432,8 @@ cod_edges_aggregated <- cod_edges %>%
   ungroup()
 
 ```
-::: panel-tabset
 
+::: panel-tabset
 ### Summary
 
 ```{r}
@@ -437,7 +451,9 @@ cod_graph <- tbl_graph(nodes = cod_nodes_extract,
 
 cod_graph
 ```
+
 ### Visualisation
+
 ```{r, warning= FALSE}
 nodes_dfcod <- cod_graph %>%
   activate(nodes) %>%
@@ -463,6 +479,7 @@ viscod_graph
 ```
 
 ### Matching
+
 ```{r, warning=FALSE}
 
 matched_cod <- cod_edges_aggregated[
@@ -525,7 +542,6 @@ print(jaccard_similaritycod)
 
 ## 4.4 Catfish
 
-
 ```{r}
 catfish_nodes <- as_tibble(catfish$nodes) %>%
   select(id,shpcountry, rcvcountry) #using select function to reorganise into desired order of columns
@@ -551,7 +567,6 @@ catfish_edges_aggregated <- catfish_edges %>%
 ```
 
 ::: panel-tabset
-
 ### Summary
 
 ```{r}
@@ -597,6 +612,7 @@ viscatfish_graph
 ```
 
 ### Matching
+
 ```{r, warning=FALSE}
 
 
@@ -688,8 +704,8 @@ herring_edges_aggregated <- herring_edges %>%
   ungroup()
 
 ```
-::: panel-tabset
 
+::: panel-tabset
 ### Summary
 
 ```{r}
@@ -711,6 +727,7 @@ herring_graph
 ```
 
 ### Visualise Herring
+
 ```{r}
 
 nodes_dfherring <- herring_graph %>%
@@ -784,6 +801,7 @@ vismherring_graph
 
 
 ```
+
 ### Jaccard Similarity Score
 
 ```{r}
@@ -798,9 +816,7 @@ print(jaccard_similarity_herring)
 
 
 ```
-
 :::
-
 
 ## 4.6 Lichen
 
@@ -830,8 +846,8 @@ lichen_edges_aggregated <- lichen_edges %>%
   ungroup()
 
 ```
-::: panel-tabset
 
+::: panel-tabset
 ### Summary
 
 ```{r}
@@ -852,8 +868,8 @@ lichen_graph
 
 ```
 
-
 ### Visualisation
+
 ```{r}
 
 
@@ -879,6 +895,7 @@ vislichen_graph
 
 
 ```
+
 ### Matching
 
 ```{r, warnin= FALSE}
@@ -927,7 +944,9 @@ vismlichen_graph
 
 
 ```
+
 ### Jaccard Similarity Score
+
 ```{r}
 common_edges_lichen <- intersect(E(lichen_graph), E(mlichen_graph))
 
@@ -941,7 +960,6 @@ print(jaccard_similarity_lichen)
 
 
 ```
-
 :::
 
 ## 4.7 Mackerel
@@ -969,9 +987,10 @@ mackerel_edges_aggregated <- mac_edges %>%
   ungroup()
 
 ```
-::: panel-tabset
 
+::: panel-tabset
 ### Summary
+
 ```{r}
 mackerel_nodes_extract <- mackerel_edges_aggregated %>%
   select(source) %>%
@@ -991,6 +1010,7 @@ mackerel_graph
 ```
 
 ### Visualiseation
+
 ```{r}
 
 
@@ -1068,6 +1088,7 @@ vismmackerel_graph
 ```
 
 ### Jaccard Similarity Score
+
 ```{r}
 common_edges_mackerel <- intersect(E(mackerel_graph), E(mmackerel_graph))
 
@@ -1112,9 +1133,10 @@ pollock_edges_aggregated <- pol_edges %>%
   ungroup()
 
 ```
-::: panel-tabset
 
+::: panel-tabset
 ### Summary
+
 ```{r}
 
 pollock_nodes_extract <- pollock_edges_aggregated %>%
@@ -1134,6 +1156,7 @@ pollock_graph
 ```
 
 ### Visualisation
+
 ```{r}
 
 
@@ -1159,7 +1182,6 @@ vispollock_graph
 
 
 ```
-
 
 ### Matching
 
@@ -1208,7 +1230,9 @@ vismpollock_graph
 
 
 ```
+
 ### Jaccard Similarity Score
+
 ```{r}
 common_edges_pollock <- intersect(E(pollock_graph), E(mpollock_graph))
 
@@ -1252,9 +1276,10 @@ salmonwgl_edges_aggregated <- salw_edges %>%
   ungroup()
 
 ```
-::: panel-tabset
 
+::: panel-tabset
 ### Summary
+
 ```{r}
 salmonwgl_nodes_extract <- salmonwgl_edges_aggregated %>%
   select(source) %>%
@@ -1274,6 +1299,7 @@ salmonwgl_graph
 ```
 
 ### Visualisation
+
 ```{r}
 
 nodes_dfsalmonwgl <- salmonwgl_graph %>%
@@ -1345,7 +1371,9 @@ vismsalmonwgl_graph <- visNetwork(nodes = nodes_dfmsalmonwgl, edges = edges_dfms
 vismsalmonwgl_graph
 
 ```
+
 ### Jaccard Similarity Score
+
 ```{r}
 common_edges_salmonwgl <- intersect(E(salmonwgl_graph), E(msalmonwgl_graph))
 
@@ -1390,9 +1418,10 @@ salmon_edges_aggregated <- salmon_edges %>%
   ungroup()
 
 ```
-::: panel-tabset
 
+::: panel-tabset
 ### Summary
+
 ```{r}
 salmon_nodes_extract <- salmon_edges_aggregated %>%
   select(source) %>%
@@ -1412,6 +1441,7 @@ salmon_graph
 ```
 
 ### Visualisation
+
 ```{r}
 
 
@@ -1486,7 +1516,9 @@ vismsalmon_graph
 
 
 ```
+
 ### Jaccard Similarity Score
+
 ```{r}
 common_edges_salmon <- intersect(E(salmon_graph), E(msalmon_graph))
 
@@ -1527,9 +1559,10 @@ shark_edges_aggregated <- shark_edges %>%
             Average_Weight_KG = mean(Weight_KG, na.rm = TRUE)) %>%
   ungroup()  
 ```
-::: panel-tabset
 
+::: panel-tabset
 ### Summary
+
 ```{r}
 shark_nodes_extract <- shark_edges_aggregated %>%
   select(source) %>%
@@ -1547,6 +1580,7 @@ shark_graph
 ```
 
 ### Visualise Shark
+
 ```{r}
 
 nodes_dfshark <- shark_graph %>%
@@ -1617,7 +1651,9 @@ vismshark_graph
 
 
 ```
+
 ### Jaccard Similarity Score
+
 ```{r}
 common_edges_shark <- intersect(E(shark_graph), E(mshark_graph))
 
@@ -1657,9 +1693,10 @@ tuna_edges_aggregated <- tuna_edges %>%
             Average_OMU = mean(Value_OMU, na.rm = TRUE)) %>%
   ungroup()
 ```
-::: panel-tabset
 
+::: panel-tabset
 ### Summary
+
 ```{r}
 tuna_nodes_extract <- tuna_edges_aggregated %>%
   select(source) %>%
@@ -1679,6 +1716,7 @@ tuna_graph
 ```
 
 ### Visualise Tuna
+
 ```{r}
 nodes_dftuna <- tuna_graph %>%
   activate(nodes) %>%
@@ -1700,7 +1738,6 @@ vistuna_graph <- visNetwork(nodes = nodes_dftuna, edges = edges_dftuna) %>%
 
 vistuna_graph
 ```
-
 
 ### Matching Tuna
 
@@ -1747,7 +1784,9 @@ vistuna_graph <- visNetwork(nodes = nodes_dfmtuna, edges = edges_dfmtuna) %>%
 vistuna_graph
 
 ```
+
 ### Jaccard Similarity Score
+
 ```{r}
 common_edges_tuna <- intersect(E(tuna_graph), E(mtuna_graph))
 
@@ -1781,14 +1820,20 @@ jaccard_scores_sorted <- jaccard_scores %>%
 print(jaccard_scores_sorted)
 
 ```
+
 ::: {.cushbox .cushicon}
-By stacking the bundles by their Jaccard Similarity Scores (descending order), we see that the most reliable bundles are **Lichen, Salmon, Shark and Tuna**, which all scored 1.0, indicating total similarity for the dataset in the bundles.
+By stacking the bundles by their Jaccard Similarity Coefficients (descending order), we see that the most reliable bundles are **Lichen, Salmon, Shark and Tuna**, which all scored 1.0, indicating total similarity for the dataset in the bundles.
 
 Conversely, **Cod** is the least reliable, scoring the lowest, and by a substantial margin from the other bundles.
 :::
 
-
-
 ## Data Limitations
 
+::: {.bubblebox .bubbleicon}
+For future analysis, a few areas should be considered:
 
+1) **Homogeneity of bundle data** - certain bundles (i.e. Catfish) were missing columns of data like Weight(kg), which would prevent it from being useful should that be a factor of consideration in our analysis into illegal fishing.
+
+2) **Single Currency** - Similarly, bundles values are all in OMU, but MC2 dataset contains mix of OMU and USD values. It is proposed to either convert all values to OMU for ease of analysis, or minimally provide the exchange rate for our own use.
+
+:::

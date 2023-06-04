@@ -338,10 +338,10 @@ GAStech_edges_aggregated <- GAStech_edges %>%
 
 ## Plotting the first interactive network graph
 
+
 ```{r}
 visNetwork(GAStech_nodes, 
            GAStech_edges_aggregated)
-
 ```
 
 ## Working with layout
@@ -360,8 +360,10 @@ visNetwork() looks for a field called "group" in the nodes object and colour the
 The code chunk below rename Department field to group.
 
 ```{r}
+
 GAStech_nodes <- GAStech_nodes %>%
   rename(group = Department) 
+
 ```
 
 When we rerun the code chunk below, visNetwork shades the nodes by assigning unique colour to each category in the group field.
@@ -380,6 +382,7 @@ visNetwork(GAStech_nodes,
 In the code run below visEdges() is used to symbolise the edges. - The argument arrows is used to define where to place the arrow. - The smooth argument is used to plot the edges using a smooth curve.
 
 ```{r}
+
 visNetwork(GAStech_nodes,
            GAStech_edges_aggregated) %>%
   visIgraphLayout(layout = "layout_with_fr") %>%

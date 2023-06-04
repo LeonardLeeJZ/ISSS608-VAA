@@ -3,3 +3,5 @@ title: "ISSS608-VAA"
 ---
 
 Welcome to **ISSS608 Visual Analytics and Applications**. In this website, you will find Leonard Lee's coursework prepared for this course.
+
+![](Images/quote.jpg)
