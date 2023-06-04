@@ -6,3 +6,4 @@ data/
 .httr-oauth
 .DS_Store
 .RDataTmp
+/data
