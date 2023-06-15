@@ -92,7 +92,7 @@ ggplot(data = mc3_edges,
 ## Initial Network Visualisation and Analysis
 
 ### Network Model (Tidygraph)
-```{r}
+```{r, warning = FALSE}
 id1 <- mc3_edges %>%
   select(source) %>%
   rename(id = source)
@@ -122,3 +122,68 @@ ggraph(layout = "fr") +
   theme_graph()
 
 ```
+## Exploring Nodes data frame
+
+```{r}
+
+skim(mc3_nodes)
+
+```
+
+::: {.cushbox .cushicon}
+
+The data summary shows that there are no missing values for all character-variables, while there are 21515 missing values in the numeric-variable __value_omu__. 
+
+:::
+
+```{r, warning = FALSE}
+DT::datatable(mc3_nodes)
+```
+
+## Tokenisation
+
+```{r}
+token_nodes <- mc3_nodes %>%
+  unnest_tokens(word, 
+                product_services)
+
+```
+
+```{r}
+token_nodes %>%
+  count(word, sort = TRUE) %>%
+  top_n(15) %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(x = word, y = n)) +
+  geom_col() +
+  xlab(NULL) +
+  coord_flip() +
+      labs(x = "Count",
+      y = "Unique words",
+      title = "Count of unique words found in product_services field")
+
+```
+### Removing stopwords
+
+```{r}
+
+stopwords_removed <- token_nodes %>% 
+  anti_join(stop_words)
+
+stopwords_removed %>%
+  count(word, sort = TRUE) %>%
+  top_n(15) %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(x = word, y = n)) +
+  geom_col() +
+  xlab(NULL) +
+  coord_flip() +
+      labs(x = "Count",
+      y = "Unique words",
+      title = "Count of unique words found in product_services field")
+```
+```{r}
+
+
+```
+
