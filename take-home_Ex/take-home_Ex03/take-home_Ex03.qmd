@@ -14,37 +14,111 @@ date-modified: "`r Sys.Date()`"
 
 ## Loading the Packages
 
-``{r}
-pacman::p_load(tidygraph, ggraph, visNetwork, lubridate, clock, ggforce, tidytext, tidyverse, graphlayouts, jsonlite)
+```{r}
+pacman::p_load(jsonlite, tidygraph, ggraph, 
+               visNetwork, graphlayouts, ggforce, 
+               skimr, tidytext, tidyverse)
+```
 
-
-``
 ## Importing the data
-``{r}
+
+
+```{r}
 mc3_data <- fromJSON("data/MC3.json")
 
-``
+```
 
 ## Data Preparation
-Don't distinct immediately bc there are two diff companies with the same ID (ZH).
 
-``{r}
+### Extracting the Edges
 
-mc3_edges <- as_tibbles(mc3_data$links) %>%
-#  distinct() %>%
+```{r}
+
+mc3_edges <- as_tibble(mc3_data$links) %>% 
+  distinct() %>%
+  mutate(source = as.character(source),
+         target = as.character(target),
+         type = as.character(type)) %>%
+  group_by(source, target, type) %>%
+    summarise(weights = n()) %>%
+  filter(source!=target) %>%
+  ungroup()
+
+```
+
+### Extracting the Nodes
+```{r, warning= FALSE}
+
+mc3_nodes <- as_tibble(mc3_data$nodes) %>%
   mutate(country = as.character(country),
          id = as.character(id),
          product_services = as.character(product_services),
-         revenue_omu = as.numeric(as.character(revenue.omu)),
+         revenue_omu = as.numeric(as.character(revenue_omu)),
          type = as.character(type)) %>%
   select(id, country, type, revenue_omu, product_services)
 
-``
+```
 
 ## Initial Data Exploration
 
+### Exploring the Edges data frame
 
-### Visualising Type Field
-         
-         
+```{r}
 
+skim(mc3_edges)
+
+
+```
+::: {.cushbox .cushicon}
+
+The data summary shows that there are no missing values in all fields. 
+
+:::
+
+
+```{r, warning = FALSE}
+DT::datatable(mc3_edges)
+
+```
+
+```{r}
+ggplot(data = mc3_edges,
+       aes(x = type)) +
+  geom_bar()
+
+```
+
+
+## Initial Network Visualisation and Analysis
+
+### Network Model (Tidygraph)
+```{r}
+id1 <- mc3_edges %>%
+  select(source) %>%
+  rename(id = source)
+id2 <- mc3_edges %>%
+  select(target) %>%
+  rename(id = target)
+mc3_nodes1 <- rbind(id1, id2) %>%
+  distinct() %>%
+  left_join(mc3_nodes,
+            unmatched = "drop")
+
+mc3_graph <- tbl_graph(nodes = mc3_nodes1,
+                       edges = mc3_edges,
+                       directed = FALSE) %>%
+  mutate(betweenness_centrality = centrality_betweenness(),
+         closeness_centrality = centrality_closeness())
+
+mc3_graph %>%
+  filter(betweenness_centrality >= 100000) %>%
+ggraph(layout = "fr") +
+  geom_edge_link(aes(alpha=0.5)) +
+  geom_node_point(aes(
+    size = betweenness_centrality,
+    colors = "lightblue",
+    alpha = 0.5)) +
+  scale_size_continuous(range=c(1,10))+
+  theme_graph()
+
+```
