@@ -12,15 +12,24 @@ date: "03 June 2023"
 date-modified: "`r Sys.Date()`"
 ---
 
-## Loading the Packages
+# The Objective
+
+As part of the ISSS608-VAA Course in MITB, SMU, Question 1 of the Vast Challenge [Mini Challenge 3] will be addressed as Take-Home Exercise 3.
+
+##  Mini Challenge 3: Detect Anomalis
+
+Q1: Use **visual analytics** to identify anomalies in the business groups present in the **knowledge graph**. 
+
+
+
+## 1 Loading the Packages
 
 ```{r}
-pacman::p_load(jsonlite, tidygraph, ggraph, 
-               visNetwork, graphlayouts, ggforce, 
-               skimr, tidytext, tidyverse)
+pacman::p_load(jsonlite, tidygraph, ggraph, DT, visNetwork, graphlayouts, ggforce, 
+               skimr, tidytext, tidyverse, ggplot2, dplyr, patchwork)
 ```
 
-## Importing the data
+## 2 Importing the data
 
 
 ```{r}
@@ -28,7 +37,9 @@ mc3_data <- fromJSON("data/MC3.json")
 
 ```
 
-## Data Preparation
+## 3 Data Preparation
+
+::: panel-tabset
 
 ### Extracting the Edges
 
@@ -55,135 +66,721 @@ mc3_nodes <- as_tibble(mc3_data$nodes) %>%
          product_services = as.character(product_services),
          revenue_omu = as.numeric(as.character(revenue_omu)),
          type = as.character(type)) %>%
-  select(id, country, type, revenue_omu, product_services)
+  select(id, country, type, revenue_omu, product_services) %>%
+  distinct(id, country, type, .keep_all = TRUE) #Match for first three columns
 
 ```
+:::
 
-## Initial Data Exploration
 
-### Exploring the Edges data frame
+## 4 Initial Data Exploration
 
+::: panel-tabset
+
+## 4.1 Edges 
+
+**Check for Missing Values**
 ```{r}
 
 skim(mc3_edges)
 
 
 ```
-::: {.cushbox .cushicon}
-
-The data summary shows that there are no missing values in all fields. 
-
-:::
-
-
-```{r, warning = FALSE}
-DT::datatable(mc3_edges)
+**Clean up Grouped Data (Source)**
+```{r}
+mc3_edges_clean <- mc3_edges%>%
+  # Extract all text within " "
+  mutate(source = str_extract_all(source, '"(.*?)"')) %>%
+  # Split into separate rows
+  unnest(source) %>%
+  # Split phrases by comma ignoring leading spaces
+  separate_rows(source, sep = ",\\s*") %>%
+  mutate(source = str_remove_all(source, '"'))
 
 ```
+
+**Checking for duplicates**
 
 ```{r}
-ggplot(data = mc3_edges,
-       aes(x = type)) +
-  geom_bar()
+mc3_edges_clean[duplicated(mc3_edges_clean),]
 
 ```
 
 
-## Initial Network Visualisation and Analysis
+**Remove Duplicate Rows**
 
-### Network Model (Tidygraph)
-```{r, warning = FALSE}
-id1 <- mc3_edges %>%
-  select(source) %>%
-  rename(id = source)
-id2 <- mc3_edges %>%
-  select(target) %>%
-  rename(id = target)
-mc3_nodes1 <- rbind(id1, id2) %>%
-  distinct() %>%
-  left_join(mc3_nodes,
-            unmatched = "drop")
-
-mc3_graph <- tbl_graph(nodes = mc3_nodes1,
-                       edges = mc3_edges,
-                       directed = FALSE) %>%
-  mutate(betweenness_centrality = centrality_betweenness(),
-         closeness_centrality = centrality_closeness())
-
-mc3_graph %>%
-  filter(betweenness_centrality >= 100000) %>%
-ggraph(layout = "fr") +
-  geom_edge_link(aes(alpha=0.5)) +
-  geom_node_point(aes(
-    size = betweenness_centrality,
-    colors = "lightblue",
-    alpha = 0.5)) +
-  scale_size_continuous(range=c(1,10))+
-  theme_graph()
+```{r}
+mc3_edges_clean <- unique(mc3_edges_clean)
 
 ```
-## Exploring Nodes data frame
 
+
+## 4.2 Nodes
+
+**Check for Missing Values**
 ```{r}
 
 skim(mc3_nodes)
 
 ```
 
+**Check for duplicates**
+
+```{r}
+mc3_nodes[duplicated(mc3_nodes),]
+
+```
+
+**Remove Duplicate Rows**
+
+```{r}
+mc3_nodes <- unique(mc3_nodes)
+
+```
+:::
+
+
 ::: {.cushbox .cushicon}
 
-The data summary shows that there are no missing values for all character-variables, while there are 21515 missing values in the numeric-variable __value_omu__. 
+**For Edges**
+
+The data summary shows that there are no missing values in all fields. 
+
+
+The data summary shows that there are no duplicated rows in all mc3_edges fields. 
+
+**For Nodes**
+
+The data summary shows that there are no missing values for all character-variables, while there are **21515** missing values in the numeric-variable __value_omu__. 
+
+The data summary shows that there are **2595** duplicated rows in all mc3_nodes fields. They are  removed to prevent skewing subsequent analyses.
 
 :::
 
-```{r, warning = FALSE}
-DT::datatable(mc3_nodes)
-```
+## 5 Understanding the Data
 
-## Tokenisation
+### 5.1 Stakeholder Details
 
 ```{r}
-token_nodes <- mc3_nodes %>%
-  unnest_tokens(word, 
-                product_services)
+
+# Set default plot theme
+
+nodes_details <- mc3_nodes %>%
+  ggplot(aes(x = type, fill = type)) +
+  geom_bar() +
+  geom_text(stat = "count", aes(label = after_stat(count)), vjust = -1) +
+  ylim(0, 11000) +
+  labs(title = "Count of Stakeholders") +
+  theme(
+    axis.title.y = element_blank(),
+    axis.title.x = element_blank(),
+    axis.text.y = element_blank(),
+    legend.position = "none",
+    plot.title = element_text(hjust = 0.5)
+  )
+
+
+
+
+nodes_details
 
 ```
 
+### 5.2 Geographical Information
+
+::: panel-tabset
+
+## Beneficial Owners
+
 ```{r}
-token_nodes %>%
-  count(word, sort = TRUE) %>%
-  top_n(15) %>%
-  mutate(word = reorder(word, n)) %>%
-  ggplot(aes(x = word, y = n)) +
+nodes_aggregated <- mc3_nodes %>%
+  group_by(country, type) %>%
+  summarise(count = n(),
+            revenue_omu = sum(revenue_omu)) %>%
+  ungroup()
+
+
+pben_owner <- nodes_aggregated %>%
+  filter(type == "Beneficial Owner") %>%
+  ggplot(aes(x = fct_rev(fct_reorder(country, count)), y = count, fill = "Standard Color")) +
   geom_col() +
-  xlab(NULL) +
-  coord_flip() +
-      labs(x = "Count",
-      y = "Unique words",
-      title = "Count of unique words found in product_services field")
+  geom_text(aes(label = count), vjust = -1) +
+  ylim(0, 13000) +
+  labs(title = "Beneficial Owners mostly from ZH") +
+  theme(
+    axis.title.y = element_blank(),
+    axis.title.x = element_blank(),
+    axis.text.y = element_blank(),
+    legend.position = "none"
+  ) +
+  scale_fill_manual(values = "#F8766D")
 
+
+pben_owner
 ```
-### Removing stopwords
+
+## Company
 
 ```{r}
 
-stopwords_removed <- token_nodes %>% 
-  anti_join(stop_words)
+pcompany <- nodes_aggregated %>%
+  filter(type == "Company" & count > 100) %>%
+  ggplot(aes(x = fct_rev(fct_reorder(country, count)), y = count)) +
+  geom_col(fill = "#00BA38") +
+  ylim(0, 3800) +
+  geom_text(aes(label = count), vjust = -1) +
+  labs(title = "Companies Mostly Operating from ZH") +
+  theme(
+    axis.title.y = element_blank(),
+    axis.title.x = element_blank(),
+    axis.text.y = element_blank())
 
-stopwords_removed %>%
-  count(word, sort = TRUE) %>%
-  top_n(15) %>%
-  mutate(word = reorder(word, n)) %>%
-  ggplot(aes(x = word, y = n)) +
+
+
+pcompany
+```
+
+
+## Company Contacts
+
+```{r}
+pcoy_contacts <- nodes_aggregated %>%
+  filter(type == "Company Contacts") %>%
+  ggplot(aes(x = fct_rev(fct_reorder(country, count)), y = count, fill = "Standard Color")) +
   geom_col() +
-  xlab(NULL) +
-  coord_flip() +
-      labs(x = "Count",
-      y = "Unique words",
-      title = "Count of unique words found in product_services field")
+  geom_text(aes(label = count), vjust = -1) +
+  ylim(0, 13000) +
+  labs(title = "Company Contacts mostly from ZH") +
+  theme(
+    axis.title.y = element_blank(),
+    axis.title.x = element_blank(),
+    axis.text.y = element_blank(),
+    legend.position = "none"
+  ) +
+  scale_fill_manual(values = "#619CFF")
+
+
+
+pcoy_contacts
+
+
 ```
+
+:::
+
+## 5.3 Revenue Groups and Unreported Revenue
+
+### Group Companies by Revenue
+
+::: {.cushbox .cushicon}
+Elaborate here
+
+1: Top 20%
+2: 20 to 40%
+3: 40 to 60%
+4: 60 to 80%
+5: Bottom 20%
+6: NA
+
+### Company Revenue Distribution
+```{r}
+
+percentiles <- quantile(mc3_nodes$revenue_omu, 
+                        probs = c(0, 0.2, 0.4, 0.6, 0.8, 1),
+                        na.rm = TRUE)
+
+# Create a new column and assign labels based on percentiles
+mc3_nodes$revenue_group <- cut(mc3_nodes$revenue_omu, 
+                                   breaks = percentiles, 
+                                   labels = c(5, 4, 3, 2, 1), 
+                                   include.lowest = TRUE)
+
+company_nodes <- mc3_nodes %>%
+  filter(type == "Company")
+
+ggplot(company_nodes, aes(x = revenue_group)) +
+  geom_bar(fill = "#00BA38") +
+  labs(
+    title = "High Number of Unreported Revenues for Companies",
+    x = "Revenue Group",
+    y = NULL
+  ) +
+  geom_text(
+    stat = "count",
+    aes(label = after_stat(count)),
+    vjust = -1) +
+  ylim(0, 10500) +
+  theme(text = element_text(size = 12)) +
+  facet_wrap(~type)
+
+
+
+```
+
+
+:::
+
+### 5.4 Company Ownership
+
+By counting the number of companies linked to each beneficial owner, we can observe which parties are linked to the highest numbers of companies at once.
+
+::: panel-tabset
+
+### Datatable
+
+```{r}
+
+target_edges <- mc3_edges_clean %>%
+  group_by(target, type) %>%
+  distinct() %>%
+  summarise(company_count = n()) %>%
+  arrange(desc(company_count)) %>%
+  ungroup()
+
+ftarget_edges <- target_edges %>%
+  filter(type == "Beneficial Owner")
+
+datatable(ftarget_edges)
+
+```
+
+### Bar & Box Plots
+
+```{r}
+frequency <- table(ftarget_edges$company_count)
+
+# Convert the frequency table to a data frame
+frequency_df <- as.data.frame(frequency)
+frequency_df <- frequency_df[order(frequency_df$Var1), ]
+
+ggplot(frequency_df, aes(x = Var1, y = Freq)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = Freq), vjust = -0.5) +
+  xlab("Company Count") +
+  ylab("Frequency") +
+  ggtitle("Distribution of Companies Linked to Beneficial Owners") +
+  ylim(0, max(frequency_df$Freq) * 1.2)
+
+
+
+```
+
+:::
+
+
+::: {.bubblebox .bubbleicon}
+
+For Brevity, Beneficial Owners with >= 3 Companies will be termed **Big Ben**.
+
+
+:::
+
+
+
+## 6 Anomalies
+
+
+With the data available, there are a few possible factors to leverage on to identify anomalies.
+
+
+**Number of Beneficial Owners**
+
+While companies having a single Beneficial Owner is not inherently anomalous, it suggests private ownership, which provides more control, privacy and fewer regulatory requirements. It is therefore worth looking into this in combination with the following factor. 
+
+
+**Number of Companies**
+
+While owning shares in many companies is not in itself anomalous, the nature of private ownership suggests a certain degree of privacy and freedom from regulations. As such, it is worthwhile looking into caaes of Beneficial owners with more than or equal to 3 companies [**Big Bens**]. 
+
+
+**Revenue**
+
+Both companies with High Revenue reported and Unreported revenue (missing values) are of interest, since these are potential signs of anomalous activity.
+
+**Products**
+
+There are companies with "Unknown" products being transacted, which could either be a data collection error, or  potentially anomalous. 
+
+
+Therefore, we will explore the following subsets of companies:
+
+**Area of Interest 1 - Companies owned by single Beneficial Owners**
+
+**Area of Interest 2 - High Revenue Companies with Big Bens**
+
+**Area of Interest 3 - High Revenue Companies with Sole Big Ben**
+
+**Area of Interest 4 - Companies with Large Number of Company Contacts but Undeclared Revenue.**
+
+
+
+## 6.1 Area of Interest 1 - Beneficial Owners With Multiple Companies
+
+```{r}
+sin_benowners <- mc3_edges_clean %>%
+  group_by(source) %>%
+  filter(type == "Beneficial Owner") %>%
+  filter(n_distinct(target) == 1)
+
+sin_bencount <- sin_benowners %>%
+  group_by(target) %>%
+  mutate(count = n()) %>%
+  filter(count >= 3) %>%
+  ungroup()
+
+
+sin_bencount_rev <- left_join(sin_bencount, mc3_nodes, by = c("source"="id")) %>%
+  select(-type.y) %>%
+  rename("type" = "type.x")
+
+sin_bencount_rev2 <-  sin_bencount_rev %>%
+  distinct() %>%
+  rename("from" = "source",
+         "to" = "target")
+
+benowner_source <- sin_bencount_rev2 %>%
+  distinct(from) %>%
+  rename("id" = "from")
+
+benowner_target <- sin_bencount_rev2 %>%
+  distinct(to) %>%
+  rename("id" = "to")
+
+benowner_nodes_extracted <- rbind(benowner_source, benowner_target)
+
+benowner_nodes_extracted$group <- ifelse(benowner_nodes_extracted$id %in% sin_bencount_rev$source, "Company", "Beneficial Owner")
+
+```
+
+### Visualisation
+
+```{r}
+
+visNetwork(
+    benowner_nodes_extracted, 
+    sin_bencount_rev2,
+    width = "100%",
+  main = list(
+    text = "Anna Wheeler is the sole Beneficial Owner",
+    style = "font-size:17x; weight:bold; text-align:right;"),
+  submain = list(text = "of 6 different Companies",
+                   style = "font-size:13pm; 
+                   text-align:right;")
+  )%>%
+  visIgraphLayout(
+    layout = "layout_with_fr"
+  ) %>%
+  visGroups(groupname = "Company",
+            color = "#00BA38") %>%
+  visGroups(groupname = "Beneficial Owner",
+            color = "#F8766D") %>%
+  visLegend() %>%
+  visEdges(
+    arrows = "to"
+  ) %>%
+  visOptions(
+    highlightNearest = list(enabled = T, degree = 2, hover = T),
+    nodesIdSelection = TRUE,
+    selectedBy = "group",
+    collapse = TRUE)
+
+
+```
+
+
+::: {.cushbox .cushicon}
+
+**General Findings**
+
+With multiple Beneficial Owners typically signalling a company being in the public domain as a publicly listed company, sole ownership typically signals that a company is privately owned. Privately owned companies enjoy privileges that publicly listed companies do not: privacy, and less regulations.
+
+As such, it is far more accessible for Beneficial Owners who are the sole owners of companies to utilise their various assets and connections to mask illegal activities whilst being poorly regulated by the industry officials. It is therefore worth monitoring and looking into these individuals.
+
+
+:::
+
+
+## 6.2 Area of Interest 2: High Revenue Companies with Big Bens
+
+
+### 6.2.1 Extract Nodes and Edges
+
+```{r}
+hr_nodes <- company_nodes %>%
+  filter(revenue_group == "1")
+
+target_3 <- ftarget_edges[ftarget_edges$company_count >= 3, ]
+
+hr_edges <- mc3_edges_clean %>%
+  filter(source %in% hr_nodes$id) %>%
+  filter(target %in% target_3$target) %>%
+  rename(from = source, to = target) %>%
+  distinct()
+
+hr_nodes_extract <- hr_edges %>%
+  select(from) %>%
+  rename(id = from) %>%
+  bind_rows(hr_edges %>%
+              select(to) %>%
+              rename(id = to)) %>%
+  distinct() %>%
+  mutate(group = ifelse(id %in% hr_edges$from, "Company", "Beneficial Owner"))
+
+
+
+```
+
+### 6.2.2 Visualisation
+
+```{r}
+# Define the color palette
+
+
+visNetwork(
+  hr_nodes_extract, 
+  hr_edges,
+  width = "100%",
+  main = list(
+    text = "Primarily Private Ownership except for",
+    style = "font-size:17x; weight:bold; text-align:right;"),
+  submain = list(text = "Mar de la Aventura Tidepool",
+                   style = "font-size:13pm; 
+                   text-align:right;")
+) %>%
+visIgraphLayout(layout = "layout_nicely") %>%
+visGroups(groupname = "Company", color = "#00BA38") %>%
+visGroups(groupname = "Beneficial Owner", color = "#F8766D") %>%
+visLegend() %>%
+visEdges(arrows = "to") %>%
+visOptions(
+  highlightNearest = list(enabled = TRUE, degree = 2, hover = TRUE),
+  nodesIdSelection = TRUE,
+  selectedBy = "group",
+  collapse = TRUE
+) %>%
+visInteraction(navigationButtons = TRUE)
+
+
+
+
+```
+
+
+::: {.cushbox .cushicon}
+
+**General Findings**
+
+Having filtered the dataset to detect for the specific links between Beneficial Owners with links to >= 3 companies, and Companies in the top revenue group, we can make the following observations:
+
+1) Mar de la Aventura presents itself as a potential publicly listed company that produces high revenue with multiple Big Bens. 
+
+
+2) Conversely, there are also cases where these Owners are the only one among their population to have stakes in Company within the top income revenue group. However, this does not shed much light on the specific group of companies/owners of interest, as this network graph could have excluded other owners who do not own multiple businesses.
+
+We therefore include another filter where we match the companies to a list of companies with only one Beneficial Owner. 
+
+
+:::
+
+## 6.3 Area of Interest 3: High Revenue Companies with Sole Big Ben
+
+### 6.3.1 Extracting Nodes and Edges
+```{r}
+
+companies_with_one_owner <- hr_edges %>%
+  group_by(from) %>%
+  summarise(count = n()) %>%
+  filter(count == 1)
+
+excl_hredges <- hr_edges %>%
+  filter(from %in% companies_with_one_owner$from)
+
+
+excl_hrnodes_extract <- excl_hredges %>%
+  select(from) %>%
+  rename(id = from) %>%
+  bind_rows(excl_hredges %>%
+              select(to) %>%
+              rename(id = to)) %>%
+  distinct() %>%
+  mutate(group = ifelse(id %in% excl_hredges$from, "Company", "Beneficial Owner"))
+
+
+
+```
+
+### 6.3.2 Visualisation
 ```{r}
 
 
+visNetwork(
+  excl_hrnodes_extract, 
+  excl_hredges,
+  width = "100%",
+  main = list(
+    text = "Tiffany Brown and John Williams solely own",
+    style = "font-size:17x; weight:bold; text-align:right;"),
+  submain = list(text = "two High Revenue companies respectively",
+                   style = "font-size:13pm; 
+                   text-align:right;")
+) %>%
+visIgraphLayout(layout = "layout_nicely") %>%
+visGroups(groupname = "Company", color = "#00BA38") %>%
+visGroups(groupname = "Beneficial Owner", color = "#F8766D") %>%
+visLegend() %>%
+visEdges(arrows = "to") %>%
+visOptions(
+  highlightNearest = list(enabled = TRUE, degree = 2, hover = TRUE),
+  nodesIdSelection = TRUE,
+  selectedBy = "group",
+  collapse = TRUE
+) %>%
+visInteraction(navigationButtons = TRUE)
+
+
 ```
+
+::: {.cushbox .cushicon}
+
+**General Findings**
+
+This specific subset of Companies x Beneficial Owners is worth looking into because both groups belong to an exclusive list of companies that are in the top revenue group, while having just one Beneficial Owner who owns multiple companies. In two particular instances, we see **__Tiffany Brown__** and **__John Williams__** being the sole owners of two top performing companies at the same time. 
+
+Though not particularly incriminating, it is worth looking into these individuals and their companies to monitor for any illicit activities that may be facilitating their high revenue across multiple companies.
+
+
+:::
+
+
+## 6.4 Area of Interest 4 - Companies with Large Number of Company Contacts but Undeclared Revenue
+
+
+### 6.4.1 Distribution of Company Contacts
+
+```{r}
+
+cc_edges <- mc3_edges_clean %>%
+  group_by(target, type) %>%
+  distinct() %>%
+  summarise(contacts_count = n()) %>%
+  arrange(desc(contacts_count)) %>%
+  ungroup()
+
+fcc_edges <- cc_edges %>%
+  filter(type == "Company Contacts")
+
+datatable(fcc_edges)
+
+
+
+```
+
+```{r}
+
+ccfrequency <- table(fcc_edges$contacts_count)
+
+# Convert the frequency table to a data frame
+ccfrequency_df <- as.data.frame(ccfrequency)
+ccfrequency_df <- ccfrequency_df[order(ccfrequency_df$Var1), ]
+
+ggplot(ccfrequency_df, aes(x = Var1, y = Freq)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = Freq), vjust = -0.5) +
+  xlab("Contacts Count") +
+  ylab("Frequency") +
+  ggtitle("Distribution of Companies Contacts linked to Companies") +
+  ylim(0, max(frequency_df$Freq) * 1.2)
+
+
+```
+
+::: {.cushbox .cushicon}
+
+Most companies have 1-2 Company Contacts, which makes companies with 3 or more contacts an anomaly. To further the discrepancy, we will specifically look into companies with >= 3 contacts (which suggest larger size and potential revenue) and yet have undisclosed revenues. 
+
+
+:::
+
+### 6.4.2 Extract Nodes and Edges
+```{r}
+
+udrev_nodes <- mc3_nodes %>%
+  filter(is.na(revenue_omu))
+
+udrev_nodes_cc <- udrev_nodes %>%
+  filter(type == "Company Contacts") %>%
+  distinct()
+
+
+udrev_edges <- mc3_edges %>%
+  filter(type == "Company Contacts") %>%
+  filter(source %in% udrev_nodes_cc$id) %>%
+  distinct() %>%
+  rename("from" = "source",
+         "to" = "target")
+
+# Extract edges that have more than or equal to 3 company contacts
+high_udrev_edges <- udrev_edges %>%
+  group_by(from) %>%
+  mutate(count = n()) %>%
+  filter(count >= 3) %>%
+  ungroup()
+
+
+udrev_source <- high_udrev_edges %>%
+  distinct(from) %>%
+  rename("id" = "from")
+
+udrev_target <- high_udrev_edges %>%
+  distinct(to) %>%
+  rename("id" = "to")
+
+# Bind into one dataframe
+udrev_nodes2 <- bind_rows(udrev_source, udrev_target)
+
+udrev_nodes2$group <- ifelse(udrev_nodes2$id %in% udrev_nodes_cc$id, "Company Contact", "Company")
+
+
+```
+
+### 6.4.3 Visualisation
+```{r}
+visNetwork(
+    udrev_nodes2, 
+    high_udrev_edges
+  ) %>%
+  visIgraphLayout(
+    layout = "layout_with_fr"
+  ) %>%
+  visGroups(groupname = "Company",
+            color = "#00BA38") %>%
+  visGroups(groupname = "Company Contact",
+            color = "#619CFF") %>%
+  visLegend() %>%
+  visEdges(
+    arrows = "to"
+  ) %>%
+  visOptions(
+    highlightNearest = list(enabled = T, degree = 2, hover = T),
+    nodesIdSelection = TRUE,
+    selectedBy = "group",
+    collapse = TRUE)
+
+
+```
+
+::: {.cushbox .cushicon}
+
+While absent data for revenue is not an immediate justification to label these companies as participating in illegal activities, the noted lack of revenue being declared coupled with their suggested size (inconclusive without more information) warrants deeper investigation and monitoring.
+
+:::
+
+
+
+## 7 Conclusion
+
+Delving into the distribution and spread of factors such as revenue and ownership has provided insights that have been explored through basic graph and network graph visualisations. While certain anomalous areas were detected, there is insufficient data to conclusively identify any individual(s) or company participating in illegal activities. 
+
+Further work may include standardisation of product service categories/keywords so that the data can be cleanly segmented by product type. It would also be helpful if companies are labeled private/public to begin with, that we may compare within each category.
+
 

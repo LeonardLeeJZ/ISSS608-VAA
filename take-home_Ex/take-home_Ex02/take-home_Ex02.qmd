@@ -24,9 +24,7 @@ pacman::p_load(igraph, tidygraph, ggraph,
 # 2 Importing the Data
 
 ::: {.cushbox .cushicon}
-
-Apart from the main dataset containing over 5.46 million links, there are a total of 12 Fish Bundles, for which we will visualise and compare to the MC2 data by matching them for source and target columns.
-We will first import the datasets.
+Apart from the main dataset containing over 5.46 million links, there are a total of 12 Fish Bundles, for which we will visualise and compare to the MC2 data by matching them for source and target columns. We will first import the datasets.
 :::
 
 ::: panel-tabset
@@ -44,7 +42,6 @@ glimpse(MC2)
 ```
 
 ### 2.2 Fish Bundles
-
 
 ```{r}
 
@@ -67,8 +64,7 @@ tuna <- fromJSON("data/tuna.json")
 # 3 Data Preparation
 
 ::: {.cushbox .cushicon}
-Apart from reorganising the nodes and edges using __select()__, we will also clean the dataset by removing duplicate rows, missing values in source/target columns, and renaming them.
-
+Apart from reorganising the nodes and edges using **select()**, we will also clean the dataset by removing duplicate rows, missing values in source/target columns, and renaming them.
 :::
 
 ## 3.1 Reorganise Dataset
@@ -128,8 +124,6 @@ Jaccard similarity coeifficients are a measure of similarity between two sets. T
 
 The Jaccard similarity coefficient, also known as the Jaccard index, is defined as the size of the intersection of two sets divided by the size of their union. It is a value between 0 and 1, where 0 indicates no similarity and 1 indicates complete similarity.
 :::
-
-
 
 ## 4.1 Carp
 
@@ -1832,8 +1826,7 @@ Conversely, **Cod** is the least reliable, scoring the lowest, and by a substant
 ::: {.bubblebox .bubbleicon}
 For future analysis, a few areas should be considered:
 
-1) **Homogeneity of bundle data** - certain bundles (i.e. Catfish) were missing columns of data like Weight(kg), which would prevent it from being useful should that be a factor of consideration in our analysis into illegal fishing.
+1)  **Homogeneity of bundle data** - certain bundles (i.e. Catfish) were missing columns of data like Weight(kg), which would prevent it from being useful should that be a factor of consideration in our analysis into illegal fishing.
 
-2) **Single Currency** - Similarly, bundles values are all in OMU, but MC2 dataset contains mix of OMU and USD values. It is proposed to either convert all values to OMU for ease of analysis, or minimally provide the exchange rate for our own use.
-
+2)  **Single Currency** - Similarly, bundles values are all in OMU, but MC2 dataset contains mix of OMU and USD values. It is proposed to either convert all values to OMU for ease of analysis, or minimally provide the exchange rate for our own use.
 :::

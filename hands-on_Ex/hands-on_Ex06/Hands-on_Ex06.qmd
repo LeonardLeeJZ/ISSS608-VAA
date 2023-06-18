@@ -106,7 +106,8 @@ ternaryAxes <- list(
   caxis = axis("Old")
 )
 ```
-Initiating a plotly visualization 
+
+Initiating a plotly visualization
 
 ```{r}
 #plot_ly(agpop_mutated, a = ~YOUNG, b = ~ACTIVE, c = ~OLD, color = I("black"), type = "scatterternary") %>% layout(annotations = label("Ternary Markers"), ternary = ternaryAxes )
@@ -184,10 +185,12 @@ One of the major limitation of the correlation matrix is that the scatter plots 
 ::: panel-tabset
 ## Basic Plot
 
-```{r}
+
 ggstatsplot::ggcorrmat(data = wine, cor.vars = 1:11)
 
 ## With Title, Subtitles
+
+## GIVING ERRORS
 ggstatsplot::ggcorrmat(
   data = wine,
   cor.vars = 1:11,
@@ -195,7 +198,6 @@ ggstatsplot::ggcorrmat(
   title = "Correlogram for wine dataset",
   subtitle = "Four pairs are not significant at p < 0.05"
 )
-```
 
 :::
 
@@ -213,7 +215,6 @@ The sample sub-code chunk can be used to control specific component of the plot 
 ggplot.component = list( theme(text=element_text(size=5), axis.text.x = element_text(size = 8), axis.text.y = element_text(size = 8)))
 
 ```
-
 
 # 3.2 Multiple Plots
 
