@@ -1,0 +1,117 @@
+---
+title: "Hands-On Exercise 4"
+author: "Leonard Lee"
+
+format:
+  html:
+    code-fold: true
+    code-summary: "Show me the good stuff"
+execute:
+  warning: false
+date: "04 May 2023"
+---
+
+
+# 1 Loading Packages
+
+```{r}
+pacman::p_load(ggstatsplot, tidyverse)
+
+
+```
+
+# 2 Importing the Data
+
+```{r}
+exam_data <- read_csv("data/Exam_data.csv")
+
+head(exam_data, 10)
+
+```
+
+# 3 Use gghistostats() - One-Sample Test
+
+```{r}
+
+set.seed(1234)
+
+gghistostats(
+  data = exam_data,
+  x = ENGLISH,
+  type = "bayes",
+  test.value = 60,
+  xlab = "English scores") + 
+  theme_classic()
+
+
+```
+
+
+# 4 Use ggbetweenstats() 
+
+## 4.1 Two-Sample Test
+
+```{r}
+ggbetweenstats(
+  data = exam_data,
+  x = GENDER, 
+  y = MATHS,
+  type = "np",
+  messages = FALSE) +
+  theme_classic()
+
+
+```
+
+### 4.2 One-Way ANOVA Test (difference of means)
+```{r}
+
+ggbetweenstats(
+  data = exam_data,
+  x = RACE, 
+  y = ENGLISH,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE) +
+  theme_classic()
+
+
+```
+
+
+# 5 ggscatterstats - Correlation Test
+
+```{r}
+
+ggscatterstats(
+  data = exam_data,
+  x = MATHS,
+  y = ENGLISH,
+  marginal = FALSE) +
+  theme_classic() +
+  theme(plot.background = element_rect(fill = "#F8F3E6", color = "#F8F3E6"))
+
+
+
+```
+
+# 6 ggbarstats() - Association Test of Dependence
+
+```{r}
+exam1 <- exam_data %>% 
+  mutate(MATHS_bins = 
+           cut(MATHS, 
+               breaks = c(0,60,75,85,100))
+)
+
+ggbarstats(exam1, 
+           x = MATHS_bins, 
+           y = GENDER) +
+  theme_classic() +
+  theme(plot.background = element_rect(fill = "#F8F3E6", color = "#F8F3E6"))
+
+
+```

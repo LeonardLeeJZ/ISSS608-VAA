@@ -1,0 +1,256 @@
+---
+title: "Hands-On Exercise 7"
+author: "Leonard Lee"
+format:
+  html:
+    code-fold: true
+    code-summary: "Show me the good stuff"
+execute:
+  warning: false
+---
+
+# 1 Preparation
+
+## 1.1 Loading the Packages
+
+```{r}
+pacman::p_load(scales, viridis, lubridate, ggthemes, gridExtra, readxl, knitr, data.table, CGPfunctions, ggHoriPlot, tidyverse)
+
+```
+
+## 1.2 Importing the Data
+
+```{r}
+attacks <- read_csv("data/eventlog.csv")
+
+air <- read_excel("data/arrivals_by_air.xlsx")
+
+rice <- read_csv("data/rice.csv")
+
+averp <- read_csv("data/AVERP.csv") %>%
+  mutate(Date = dmy(Date)) %>%
+  rename(Consumer_items = 'Consumer Items')
+
+```
+
+# 2 Calendar Heatmap
+
+## Error Coding
+
+## 2.1 Examine Data
+
+kable(head(attacks))
+
+
+
+## 2.2 Data Preparation
+
+
+
+make_hr_wkday <- function(ts, sc, tz) {
+  real_times <- ymd_hms(ts, 
+                        tz = tz[1], 
+                        quiet = TRUE)
+  dt <- data.table(source_country = sc,
+                   wkday = weekdays(real_times),
+                   hour = hour(real_times))
+  return(dt)
+  }
+
+
+
+
+## 2.3 Building the Heatmap
+
+
+
+grouped <- attacks %>% 
+  count(wkday, hour) %>% 
+  ungroup() %>%
+  na.omit()
+
+ggplot(grouped, 
+       aes(hour, 
+           wkday, 
+           fill = n)) + 
+geom_tile(color = "white", 
+          size = 0.1) + 
+theme_tufte(base_family = "Helvetica") + 
+coord_equal() +
+scale_fill_gradient(name = "# of attacks",
+                    low = "sky blue", 
+                    high = "dark blue") +
+labs(x = NULL, 
+     y = NULL, 
+     title = "Attacks by weekday and time of day") +
+theme(axis.ticks = element_blank(),
+      plot.title = element_text(hjust = 0.5),
+      legend.title = element_text(size = 8),
+      legend.text = element_text(size = 6) )
+
+
+# 3 Multiple Calendar Heatmaps
+
+## 3.1 ID top 4 countries w highest number of attacks
+
+
+
+attacks_by_country <- count(
+  attacks, source_country) %>%
+  mutate(percent = percent(n/sum(n))) %>%
+  arrange(desc(n))
+
+
+
+## 3.2 Data Prep
+
+
+
+top4 <- attacks_by_country$source_country[1:4]
+top4_attacks <- attacks %>%
+  filter(source_country %in% top4) %>%
+  count(source_country, wkday, hour) %>%
+  ungroup() %>%
+  mutate(source_country = factor(
+    source_country, levels = top4)) %>%
+  na.omit()
+
+
+
+### 3.3 Plotting
+
+
+
+ggplot(top4_attacks, 
+       aes(hour, 
+           wkday, 
+           fill = n)) + 
+  geom_tile(color = "white", 
+          size = 0.1) + 
+  theme_tufte(base_family = "Helvetica") + 
+  coord_equal() +
+  scale_fill_gradient(name = "# of attacks",
+                    low = "sky blue", 
+                    high = "dark blue") +
+  facet_wrap(~source_country, ncol = 2) +
+  labs(x = NULL, y = NULL, 
+     title = "Attacks on top 4 countries by weekday and time of day") +
+  theme(axis.ticks = element_blank(),
+        axis.text.x = element_text(size = 7),
+        plot.title = element_text(hjust = 0.5),
+        legend.title = element_text(size = 8),
+        legend.text = element_text(size = 6) )
+
+
+
+# 4 Cycle Plot
+
+## Error Coding
+
+## 4.1 Extract Target Country
+
+
+
+Vietnam <- air %>% 
+  select(`Vietnam`, 
+         month, 
+         year) %>%
+  filter(year >= 2010)
+
+
+
+## 4.2 Computing Year AVG arrivals by month
+
+
+
+hline.data <- Vietnam %>% 
+  group_by(month) %>%
+  summarise(avgvalue = mean(`Vietnam`))
+
+
+
+
+## 4.3 Plotting Cycle Plot
+
+
+
+ggplot() + 
+  geom_line(data=Vietnam,
+            aes(x=year, 
+                y=`Vietnam`, 
+                group=month), 
+            colour="black") +
+  geom_hline(aes(yintercept=avgvalue), 
+             data=hline.data, 
+             linetype=6, 
+             colour="red", 
+             size=0.5) + 
+  facet_grid(~month) +
+  labs(axis.text.x = element_blank(),
+       title = "Visitor arrivals from Vietnam by air, Jan 2010-Dec 2019") +
+  xlab("") +
+  ylab("No. of Visitors")
+
+
+
+# 5 Slopegraph
+
+## Error Coding
+
+
+
+rice %>% 
+  mutate(Year = factor(Year)) %>%
+  filter(Year %in% c(1961, 1980)) %>%
+  newggslopegraph(Year, Yield, Country,
+                Title = "Rice Yield of Top 11 Asian Counties",
+                SubTitle = "1961-1980",
+                Caption = "Prepared by: Dr. Kam Tin Seong")
+
+
+
+::: {.bubblebox .bubbleicon}
+
+For effective data visualisation design, __factor()__ is used convert the value type of Year field from numeric to factor.
+
+
+:::
+
+# 6 Horizon Plot
+
+```{r}
+
+averp %>% 
+  filter(Date >= "2018-01-01") %>%
+  ggplot() +
+  geom_horizon(
+    aes(x = Date, y = Values), 
+    origin = "midpoint", 
+    horizonscale = 6
+  )+
+  facet_grid(Consumer_items~.) +
+  theme_few() +
+  scale_fill_hcl(palette = 'RdBu') +
+  scale_x_date(
+    expand=c(0,0), 
+    date_breaks = "3 month", 
+    date_labels = "%b%y"
+  ) +
+  labs(
+    title = "Average Retail Prices of Selected Consumer Items (Jan 2018 to Dec 2022)"
+  ) +
+  theme(
+    panel.spacing.y = unit(0, "lines"), 
+    strip.text.y = element_text(size = 5, angle = 0, hjust = 0),
+    legend.position = "none",
+    axis.text.y = element_blank(),
+    axis.text.x = element_text(size = 7, angle = 90),
+    axis.title.y = element_blank(),
+    axis.title.x = element_blank(),
+    axis.ticks.y = element_blank(),
+    panel.border = element_blank())
+
+```
+
+
+
